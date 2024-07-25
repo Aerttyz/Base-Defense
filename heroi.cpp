@@ -1,18 +1,35 @@
 #include <iostream>
 #include "heroi.hpp"
+#include "cmath"
+
 
 using namespace std;
 using namespace sf; 
 
-Heroi::Heroi(const string& heroiFile) {
+//Construtor
+Heroi::Heroi(const string& heroiFile) : velocidade(0.5f){
     if(!background_heroi.loadFromFile(heroiFile)) {
         cout << "Erro ao carregar imagem do herói" << endl;
     }
     backgroundSprite_heroi.setTexture(background_heroi);
+    posicao = backgroundSprite_heroi.getPosition();
 }
 
+//Define a posição do herói
+void Heroi::definirPosicao(const Vector2f& novaPosicao) {
+    posicao = novaPosicao;
+}
+
+//Move o herói
 void Heroi::mover() {
-    //TODO
+    Vector2f posicaoAtual = backgroundSprite_heroi.getPosition();
+    Vector2f direcao = posicao - posicaoAtual;
+    float distancia = sqrt(direcao.x * direcao.x + direcao.y * direcao.y);
+
+    if(distancia > 1.0f) {
+        direcao /= distancia;
+        backgroundSprite_heroi.move(direcao * velocidade * 0.01f);
+    }
 }
 
 void Heroi::atirar() {
@@ -27,8 +44,10 @@ void Heroi::curar() {
     //TODO
 }
 
+//Renderiza o herói
 void Heroi::renderizar(RenderWindow& window) {
     window.draw(backgroundSprite_heroi);
+    
 }
 
 

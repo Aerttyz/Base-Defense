@@ -9,6 +9,7 @@ using namespace std;
 class Heroi {
     public:
         Heroi(const string& heroiFile);
+        void definirPosicao(const Vector2f& posicao);
         void mover();
         void atirar();
         void tomarDano();
@@ -18,6 +19,8 @@ class Heroi {
     private:
         Texture background_heroi;
         Sprite backgroundSprite_heroi;
+        Vector2f posicao;
+        float velocidade;
         int vida;
         const int max_vida = 100;
         int projeteis;

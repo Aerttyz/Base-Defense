@@ -11,7 +11,7 @@ CXX = g++
 CXXFLAGS = -I/path/to/SFML/include
 
 # Bibliotecas
-LIBS = -lsfml-graphics -lsfml-window -lsfml-system
+LIBS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 # Diretório das bibliotecas
 LDFLAGS = -L/path/to/SFML/lib
