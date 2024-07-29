@@ -8,10 +8,10 @@ int main() {
     RenderWindow window(VideoMode(800, 600), "Base-Defense");
     
     //Carrega imagem do herói
-    Heroi heroi("imagens/Cactus Man.png");
+    Heroi heroi(100, "imagens/índice.jpeg");
 
     //Carrega tela
-    gerenciamentoTela gerenciamentoTela("imagens/background.png","imagens/dark_forest.ogg", &heroi);    
+    gerenciamentoTela gerenciamentoTela("imagens/fundo.jpeg","imagens/dark_forest.ogg", &heroi);    
     
 
     

@@ -2,7 +2,7 @@
 TARGET = base-defense
 
 # Arquivos fonte
-SRCS = main.cpp Gerenciamento_Tela.cpp heroi.cpp
+SRCS = main.cpp Gerenciamento_Tela.cpp heroi.cpp 
 
 # Compilador
 CXX = g++
@@ -11,7 +11,7 @@ CXX = g++
 CXXFLAGS = -I/path/to/SFML/include
 
 # Bibliotecas
-LIBS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+LIBS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio 
 
 # Diretório das bibliotecas
 LDFLAGS = -L/path/to/SFML/lib
