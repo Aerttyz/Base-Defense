@@ -8,7 +8,7 @@ using namespace sf;
 
 //Carrega a imagem de fundo e a música
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base) 
-: heroi(heroi), base(base), estado(Estado::MENU) {
+: heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(2)) {
     
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
@@ -20,7 +20,6 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     if(!background_menu.loadFromFile(backgroundMenuFile)) {
         cout << "Erro ao carregar imagem de fundo do menu" << endl;
     }
-
     if(!music.openFromFile(musicFile)) {
         cout << "Erro ao carregar música" << endl;
     }else {
@@ -28,13 +27,11 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
         music.play();
         
     }
+    //Seta a imagem de fundo
     backgroundSprite.setTexture(background);
     backgroundSprite_menu.setTexture(background_menu);
 
-    shape.setSize(Vector2f(100.0f, 100.0f));
-    shape.setFillColor(Color::Green);
-    shape.setPosition(200.0f, 200.0f);
-    
+    //Configuração do texto do menu
     textoMenu.setFont(font);
     textoMenu.setCharacterSize(30);
     textoMenu.setFillColor(Color::White);
@@ -42,6 +39,9 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     FloatRect textRect = textoMenu.getLocalBounds();
     textoMenu.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
     textoMenu.setPosition(400.0f, 300.0f);
+
+    //Inicia o relógio
+    spawRelogio.restart();
 }
 
 //Verifica eventos do mouse
@@ -80,18 +80,35 @@ void gerenciamentoTela::setHeroiPosition(RenderWindow& window) {
    }
 }
 
-//Atualiza a posição do herói
+//Gera uma posição aleatória para o inimigo
+Vector2f gerenciamentoTela::getPosicaoRandom(const Vector2u& windowSize) {
+    int x = rand() % windowSize.x;
+    int y = rand() % windowSize.y;
+    return Vector2f(x, y);
+}
+
+//Atualiza a posição do herói e do inimigo
 void gerenciamentoTela::atualizar() {
     if(estado == Estado::JOGO) {
         if(heroi){
             heroi->mover();
-            heroi->verificarColisao(shape);
-            heroi->verificarColisao(base->getSprite());
+            //heroi->verificarColisao(base->getSprite());
         }
         if(base) {
             //Aqui implemente a verificação de colisão do sprite com a base
             //heroi usado para testar, posteriormente substituir por progeteis
             base->verificarColisao(heroi->getSprite());
+        }
+        if(spawRelogio.getElapsedTime() >= spawInimigo) {
+            Vector2f posicao = getPosicaoRandom(Vector2u(800, 600));
+            Inimigo* inimigo = new Inimigo("imagens/inimigo.png");
+            if(inimigo->isTextureLoaded()) {
+                inimigo->setPosicao(posicao);
+                inimigos.push_back(*inimigo);
+            }else{
+                delete inimigo;
+            }
+            spawRelogio.restart();
         }
     }
 }
@@ -114,8 +131,10 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         if(base) {
             base->renderizar(window);
         }
+        for (auto& inimigo : inimigos) {
+            inimigo.renderizar(window);
+        }
         
-        //window.draw(shape);
     }
     window.display();
 }

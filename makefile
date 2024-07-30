@@ -2,7 +2,7 @@
 TARGET = base-defense
 
 # Arquivos fonte
-SRCS = main.cpp Gerenciamento_Tela.cpp heroi.cpp base.cpp
+SRCS = main.cpp Gerenciamento_Tela.cpp heroi.cpp base.cpp inimigo.cpp 
 
 # Compilador
 CXX = g++

@@ -2,6 +2,7 @@
 #include "Gerenciamento_Tela.hpp"
 #include "heroi.hpp"
 #include "base.hpp"
+#include "inimigo.hpp"
 #include <iostream>
 using namespace sf;
 using namespace std;
@@ -16,6 +17,8 @@ int main() {
         cerr << "Erro ao carregar a fonte" << endl;
         return -1;
     }
+
+    Inimigo novoInimigo("imagens/Cactus Man.png");
 
     //Carrega imagem da base
     Base base(100, "imagens/Cactus Man.png", font);

@@ -5,15 +5,16 @@
 #include <SFML/Graphics.hpp>
 #include "heroi.hpp"
 #include "base.hpp"
+#include "inimigo.hpp"
 
 using namespace sf;
 using namespace std;
 
-enum class Estado {MENU, JOGO, GAMEOVER};
+
 
 class gerenciamentoTela {
     public:
-        gerenciamentoTela(const string& backgroundFile,const string& backgroundMenuFile, const string& musicFile, Heroi *heroi, Base *base);
+        gerenciamentoTela(const string& backgroundFile,const string& backgroundMenuFile, const string& musicFile, Heroi *heroi, Base *base);  
         void eventos(RenderWindow& window);
         void renderizar(RenderWindow& window);
         void atualizar();
@@ -30,8 +31,14 @@ class gerenciamentoTela {
         Music music;
         Heroi *heroi;
         Base *base;
-        Estado estado;
+        Inimigo *inimigo;
         Font font;
+        enum class Estado {MENU, JOGO, GAMEOVER};
+        Estado estado;
+        vector<Inimigo> inimigos;
+        Clock spawRelogio;
+        Time spawInimigo;
+        Vector2f getPosicaoRandom(const Vector2u& windowSize);
 
 
 };
