@@ -20,6 +20,11 @@ Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(0
     textoVida.setString("Heroi: " + to_string(vida));   
 }
 
+//Retorna o sprite do herói
+Sprite Heroi::getSprite() const {
+    return backgroundSprite_heroi;
+}
+
 //Define a posição do herói
 void Heroi::definirPosicao(const Vector2f& novaPosicao) {
     posicao = novaPosicao;

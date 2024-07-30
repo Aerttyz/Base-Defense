@@ -16,6 +16,7 @@ class Heroi {
         int getVida();
         void verificarColisao(const Sprite& sprite);
         void verificarColisao(const RectangleShape& shape);
+        Sprite getSprite() const;
     
     private:
         float velocidade;

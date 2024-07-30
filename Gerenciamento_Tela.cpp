@@ -7,7 +7,8 @@ using namespace sf;
 
 
 //Carrega a imagem de fundo e a música
-gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base) : heroi(heroi), base(base), estado(Estado::MENU) {
+gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base) 
+: heroi(heroi), base(base), estado(Estado::MENU) {
     
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
@@ -87,6 +88,11 @@ void gerenciamentoTela::atualizar() {
             heroi->verificarColisao(shape);
             heroi->verificarColisao(base->getSprite());
         }
+        if(base) {
+            //Aqui implemente a verificação de colisão do sprite com a base
+            //heroi usado para testar, posteriormente substituir por progeteis
+            base->verificarColisao(heroi->getSprite());
+        }
     }
 }
 
@@ -109,7 +115,7 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
             base->renderizar(window);
         }
         
-        window.draw(shape);
+        //window.draw(shape);
     }
     window.display();
 }

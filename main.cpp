@@ -18,7 +18,7 @@ int main() {
     }
 
     //Carrega imagem da base
-    Base base(100, "imagens/base1.png", font);
+    Base base(100, "imagens/Cactus Man.png", font);
 
     //Carrega imagem do herói
     Heroi heroi(100, "imagens/Cactus Man.png", font);
