@@ -2,6 +2,7 @@
 #include "heroi.hpp"
 #include <iostream>
 #include "base.hpp"
+#include "inimigo.hpp"
 using namespace std;
 using namespace sf;
 
@@ -92,7 +93,9 @@ void gerenciamentoTela::atualizar() {
     if(estado == Estado::JOGO) {
         if(heroi){
             heroi->mover();
-            //heroi->verificarColisao(base->getSprite());
+            for (auto& inimigo : inimigos) {
+                heroi->verificarColisao(inimigo.getSprite());
+            }
         }
         if(base) {
             //Aqui implemente a verificação de colisão do sprite com a base

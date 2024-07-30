@@ -23,6 +23,10 @@ Vector2f Inimigo::getPosicao() const {
         return backgroundSprite_inimigo.getPosition();
     }
 
+Sprite Inimigo::getSprite() const {
+    return backgroundSprite_inimigo;
+}
+
 void Inimigo::renderizar(RenderWindow& window) {
         if(textureLoaded){
             window.draw(backgroundSprite_inimigo);

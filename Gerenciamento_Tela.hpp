@@ -31,11 +31,10 @@ class gerenciamentoTela {
         Music music;
         Heroi *heroi;
         Base *base;
-        Inimigo *inimigo;
+        vector<Inimigo> inimigos;
         Font font;
         enum class Estado {MENU, JOGO, GAMEOVER};
         Estado estado;
-        vector<Inimigo> inimigos;
         Clock spawRelogio;
         Time spawInimigo;
         Vector2f getPosicaoRandom(const Vector2u& windowSize);
