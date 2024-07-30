@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Gerenciamento_Tela.hpp"
 #include "heroi.hpp"
+#include "base.hpp"
 #include <iostream>
 using namespace sf;
 using namespace std;
@@ -16,11 +17,14 @@ int main() {
         return -1;
     }
 
+    //Carrega imagem da base
+    Base base(100, "imagens/base1.png", font);
+
     //Carrega imagem do herói
     Heroi heroi(100, "imagens/Cactus Man.png", font);
 
     //Carrega tela
-    gerenciamentoTela gerenciamentoTela("imagens/background.png","imagens/dark_forest.ogg", &heroi);    
+    gerenciamentoTela gerenciamentoTela("imagens/background.png","imagens/dark_forest.ogg", &heroi, &base);    
     
     
     

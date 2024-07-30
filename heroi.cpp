@@ -46,6 +46,8 @@ int Heroi::getVida() {
     return vida;
 }
 
+//Verifica colisão com um sprite
+
 void Heroi::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
         if(relogio.getElapsedTime() > dps) {
@@ -59,6 +61,8 @@ void Heroi::verificarColisao(const Sprite& sprite) {
     }
 }
 
+
+//Verifica colisão com um retângulo de testes
 
 void Heroi::verificarColisao(const RectangleShape& shape) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(shape.getGlobalBounds())) {

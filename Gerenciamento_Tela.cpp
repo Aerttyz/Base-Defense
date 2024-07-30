@@ -1,13 +1,13 @@
 #include "Gerenciamento_Tela.hpp"
 #include "heroi.hpp"
 #include <iostream>
-
+#include "base.hpp"
 using namespace std;
 using namespace sf;
-class heroi;
+
 
 //Carrega a imagem de fundo e a música
-gerenciamentoTela::gerenciamentoTela(const string& backgroundFile,const string& musicFile, Heroi *heroi) : heroi(heroi) {
+gerenciamentoTela::gerenciamentoTela(const string& backgroundFile,const string& musicFile, Heroi *heroi, Base *base) : heroi(heroi), base(base) {
     
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
@@ -61,6 +61,7 @@ void gerenciamentoTela::atualizar() {
     if(heroi){
         heroi->mover();
         heroi->verificarColisao(shape);
+        heroi->verificarColisao(base->getSprite());
     }
 }
 
@@ -73,6 +74,10 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
 
     if(heroi != nullptr) {
         heroi->renderizar(window);
+    }
+    
+    if(base) {
+        base->renderizar(window);
     }
     
     window.draw(shape);
