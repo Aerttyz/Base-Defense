@@ -24,6 +24,8 @@ class Heroi {
         Sprite backgroundSprite_heroi;
         Vector2f posicao;
         Text  textoVida;
+        Clock relogio;
+        Time dps;
 };
 
 

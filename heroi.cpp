@@ -7,7 +7,7 @@ using namespace std;
 using namespace sf; 
 
 //Construtor
-Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(0.5f), vida(vida){
+Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(0.5f), vida(vida), dps(seconds(1.0f)) {
     if(!background_heroi.loadFromFile(heroiFile)) {
         cout << "Erro ao carregar imagem do herói" << endl;
     }
@@ -48,22 +48,26 @@ int Heroi::getVida() {
 
 void Heroi::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
-        vida -= 1;
-        if (vida < 0) {
-            vida = 0;
+        if(relogio.getElapsedTime() > dps) {
+            vida -= 10;
+            if (vida < 0) {
+                vida = 0;
+            }
+            textoVida.setString("Heroi: " + to_string(vida));
+            relogio.restart();   
         }
-        textoVida.setString("Heroi: " + to_string(vida));   
     }
 }
 
 
 void Heroi::verificarColisao(const RectangleShape& shape) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(shape.getGlobalBounds())) {
-        vida -= 1;
-        if (vida < 0) {
-            vida = 0;
-        }
+         if(relogio.getElapsedTime() > dps) {
+            vida = vida - 10;
+           
         textoVida.setString("Heroi: " + to_string(vida));   
+        relogio.restart();
+        }
     }
 }
 
