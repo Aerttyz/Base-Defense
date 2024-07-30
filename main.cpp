@@ -24,7 +24,7 @@ int main() {
     Heroi heroi(100, "imagens/Cactus Man.png", font);
 
     //Carrega tela
-    gerenciamentoTela gerenciamentoTela("imagens/background.png","imagens/dark_forest.ogg", &heroi, &base);    
+    gerenciamentoTela gerenciamentoTela("imagens/background.png", "imagens/backgroundInicio.png", "imagens/dark_forest.ogg", &heroi, &base);    
     
     
     
