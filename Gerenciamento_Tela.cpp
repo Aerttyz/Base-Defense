@@ -6,9 +6,9 @@ using namespace std;
 using namespace sf;
 class heroi;
 
-
 //Carrega a imagem de fundo e a música
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile,const string& musicFile, Heroi *heroi) : heroi(heroi) {
+    
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
     }
@@ -17,8 +17,13 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile,const string& 
     }else {
         music.setLoop(true);
         music.play();
+        
     }
     backgroundSprite.setTexture(background);
+
+    shape.setSize(Vector2f(100.0f, 100.0f));
+    shape.setFillColor(Color::Green);
+    shape.setPosition(200.0f, 200.0f);
     
 }
 
@@ -55,6 +60,7 @@ void gerenciamentoTela::setHeroiPosition(RenderWindow& window) {
 void gerenciamentoTela::atualizar() {
     if(heroi){
         heroi->mover();
+        heroi->verificarColisao(shape);
     }
 }
 
@@ -68,6 +74,8 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
     if(heroi != nullptr) {
         heroi->renderizar(window);
     }
+    
+    window.draw(shape);
 
     window.display();
 }

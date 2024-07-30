@@ -16,6 +16,7 @@ class gerenciamentoTela {
         void atualizar();
         
     private:
+        RectangleShape shape;
         Texture background;
         Sprite backgroundSprite;
         Music music;

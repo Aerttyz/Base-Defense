@@ -8,25 +8,22 @@ using namespace std;
 
 class Heroi {
     public:
-        Heroi(int vida, const string& heroiFile);
+        Heroi(int vida, const string& heroiFile, const Font& fonte);
         void definirPosicao(const Vector2f& posicao);
         void mover();
-        void atirar();
-        void tomarDano();
-        void curar();
         void renderizar(RenderWindow& window);
         void setVida(int novaVida);
         int getVida();
         void verificarColisao(const Sprite& sprite);
+        void verificarColisao(const RectangleShape& shape);
     
     private:
+        float velocidade;
+        int vida;
         Texture background_heroi;
         Sprite backgroundSprite_heroi;
         Vector2f posicao;
-        float velocidade;
-        int vida;
-        int projeteis;
-        const int max_projeteis = 20;
+        Text  textoVida;
 };
 
 
