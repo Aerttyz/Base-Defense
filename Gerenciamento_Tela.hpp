@@ -6,6 +6,7 @@
 #include "heroi.hpp"
 #include "base.hpp"
 #include "inimigo.hpp"
+#include <vector>
 
 using namespace sf;
 using namespace std;
@@ -14,7 +15,7 @@ using namespace std;
 
 class gerenciamentoTela {
     public:
-        gerenciamentoTela(const string& backgroundFile,const string& backgroundMenuFile, const string& musicFile, Heroi *heroi, Base *base);  
+        gerenciamentoTela(const string& backgroundFile,const string& backgroundMenuFile, const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize);  
         void eventos(RenderWindow& window);
         void renderizar(RenderWindow& window);
         void atualizar();

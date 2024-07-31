@@ -7,7 +7,7 @@ using namespace sf;
 
 class Base{
     public:
-        Base(int vida, const string& baseFile, const Font& font);
+        Base(int vida, const string& baseFile, const Font& font, const Vector2f& windowSize);
         void renderizar(RenderWindow& window);
         void verificarColisao(const Sprite& sprite);
         Sprite getSprite() const;

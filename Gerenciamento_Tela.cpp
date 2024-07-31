@@ -9,7 +9,7 @@ using namespace sf;
 
 
 //Carrega a imagem de fundo e a música
-gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base) 
+gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
 : heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(2)) {
     
     if(!background.loadFromFile(backgroundFile)) {
@@ -40,7 +40,7 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     textoMenu.setString("Pressione Enter para iniciar o jogo");
     FloatRect textRect = textoMenu.getLocalBounds();
     textoMenu.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
-    textoMenu.setPosition(400.0f, 300.0f);
+    textoMenu.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
 
     //Inicia o relógio
     spawRelogio.restart();

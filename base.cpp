@@ -4,14 +4,15 @@
 using namespace std;
 using namespace sf;
 
-Base::Base(int vidaBase, const string& baseFile, const Font& font) : vida(vidaBase), dps(seconds(1.0f)) {
+Base::Base(int vidaBase, const string& baseFile, const Font& font, const Vector2f& windowSize) : vida(vidaBase), dps(seconds(1.0f)) {
     cout << "Construtor Base com Vida" << endl;
     if(!background_base.loadFromFile(baseFile)) {
         cout << "Erro ao carregar imagem da base" << endl;
     }
     backgroundSprite_base.setTexture(background_base);
-    //backgroundSprite_base.setOrigin(backgroundSprite_base.getLocalBounds().width / 2, backgroundSprite_base.getLocalBounds().height / 2);
-    backgroundSprite_base.setPosition(400.0f, 300.0f);
+    FloatRect spriteBounds = backgroundSprite_base.getLocalBounds();
+    backgroundSprite_base.setOrigin(spriteBounds.width / 2.0f, spriteBounds.height / 2.0f);
+    backgroundSprite_base.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
 
     textoVidaBase.setFont(font);
     textoVidaBase.setCharacterSize(20);

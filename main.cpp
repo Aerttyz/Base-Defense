@@ -21,13 +21,13 @@ int main() {
     Inimigo novoInimigo("imagens/Cactus Man.png");
 
     //Carrega imagem da base
-    Base base(100, "imagens/safezone.png", font);
+    Base base(100, "imagens/safezone.png", font, Vector2f(window.getSize()));
 
     //Carrega imagem do herói
     Heroi heroi(100, "imagens/Cactus Man.png", font);
 
     //Carrega tela
-    gerenciamentoTela gerenciamentoTela("imagens/background1.png", "imagens/backgroundInicio.png", "imagens/dark_forest.ogg", &heroi, &base);    
+    gerenciamentoTela gerenciamentoTela("imagens/background1.png", "imagens/backgroundInicio.png", "imagens/dark_forest.ogg", &heroi, &base, Vector2f(window.getSize()));    
     
     
     
