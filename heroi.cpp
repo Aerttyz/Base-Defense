@@ -7,7 +7,7 @@ using namespace std;
 using namespace sf; 
 
 //Construtor
-Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(1.0f), vida(vida), dps(seconds(1.0f)) {
+Heroi::Heroi(int vida, const string& heroiFile, const Font& font, const string& projeteisFile) : velocidade(1.0f), vida(vida), dps(seconds(1.0f)) {
     if(!background_heroi.loadFromFile(heroiFile)) {
         cout << "Erro ao carregar imagem do herói" << endl;
     }
@@ -40,6 +40,10 @@ void Heroi::mover() {
         direcao /= distancia;
         backgroundSprite_heroi.move(direcao * velocidade * 0.01f);
     }
+}
+
+void Heroi::atirar() {
+    //Implementar
 }
 
 void Heroi::setVida(int novaVida) {
