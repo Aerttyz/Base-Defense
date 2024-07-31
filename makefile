@@ -17,11 +17,14 @@ LIBS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 LDFLAGS = -L/path/to/SFML/lib
 
 # Regra padrão
-all: $(TARGET)
+all: $(TARGET) 
 
 # Regra para criar o executável
 $(TARGET): $(SRCS)
 	$(CXX) -o $(TARGET) $(SRCS) $(CXXFLAGS) $(LDFLAGS) $(LIBS)
+
+
+
 
 # Limpar arquivos gerados
 clean:

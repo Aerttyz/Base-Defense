@@ -1,6 +1,7 @@
 #include "Gerenciamento_Tela.hpp"
-#include "heroi.hpp"
 #include <iostream>
+#include <cmath>
+#include "heroi.hpp"
 #include "base.hpp"
 #include "inimigo.hpp"
 using namespace std;
@@ -69,7 +70,7 @@ void gerenciamentoTela::setBackgroundScale(RenderWindow& window, Sprite& sprite)
     Vector2u textureSize = background.getSize();
     Vector2u windowSize = window.getSize();
     backgroundSprite.setScale((float) windowSize.x / textureSize.x, (float) windowSize.y / textureSize.y);
-    backgroundSprite_menu.setScale((float) windowSize.x / textureSize.x, (float) windowSize.y / textureSize.y);
+    //backgroundSprite_menu.setScale((float) windowSize.x / textureSize.x, (float) windowSize.y / textureSize.y);
 }
 
 //Ajusta a posição do herói
@@ -83,9 +84,13 @@ void gerenciamentoTela::setHeroiPosition(RenderWindow& window) {
 
 //Gera uma posição aleatória para o inimigo
 Vector2f gerenciamentoTela::getPosicaoRandom(const Vector2u& windowSize) {
-    int x = rand() % windowSize.x;
-    int y = rand() % windowSize.y;
+    int x = rand() % (windowSize.x + 200);
+    int y = rand() % (windowSize.y + 200);
     return Vector2f(x, y);
+}
+
+float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
+    return sqrt(pow(posicao1.x - posicao2.x, 2) + pow(posicao1.y - posicao2.y, 2));
 }
 
 //Atualiza a posição do herói e do inimigo
@@ -103,8 +108,24 @@ void gerenciamentoTela::atualizar() {
             base->verificarColisao(heroi->getSprite());
         }
         if(spawRelogio.getElapsedTime() >= spawInimigo) {
-            Vector2f posicao = getPosicaoRandom(Vector2u(800, 600));
-            Inimigo* inimigo = new Inimigo("imagens/inimigo.png");
+            Vector2f posicao;
+            bool posicaoValida = false;
+            const float distanciaMinima = 50.0f;
+
+            while(!posicaoValida){
+                posicao = getPosicaoRandom(Vector2u(800, 600));
+                posicaoValida = true;
+
+                for(const auto& inimigo : inimigos) {
+                    if(calcularDistancia(posicao, inimigo.getPosicao()) < distanciaMinima) {
+                        posicaoValida = false;
+                        break;
+                    }
+                }
+
+            }
+            
+            Inimigo* inimigo = new Inimigo("imagens/alien_0.png");
             if(inimigo->isTextureLoaded()) {
                 inimigo->setPosicao(posicao);
                 inimigos.push_back(*inimigo);

@@ -7,7 +7,7 @@ using namespace std;
 using namespace sf; 
 
 //Construtor
-Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(0.5f), vida(vida), dps(seconds(1.0f)) {
+Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(1.0f), vida(vida), dps(seconds(1.0f)) {
     if(!background_heroi.loadFromFile(heroiFile)) {
         cout << "Erro ao carregar imagem do herói" << endl;
     }
