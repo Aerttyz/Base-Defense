@@ -21,7 +21,7 @@ int main() {
     Inimigo novoInimigo("imagens/Cactus Man.png");
 
     //Carrega imagem da base
-    Base base(100, "imagens/Cactus Man.png", font);
+    Base base(100, "imagens/safezone.png", font);
 
     //Carrega imagem do herói
     Heroi heroi(100, "imagens/Cactus Man.png", font);
