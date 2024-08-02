@@ -110,19 +110,22 @@ Vector2f gerenciamentoTela::getPosicaoRandom(const Vector2u& windowSize) {
     }
 }
 
+//Calcula a distância entre duas posições
 float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
     return sqrt(pow(posicao1.x - posicao2.x, 2) + pow(posicao1.y - posicao2.y, 2));
 }
 
-//Atualiza a posição do herói e do inimigo
+//Atualiza as informações do jogo
 void gerenciamentoTela::atualizar() {
     if(estado == Estado::JOGO) {
         if(heroi){
             heroi->mover();
+            //implementa a verificação de colisão do sprite com os inimigos
             for (auto& inimigo : inimigos) {
                 heroi->verificarColisao(inimigo.getSprite());
             }
         }
+        //move os inimigos e verifica colisão
         if(!inimigos.empty()) {
             for (auto& inimigo : inimigos) {
                 inimigo.mover();
@@ -136,6 +139,7 @@ void gerenciamentoTela::atualizar() {
             //heroi usado para testar, posteriormente substituir por progeteis
             base->verificarColisao(heroi->getSprite());
         }
+        //Cria um novo inimigo a cada x segundos com distância mínima de 50
         if(spawRelogio.getElapsedTime() >= spawInimigo) {
             Vector2f posicao;
             bool posicaoValida = false;
@@ -166,7 +170,7 @@ void gerenciamentoTela::atualizar() {
     }
 }
 
-//Renderiza a imagem de fundo e o herói
+//Renderiza a imagem de fundo e os sprites
 void gerenciamentoTela::renderizar(RenderWindow& window) {
     window.clear();
 

@@ -21,7 +21,6 @@ class gerenciamentoTela {
         void atualizar();
         void setBackgroundScale(RenderWindow& window, Sprite& sprite);
         void setHeroiPosition(RenderWindow& window);
-        void setInimigoPosition();
         Vector2f getPosicaoRandom(const Vector2u& windowSize);
         
     private:
