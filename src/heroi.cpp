@@ -1,5 +1,5 @@
 #include <iostream>
-#include "heroi.hpp"
+#include "../include/heroi.hpp"
 #include "cmath"
 
 

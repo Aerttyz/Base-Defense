@@ -3,9 +3,9 @@
 
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include "heroi.hpp"
-#include "base.hpp"
-#include "inimigo.hpp"
+#include "../include/heroi.hpp"
+#include "../include/base.hpp"
+#include "../include/inimigo.hpp"
 #include <vector>
 
 using namespace sf;

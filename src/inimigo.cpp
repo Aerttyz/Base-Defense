@@ -1,5 +1,6 @@
 #include <iostream>
-#include "inimigo.hpp"
+#include <SFML/Graphics.hpp>
+#include "../include/inimigo.hpp"
 
 using namespace std;
 using namespace sf;

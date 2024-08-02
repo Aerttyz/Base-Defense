@@ -1,9 +1,9 @@
-#include "Gerenciamento_Tela.hpp"
+#include "../include/Gerenciamento_Tela.hpp"
 #include <iostream>
 #include <cmath>
-#include "heroi.hpp"
-#include "base.hpp"
-#include "inimigo.hpp"
+#include "../include/heroi.hpp"
+#include "../include/base.hpp"
+#include "../include/inimigo.hpp"
 using namespace std;
 using namespace sf;
 
@@ -11,11 +11,11 @@ using namespace sf;
 //Carrega a imagem de fundo e a música
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
 : heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(2)) {
-    
+
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
     }
-    if(!font.loadFromFile("imagens/fonts/fonts.ttf")) {
+    if(!font.loadFromFile("assets/fonts/fonts.ttf")) {
         cerr << "Erro ao carregar a fonte" << endl;
         exit(1);
     }
@@ -84,6 +84,7 @@ void gerenciamentoTela::setHeroiPosition(RenderWindow& window) {
 
 //Gera uma posição aleatória para o inimigo
 Vector2f gerenciamentoTela::getPosicaoRandom(const Vector2u& windowSize) {
+    //Offset para evitar que o inimigo apareça fora da tela
     const int offset = 0;
     int direcao = rand() % (2);
     int sentido = rand() % (2);
@@ -145,7 +146,7 @@ void gerenciamentoTela::atualizar() {
 
             }
             
-            Inimigo* inimigo = new Inimigo("imagens/alien_0.png");
+            Inimigo* inimigo = new Inimigo("assets/images/characters/alien_0.png");
             if(inimigo->isTextureLoaded()) {
                 inimigo->setPosicao(posicao);
                 inimigos.push_back(*inimigo);

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "base.hpp"
+#include "../include/base.hpp"
 
 using namespace std;
 using namespace sf;
