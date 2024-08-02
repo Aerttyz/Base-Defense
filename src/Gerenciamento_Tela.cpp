@@ -123,6 +123,14 @@ void gerenciamentoTela::atualizar() {
                 heroi->verificarColisao(inimigo.getSprite());
             }
         }
+        if(!inimigos.empty()) {
+            for (auto& inimigo : inimigos) {
+                inimigo.mover();
+                if(base) {
+                    base->verificarColisao(inimigo.getSprite());
+                }
+            }
+        }
         if(base) {
             //Aqui implemente a verificação de colisão do sprite com a base
             //heroi usado para testar, posteriormente substituir por progeteis

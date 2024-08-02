@@ -9,7 +9,7 @@ using namespace sf;
 class Inimigo{
     public:
         Inimigo(const string& inimigoFile);
-        //void mover();
+        void mover();
         void renderizar(RenderWindow& window);
         //void verificarColisao(const Sprite& sprite);
         void setPosicao(const Vector2f& posicao);

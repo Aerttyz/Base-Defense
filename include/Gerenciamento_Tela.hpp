@@ -21,6 +21,8 @@ class gerenciamentoTela {
         void atualizar();
         void setBackgroundScale(RenderWindow& window, Sprite& sprite);
         void setHeroiPosition(RenderWindow& window);
+        void setInimigoPosition();
+        Vector2f getPosicaoRandom(const Vector2u& windowSize);
         
     private:
         RectangleShape shape;
@@ -34,11 +36,10 @@ class gerenciamentoTela {
         Base *base;
         vector<Inimigo> inimigos;
         Font font;
-        enum class Estado {MENU, JOGO, GAMEOVER};
-        Estado estado;
         Clock spawRelogio;
         Time spawInimigo;
-        Vector2f getPosicaoRandom(const Vector2u& windowSize);
+        enum class Estado {MENU, JOGO, GAMEOVER};
+        Estado estado;
 
 
 };
