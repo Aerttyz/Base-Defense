@@ -10,6 +10,7 @@ using namespace std;
 int main() {
     //Cria janela de 800x600 pixels
     RenderWindow window(VideoMode(800, 600), "Base-Defense");
+    window.setFramerateLimit(60);
     
 
     Font font;

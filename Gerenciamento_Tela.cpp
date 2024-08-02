@@ -84,9 +84,29 @@ void gerenciamentoTela::setHeroiPosition(RenderWindow& window) {
 
 //Gera uma posição aleatória para o inimigo
 Vector2f gerenciamentoTela::getPosicaoRandom(const Vector2u& windowSize) {
-    int x = rand() % (windowSize.x + 200);
-    int y = rand() % (windowSize.y + 200);
-    return Vector2f(x, y);
+    const int offset = 0;
+    int direcao = rand() % (2);
+    int sentido = rand() % (2);
+    if(direcao == 0) {
+        int x = rand() % (windowSize.x + offset);
+        int y;
+        if(sentido == 0) {
+            y = -offset;
+        }else{
+            y = windowSize.y + offset;
+        }
+        return Vector2f(x, y);
+    }
+    else{
+        int y = rand() % (windowSize.y + offset);
+        int x;
+        if(sentido == 0) {
+            x = -offset;
+        }else{
+            x = windowSize.x + offset;
+        }
+        return Vector2f(x, y);
+    }
 }
 
 float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {

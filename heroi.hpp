@@ -8,7 +8,7 @@ using namespace std;
 
 class Heroi {
     public:
-        Heroi(int vida, const string& heroiFile, const Font& fonte, const string& projeteisFile);
+        Heroi(int vida, const string& heroiFile, const Font& fonte);
         void definirPosicao(const Vector2f& posicao);
         void mover();
         void atirar();
