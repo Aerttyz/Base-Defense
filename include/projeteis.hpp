@@ -12,6 +12,7 @@ class Projetil{
         FloatRect getGlobalBounds() const;  
         Sprite getSprite() const;
         Vector2f getPosicao() const;
+        bool verificarColisao(const Sprite& sprite);
     private:
         Sprite backgroundSprite_projetil;
         float velocidade;

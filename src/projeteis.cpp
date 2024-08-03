@@ -1,4 +1,6 @@
 #include "../include/projeteis.hpp"
+#include <iostream>
+using namespace std;
 
 Projetil::Projetil(const Vector2f& posicaoInicial, const Vector2f& direcao, const Texture& textura) : direcao(direcao), velocidade(400.0f) {
     backgroundSprite_projetil.setTexture(textura);
@@ -9,6 +11,12 @@ Sprite Projetil::getSprite() const {
     return backgroundSprite_projetil;
 }   
 
+bool Projetil::verificarColisao(const Sprite& sprite) {
+    if(backgroundSprite_projetil.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
+      cout << "Colisão detectada proje" << endl;  
+      return true;
+    }
+}
 
 Vector2f Projetil::getPosicao() const{
     return backgroundSprite_projetil.getPosition();

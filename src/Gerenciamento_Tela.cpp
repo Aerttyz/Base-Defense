@@ -160,7 +160,11 @@ void gerenciamentoTela::atualizar() {
                 if(inimigo.verificarColisao(base->getSprite())){
                     inimigos.erase(inimigos.begin());
                 }
-                
+                for(auto& projetil : heroi->getProjeteis()) {
+                    if(inimigo.verificarColisao(projetil.getSprite())) {
+                        inimigos.erase(inimigos.begin());
+                    }
+                }
             }
         }
         //Cria um novo inimigo a cada x segundos com distância mínima de 50
