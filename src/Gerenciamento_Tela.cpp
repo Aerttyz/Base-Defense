@@ -163,6 +163,7 @@ void gerenciamentoTela::atualizar() {
                 for(auto& projetil : heroi->getProjeteis()) {
                     if(inimigo.verificarColisao(projetil.getSprite())) {
                         inimigos.erase(inimigos.begin());
+                        heroi->getProjeteis().erase(heroi->getProjeteis().begin());
                     }
                 }
             }
