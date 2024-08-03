@@ -42,8 +42,24 @@ void Heroi::mover() {
     }
 }
 
-void Heroi::atirar() {
-    //Implementar
+void Heroi::atirar(const Vector2f& direcao, const Texture& texturaProjetil) {
+        //Vector2f posicaoProjetil = backgroundSprite_heroi.getPosition();
+        //projeteis.emplace_back(posicaoProjetil, texturaProjetil);   
+        Vector2f direcaoNormalizada = direcao / sqrt(direcao.x * direcao.x + direcao.y * direcao.y);
+        Projetil projetil(backgroundSprite_heroi.getPosition(), direcaoNormalizada, texturaProjetil);
+        projeteis.push_back(projetil);
+}
+
+void Heroi::atualizarProjeteis(const Vector2u& windowSize) {
+     for (auto it = projeteis.begin(); it != projeteis.end();) {
+        it->mover();
+        Vector2f posicao = it->getPosicao();
+        if (posicao.x < 0 || posicao.x > windowSize.x || posicao.y < 0 || posicao.y > windowSize.y) {
+            it = projeteis.erase(it); // Remove o projétil se sair da tela
+        } else {
+            ++it; // Move para o próximo projétil
+        }
+    }
 }
 
 void Heroi::setVida(int novaVida) {
@@ -84,13 +100,21 @@ void Heroi::verificarColisao(const RectangleShape& shape) {
     }
 }
 
+vector<Projetil>& Heroi::getProjeteis() {
+    return projeteis;
+}
+
 //Renderiza o herói
 void Heroi::renderizar(RenderWindow& window) {
     window.draw(backgroundSprite_heroi);
+    for (auto& projetil : projeteis) {
+        projetil.renderizar(window);
+    }
 
     FloatRect textRect = textoVida.getLocalBounds();
     textoVida.setPosition(window.getSize().x - textRect.width - 10, 10);
     window.draw(textoVida);
+
     
 }
 

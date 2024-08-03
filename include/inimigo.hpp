@@ -13,7 +13,7 @@ class Inimigo{
         void renderizar(RenderWindow& window);
         bool verificarColisao(const Sprite& sprite);
         void setPosicao(const Vector2f& posicao);
-        sf::Vector2f getPosicao() const;
+        Vector2f getPosicao() const;
         Sprite getSprite() const;
         bool isTextureLoaded() const;   
         

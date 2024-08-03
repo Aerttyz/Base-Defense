@@ -20,21 +20,25 @@ Base::Base(int vidaBase, const string& baseFile, const Font& font, const Vector2
     textoVidaBase.setString("Base: " + to_string(vidaBase));
 }
 
+//Retorna o sprite da base
 Sprite Base::getSprite() const {
     return backgroundSprite_base;
 }
 
+//Define a vida da base
 void Base::setVidaBase(int novaVidaBase) {
     cout << "Vida Base: " << novaVidaBase << endl;
     vida = novaVidaBase;
     textoVidaBase.setString("Base: " + to_string(vida));
 }
 
+
 int Base::getVidaBase() {
     return vida;
 }
 
-void Base::verificarColisao(const Sprite& sprite) {
+//Verifica colisão com um sprite e diminui a vida da base
+bool Base::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_base.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
         if(relogio.getElapsedTime() > dps) {
             vida -= 10;
@@ -42,6 +46,7 @@ void Base::verificarColisao(const Sprite& sprite) {
                 vida = 0;
             }
             textoVidaBase.setString("Base: " + to_string(vida));
+            return true;
             relogio.restart();
         }
     }

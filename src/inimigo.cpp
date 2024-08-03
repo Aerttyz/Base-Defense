@@ -28,6 +28,7 @@ void Inimigo::mover() {
     }
 }
 
+//Verifica colisão com um sprite
 bool Inimigo::verificarColisao(const Sprite& sprite) {
     if(backgroundSprite_inimigo.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
         if(relogio.getElapsedTime() > dps) {

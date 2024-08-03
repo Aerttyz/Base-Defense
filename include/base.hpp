@@ -9,7 +9,7 @@ class Base{
     public:
         Base(int vida, const string& baseFile, const Font& font, const Vector2f& windowSize);
         void renderizar(RenderWindow& window);
-        void verificarColisao(const Sprite& sprite);
+        bool verificarColisao(const Sprite& sprite);
         Sprite getSprite() const;
         void setVidaBase(int novaVidaBase);
         int getVidaBase();
