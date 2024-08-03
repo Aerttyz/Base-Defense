@@ -50,16 +50,13 @@ void Heroi::atirar(const Vector2f& direcao, const Texture& texturaProjetil) {
         projeteis.push_back(projetil);
 }
 
-void Heroi::atualizarProjeteis(const Vector2u& windowSize) {
-     for (auto it = projeteis.begin(); it != projeteis.end();) {
-        it->mover();
-        Vector2f posicao = it->getPosicao();
-        if (posicao.x < 0 || posicao.x > windowSize.x || posicao.y < 0 || posicao.y > windowSize.y) {
-            it = projeteis.erase(it); // Remove o projétil se sair da tela
-        } else {
-            ++it; // Move para o próximo projétil
-        }
+void Heroi::atualizarProjeteis() {
+    for (auto& projetil : projeteis) {
+        projetil.mover();
     }
+    projeteis.erase(remove_if(projeteis.begin(), projeteis.end(), [](const Projetil& p) {
+        return p.getGlobalBounds().top + p.getGlobalBounds().height < 0;
+    }), projeteis.end());
 }
 
 void Heroi::setVida(int novaVida) {

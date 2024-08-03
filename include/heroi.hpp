@@ -15,7 +15,7 @@ class Heroi {
         void definirPosicao(const Vector2f& posicao);
         void mover();
         void atirar(const Vector2f& direcao, const Texture& texturaProjetil);
-        void atualizarProjeteis(const Vector2u& windowSize);
+        void atualizarProjeteis();
         void setVida(int novaVida);
         int getVida();
         void verificarColisao(const Sprite& sprite);
