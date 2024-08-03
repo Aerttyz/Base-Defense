@@ -4,7 +4,7 @@
 using namespace std;
 using namespace sf;
 
-Base::Base(int vidaBase, const string& baseFile, const Font& font, const Vector2f& windowSize) : vida(vidaBase), dps(seconds(1.0f)) {
+Base::Base(int vidaBase, const string& baseFile, const Font& font, const Vector2f& windowSize) : vida(vidaBase), dps(seconds(0.01f)) {
     cout << "Construtor Base com Vida" << endl;
     if(!background_base.loadFromFile(baseFile)) {
         cout << "Erro ao carregar imagem da base" << endl;
@@ -38,6 +38,9 @@ void Base::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_base.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
         if(relogio.getElapsedTime() > dps) {
             vida -= 10;
+            if(vida <= 0) {
+                vida = 0;
+            }
             textoVidaBase.setString("Base: " + to_string(vida));
             relogio.restart();
         }

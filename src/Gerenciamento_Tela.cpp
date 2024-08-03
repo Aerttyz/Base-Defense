@@ -125,6 +125,16 @@ void gerenciamentoTela::atualizar() {
                 heroi->verificarColisao(inimigo.getSprite());
             }
         }
+
+        if(base) {
+            //Aqui implemente a verificação de colisão do sprite com a base
+            //heroi usado para testar, posteriormente substituir por progeteis
+            for(auto& inimigo : inimigos) {
+                base->verificarColisao(inimigo.getSprite());
+            }
+            //base->verificarColisao(inimigo->getSprite());
+        }
+
         //move os inimigos e verifica colisão
         if(!inimigos.empty()) {
             for (auto& inimigo : inimigos) {
@@ -132,12 +142,11 @@ void gerenciamentoTela::atualizar() {
                 if(base) {
                     base->verificarColisao(inimigo.getSprite());
                 }
+                if(inimigo.verificarColisao(base->getSprite())){
+                    inimigos.erase(inimigos.begin());
+                }
+                
             }
-        }
-        if(base) {
-            //Aqui implemente a verificação de colisão do sprite com a base
-            //heroi usado para testar, posteriormente substituir por progeteis
-            base->verificarColisao(heroi->getSprite());
         }
         //Cria um novo inimigo a cada x segundos com distância mínima de 50
         if(spawRelogio.getElapsedTime() >= spawInimigo) {

@@ -6,7 +6,7 @@ using namespace std;
 using namespace sf;
 
 //Construtor
-Inimigo::Inimigo(const string& inimigoFile) : textureLoaded(false), velocidade(100.0f), posicao(Vector2f(400, 300)) { 
+Inimigo::Inimigo(const string& inimigoFile) : textureLoaded(false), velocidade(100.0f), posicao(Vector2f(400, 300)), dps(seconds(1.0f)) { 
         if (!background_inimigo.loadFromFile(inimigoFile)) {
             cerr << "Erro ao carregar a imagem do inimigo" << endl;
             exit(1);
@@ -25,6 +25,16 @@ void Inimigo::mover() {
     if(distancia > 1.0f) {
         direcao /= distancia;
         backgroundSprite_inimigo.move(direcao * velocidade * 0.01f);
+    }
+}
+
+bool Inimigo::verificarColisao(const Sprite& sprite) {
+    if(backgroundSprite_inimigo.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
+        if(relogio.getElapsedTime() > dps) {
+            cout << "Colisão detectada" << endl;
+            return true;
+            relogio.restart();
+        }
     }
 }
 

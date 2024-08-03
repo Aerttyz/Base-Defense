@@ -11,11 +11,10 @@ class Inimigo{
         Inimigo(const string& inimigoFile);
         void mover();
         void renderizar(RenderWindow& window);
-        //void verificarColisao(const Sprite& sprite);
+        bool verificarColisao(const Sprite& sprite);
         void setPosicao(const Vector2f& posicao);
         sf::Vector2f getPosicao() const;
         Sprite getSprite() const;
-        
         bool isTextureLoaded() const;   
         
     private:
