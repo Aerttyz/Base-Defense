@@ -50,6 +50,7 @@ bool Base::verificarColisao(const Sprite& sprite) {
             relogio.restart();
         }
     }
+    return false;
 }
 
 void Base::renderizar(RenderWindow& window) {

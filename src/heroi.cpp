@@ -25,6 +25,11 @@ Sprite Heroi::getSprite() const {
     return backgroundSprite_heroi;
 }
 
+//Retorna a posição do herói
+Vector2f Heroi::getPosicao() {
+    return backgroundSprite_heroi.getPosition();
+}
+
 //Define a posição do herói
 void Heroi::definirPosicao(const Vector2f& novaPosicao) {
     posicao = novaPosicao;
@@ -43,8 +48,6 @@ void Heroi::mover() {
 }
 
 void Heroi::atirar(const Vector2f& direcao, const Texture& texturaProjetil) {
-        //Vector2f posicaoProjetil = backgroundSprite_heroi.getPosition();
-        //projeteis.emplace_back(posicaoProjetil, texturaProjetil);   
         Vector2f direcaoNormalizada = direcao / sqrt(direcao.x * direcao.x + direcao.y * direcao.y);
         Projetil projetil(backgroundSprite_heroi.getPosition(), direcaoNormalizada, texturaProjetil);
         projeteis.push_back(projetil);

@@ -2,8 +2,9 @@
 #include <iostream>
 using namespace std;
 
-Projetil::Projetil(const Vector2f& posicaoInicial, const Vector2f& direcao, const Texture& textura) : direcao(direcao), velocidade(400.0f) {
-    backgroundSprite_projetil.setTexture(textura);
+Projetil::Projetil(const Vector2f& posicaoInicial, const Vector2f& direcao, const Texture& texturaProjetil) : direcao(direcao), velocidade(400.0f) {
+    background_projetil = texturaProjetil;
+    backgroundSprite_projetil.setTexture(background_projetil);
     backgroundSprite_projetil.setPosition(posicaoInicial);
 }
 
@@ -16,6 +17,7 @@ bool Projetil::verificarColisao(const Sprite& sprite) {
       cout << "Colisão detectada proje" << endl;  
       return true;
     }
+    return false;
 }
 
 Vector2f Projetil::getPosicao() const{
@@ -33,3 +35,8 @@ void Projetil::renderizar(RenderWindow& window) {
 FloatRect Projetil::getGlobalBounds() const {
     return backgroundSprite_projetil.getGlobalBounds();
 }   
+
+bool Projetil::isTextureLoaded() const {
+        return textureLoaded;
+    }
+    

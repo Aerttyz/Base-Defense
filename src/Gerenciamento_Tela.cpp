@@ -66,7 +66,7 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
         if(event.type == Event::KeyPressed && event.key.code == Keyboard::Q) {
             if(heroi) {
                 Texture texturaProjetil;
-                if (!texturaProjetil.loadFromFile("assets/images/bullet1.png")) {
+                if (!texturaProjetil.loadFromFile("assets/images/background/bullet1.png")) {
                         cout << "Erro ao carregar imagem do projétil" << endl;
                 }else{
                     Vector2i posicaoMouse = Mouse::getPosition(window);
@@ -131,67 +131,70 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
 
 //Atualiza as informações do jogo
 void gerenciamentoTela::atualizar() {
-    if(estado == Estado::JOGO) {
-        if(heroi){
+    if (estado == Estado::JOGO) {
+        if (heroi) {
             heroi->mover();
             heroi->atualizarProjeteis();
-            //implementa a verificação de colisão do sprite com os inimigos
             for (auto& inimigo : inimigos) {
                 heroi->verificarColisao(inimigo.getSprite());
             }
         }
 
-        if(base) {
-            //Aqui implemente a verificação de colisão do sprite com a base
-            //heroi usado para testar, posteriormente substituir por progeteis
-            for(auto& inimigo : inimigos) {
+        if (base) {
+            for (auto& inimigo : inimigos) {
                 base->verificarColisao(inimigo.getSprite());
             }
-            //base->verificarColisao(inimigo->getSprite());
         }
 
-        //move os inimigos e verifica colisão
-        if(!inimigos.empty()) {
-            for (auto& inimigo : inimigos) {
-                inimigo.mover();
-                if(base) {
-                    base->verificarColisao(inimigo.getSprite());
-                }
-                if(inimigo.verificarColisao(base->getSprite())){
-                    inimigos.erase(inimigos.begin());
-                }
-                for(auto& projetil : heroi->getProjeteis()) {
-                    if(inimigo.verificarColisao(projetil.getSprite())) {
-                        inimigos.erase(inimigos.begin());
-                        heroi->getProjeteis().erase(heroi->getProjeteis().begin());
-                    }
-                }
+        for (auto it = inimigos.begin(); it != inimigos.end();) {
+            it->mover();
+            if (base && it->verificarColisao(base->getSprite())) {
+                it = inimigos.erase(it);
+            } else {
+                ++it;
             }
         }
-        //Cria um novo inimigo a cada x segundos com distância mínima de 50
-        if(spawRelogio.getElapsedTime() >= spawInimigo) {
+
+        auto& projeteis = heroi->getProjeteis();
+        for (auto it = projeteis.begin(); it != projeteis.end();) {
+            bool projetilRemovido = false;
+            for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
+                if (inimigoIt->verificarColisao(it->getSprite())) {
+                    inimigoIt = inimigos.erase(inimigoIt);
+                    it = projeteis.erase(it);
+                    projetilRemovido = true;
+                    break;
+                } else {
+                    ++inimigoIt;
+                }
+            }
+            if (!projetilRemovido) {
+                ++it;
+            }
+        }
+
+        if (spawRelogio.getElapsedTime() >= spawInimigo) {
             Vector2f posicao;
             bool posicaoValida = false;
             const float distanciaMinima = 50.0f;
 
-            while(!posicaoValida){
+            while (!posicaoValida) {
                 posicao = getPosicaoRandom(Vector2u(800, 600));
                 posicaoValida = true;
 
-                for(const auto& inimigo : inimigos) {
-                    if(calcularDistancia(posicao, inimigo.getPosicao()) < distanciaMinima) {
+                for (const auto& inimigo : inimigos) {
+                    if (calcularDistancia(posicao, inimigo.getPosicao()) < distanciaMinima) {
                         posicaoValida = false;
                         break;
                     }
                 }
-
             }
-            
+
             Inimigo* inimigo = new Inimigo("assets/images/characters/alien_0.png");
-            if(inimigo->isTextureLoaded()) {
+            if (inimigo->isTextureLoaded()) {
                 inimigo->setPosicao(posicao);
                 inimigos.push_back(*inimigo);
-            }else{
+            } else {
                 delete inimigo;
             }
             spawRelogio.restart();

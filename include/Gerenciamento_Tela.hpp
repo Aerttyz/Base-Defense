@@ -34,6 +34,7 @@ class gerenciamentoTela {
         Heroi *heroi;
         Base *base;
         vector<Inimigo> inimigos;
+        vector<Projetil> projeteis;
         Font font;
         Clock spawRelogio;
         Time spawInimigo;

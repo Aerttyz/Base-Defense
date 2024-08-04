@@ -37,6 +37,7 @@ bool Inimigo::verificarColisao(const Sprite& sprite) {
             relogio.restart();
         }
     }
+    return false;
 }
 
 //Define a posição do inimigo
