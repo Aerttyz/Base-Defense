@@ -148,6 +148,7 @@ void gerenciamentoTela::atualizar() {
 
         for (auto it = inimigos.begin(); it != inimigos.end();) {
             it->mover();
+            base->verificarColisao(it->getSprite());
             if (base && it->verificarColisao(base->getSprite())) {
                 it = inimigos.erase(it);
             } else {
