@@ -17,12 +17,33 @@ Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(1
     textoVida.setFont(font);
     textoVida.setCharacterSize(20);
     textoVida.setFillColor(Color::White);
-    textoVida.setString("Heroi: " + to_string(vida));   
+    textoVida.setString("Heroi: " + to_string(vida));
+
+    projetilFile = "assets/images/background/bullet1.png";   
+    if(!texturaProjetil.loadFromFile(projetilFile)) {
+        cout << "Erro ao carregar textura do projetil" << endl;
+    }
+    
+    bulletSongFile = "assets/music/bulletsong.ogg";
+    if(!bufferBulletSong.loadFromFile(bulletSongFile)) {
+        cout << "Erro ao carregar música do projetil" << endl;
+    }else {
+        bulletSong.setBuffer(bufferBulletSong);
+    }
+
+
+    backgroundSprite_projetil.setTexture(texturaProjetil);
+    backgroundSprite_projetil.setPosition(posicao);
 }
 
 //Retorna o sprite do herói
 Sprite Heroi::getSprite() const {
     return backgroundSprite_heroi;
+}
+
+//Retorna a posição do herói
+Vector2f Heroi::getPosicao() {
+    return backgroundSprite_heroi.getPosition();
 }
 
 //Define a posição do herói
@@ -42,24 +63,20 @@ void Heroi::mover() {
     }
 }
 
-void Heroi::atirar(const Vector2f& direcao, const Texture& texturaProjetil) {
-        //Vector2f posicaoProjetil = backgroundSprite_heroi.getPosition();
-        //projeteis.emplace_back(posicaoProjetil, texturaProjetil);   
+void Heroi::atirar(const Vector2f& direcao) {
         Vector2f direcaoNormalizada = direcao / sqrt(direcao.x * direcao.x + direcao.y * direcao.y);
-        Projetil projetil(backgroundSprite_heroi.getPosition(), direcaoNormalizada, texturaProjetil);
+        Projetil projetil(backgroundSprite_heroi.getPosition(), direcaoNormalizada, backgroundSprite_projetil);
         projeteis.push_back(projetil);
+        bulletSong.play();
 }
 
-void Heroi::atualizarProjeteis(const Vector2u& windowSize) {
-     for (auto it = projeteis.begin(); it != projeteis.end();) {
-        it->mover();
-        Vector2f posicao = it->getPosicao();
-        if (posicao.x < 0 || posicao.x > windowSize.x || posicao.y < 0 || posicao.y > windowSize.y) {
-            it = projeteis.erase(it); // Remove o projétil se sair da tela
-        } else {
-            ++it; // Move para o próximo projétil
-        }
+void Heroi::atualizarProjeteis() {
+    for (auto& projetil : projeteis) {
+        projetil.mover();
     }
+    projeteis.erase(remove_if(projeteis.begin(), projeteis.end(), [](const Projetil& p) {
+        return p.getGlobalBounds().top + p.getGlobalBounds().height < 0;
+    }), projeteis.end());
 }
 
 void Heroi::setVida(int novaVida) {

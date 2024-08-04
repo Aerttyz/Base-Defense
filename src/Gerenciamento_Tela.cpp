@@ -65,15 +65,10 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
         }
         if(event.type == Event::KeyPressed && event.key.code == Keyboard::Q) {
             if(heroi) {
-                Texture texturaProjetil;
-                if (!texturaProjetil.loadFromFile("assets/images/bullet1.png")) {
-                        cout << "Erro ao carregar imagem do projétil" << endl;
-                }else{
-                    Vector2i posicaoMouse = Mouse::getPosition(window);
-                    Vector2f direcao(static_cast<float>(posicaoMouse.x) - heroi->getSprite().getPosition().x, static_cast<float>(posicaoMouse.y) - heroi->getSprite().getPosition().y);
-                    heroi->atirar(direcao, texturaProjetil);
-                    cout << "Atirou" << endl;
-                }
+                Vector2i posicaoMouse = Mouse::getPosition(window);
+                Vector2f direcao(static_cast<float>(posicaoMouse.x) - heroi->getSprite().getPosition().x, static_cast<float>(posicaoMouse.y) - heroi->getSprite().getPosition().y);
+                heroi->atirar(direcao);
+                cout << "Atirou" << endl;
             }
         }
     }
@@ -130,96 +125,82 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
 }
 
 //Atualiza as informações do jogo
-void gerenciamentoTela::atualizar() {
+void gerenciamentoTela::atualizar(RenderWindow& window) {
     if (estado == Estado::JOGO) {
         if (heroi) {
             heroi->mover();
-            heroi->atualizarProjeteis(Vector2u(800, 600));
+            heroi->atualizarProjeteis();
+            for (auto& inimigo : inimigos) {
+                heroi->verificarColisao(inimigo.getSprite());
+            }
+        }
 
-            auto& projeteis = heroi->getProjeteis();
-            for (auto it = projeteis.begin(); it != projeteis.end();) {
-                bool projetilDestruido = false;
+        if (base) {
+            for (auto& inimigo : inimigos) {
+                base->verificarColisao(inimigo.getSprite());
+            }
+        }
 
-                // Verifica colisão do projétil com inimigos
+        for (auto it = inimigos.begin(); it != inimigos.end();) {
+            it->mover();
+            base->verificarColisao(it->getSprite());
+            if (base && it->verificarColisao(base->getSprite())) {
+                it = inimigos.erase(it);
+            } else {
+                ++it;
+            }
+        }
+
+        auto& projeteis = heroi->getProjeteis();
+        for (auto it = projeteis.begin(); it != projeteis.end();) {
+            bool projetilRemovido = false;
+
+            if (it->verificarColisaoJanela(window)) {
+                it = projeteis.erase(it);
+                projetilRemovido = true;
+            }
+            if (!projetilRemovido){
                 for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
                     if (inimigoIt->verificarColisao(it->getSprite())) {
-                        // Remove o inimigo e marca o projétil para remoção
                         inimigoIt = inimigos.erase(inimigoIt);
-                        projetilDestruido = true;
-                        break; // Sai do loop de inimigos
+                        it = projeteis.erase(it);
+                        projetilRemovido = true;
+                        break;
                     } else {
                         ++inimigoIt;
                     }
                 }
-
-                // Verifica se o projétil saiu da tela
-                if (it->getPosicao().x < 0 || it->getPosicao().x > 800 ||
-                    it->getPosicao().y < 0 || it->getPosicao().y > 600) {
-                    projetilDestruido = true;
-                }
-
-                // Remove o projétil se necessário
-                if (projetilDestruido) {
-                    it = projeteis.erase(it);
-                } else {
-                    ++it;
-                }
             }
-
-            // Verificação de colisão do herói com os inimigos
-            for (auto& inimigo : inimigos) {
-                heroi->verificarColisao(inimigo.getSprite());
+            if (!projetilRemovido) {
+                ++it;
             }
+        }
 
-            if (base) {
-                for (auto& inimigo : inimigos) {
-                    base->verificarColisao(inimigo.getSprite());
-                }
-            }
+        if (spawRelogio.getElapsedTime() >= spawInimigo) {
+            Vector2f posicao;
+            bool posicaoValida = false;
+            const float distanciaMinima = 50.0f;
 
-            // Movimentação e remoção de inimigos
-            if (!inimigos.empty()) {
-                for (auto it = inimigos.begin(); it != inimigos.end();) {
-                    it->mover();
-                    if (base) {
-                        if (base->verificarColisao(it->getSprite())) {
-                            it = inimigos.erase(it); // Remove o inimigo se colidir com a base
-                        } else {
-                            ++it;
-                        }
-                    } else {
-                        ++it;
+            while (!posicaoValida) {
+                posicao = getPosicaoRandom(Vector2u(800, 600));
+                posicaoValida = true;
+
+                for (const auto& inimigo : inimigos) {
+                    if (calcularDistancia(posicao, inimigo.getPosicao()) < distanciaMinima) {
+                        posicaoValida = false;
+                        break;
                     }
                 }
             }
 
-            // Criação de novos inimigos
-            if (spawRelogio.getElapsedTime() >= spawInimigo) {
-                Vector2f posicao;
-                bool posicaoValida = false;
-                const float distanciaMinima = 50.0f;
-
-                while (!posicaoValida) {
-                    posicao = getPosicaoRandom(Vector2u(800, 600));
-                    posicaoValida = true;
-
-                    for (const auto& inimigo : inimigos) {
-                        if (calcularDistancia(posicao, inimigo.getPosicao()) < distanciaMinima) {
-                            posicaoValida = false;
-                            break;
-                        }
-                    }
-                }
-
-                Inimigo* inimigo = new Inimigo("assets/images/characters/alien_0.png");
-                if (inimigo->isTextureLoaded()) {
-                    inimigo->setPosicao(posicao);
-                    inimigos.push_back(*inimigo);
-                } else {
-                    delete inimigo;
-                }
-                spawRelogio.restart();
+            Inimigo* inimigo = new Inimigo("assets/images/characters/alien_0.png");
+            if (inimigo->isTextureLoaded()) {
+                inimigo->setPosicao(posicao);
+                inimigos.push_back(*inimigo);
+            } else {
+                delete inimigo;
             }
+            spawRelogio.restart();
         }
     }
 }
@@ -236,12 +217,12 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
     }else if(estado == Estado::JOGO) {
         setBackgroundScale(window, backgroundSprite);
         window.draw(backgroundSprite);
-        if(heroi != nullptr) {
-            heroi->renderizar(window);
-        }
         
         if(base) {
             base->renderizar(window);
+        }
+        if(heroi != nullptr) {
+            heroi->renderizar(window);
         }
         for (auto& inimigo : inimigos) {
             inimigo.renderizar(window);
