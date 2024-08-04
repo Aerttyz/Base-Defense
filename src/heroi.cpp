@@ -23,6 +23,14 @@ Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(1
     if(!texturaProjetil.loadFromFile(projetilFile)) {
         cout << "Erro ao carregar textura do projetil" << endl;
     }
+    
+    bulletSongFile = "assets/music/bulletsong.ogg";
+    if(!bufferBulletSong.loadFromFile(bulletSongFile)) {
+        cout << "Erro ao carregar música do projetil" << endl;
+    }else {
+        bulletSong.setBuffer(bufferBulletSong);
+    }
+
 
     backgroundSprite_projetil.setTexture(texturaProjetil);
     backgroundSprite_projetil.setPosition(posicao);
@@ -59,6 +67,7 @@ void Heroi::atirar(const Vector2f& direcao) {
         Vector2f direcaoNormalizada = direcao / sqrt(direcao.x * direcao.x + direcao.y * direcao.y);
         Projetil projetil(backgroundSprite_heroi.getPosition(), direcaoNormalizada, backgroundSprite_projetil);
         projeteis.push_back(projetil);
+        bulletSong.play();
 }
 
 void Heroi::atualizarProjeteis() {

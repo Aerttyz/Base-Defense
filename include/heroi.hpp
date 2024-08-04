@@ -2,6 +2,7 @@
 #define HEROI_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "../include/projeteis.hpp" 
 #include <vector>
 using namespace sf;
@@ -15,7 +16,6 @@ class Heroi {
         void definirPosicao(const Vector2f& posicao);
         void mover();
         void atirar(const Vector2f& direcao);
-        Texture carregarTextura(const string& projetilFile);
         void atualizarProjeteis();
         void setVida(int novaVida);
         int getVida();
@@ -28,6 +28,9 @@ class Heroi {
     private:
         float velocidade;
         int vida;
+        string bulletSongFile;
+        Sound bulletSong;
+        SoundBuffer bufferBulletSong;
         Texture texturaProjetil;
         string projetilFile;
         vector<Projetil> projeteis;
