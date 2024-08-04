@@ -37,7 +37,7 @@ int main() {
             
             gerenciamentoTela.eventos(window);
             
-            gerenciamentoTela.atualizar();
+            gerenciamentoTela.atualizar(window);
             
             gerenciamentoTela.renderizar(window);
 

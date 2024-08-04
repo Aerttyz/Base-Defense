@@ -125,7 +125,7 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
 }
 
 //Atualiza as informações do jogo
-void gerenciamentoTela::atualizar() {
+void gerenciamentoTela::atualizar(RenderWindow& window) {
     if (estado == Estado::JOGO) {
         if (heroi) {
             heroi->mover();
@@ -154,14 +154,21 @@ void gerenciamentoTela::atualizar() {
         auto& projeteis = heroi->getProjeteis();
         for (auto it = projeteis.begin(); it != projeteis.end();) {
             bool projetilRemovido = false;
-            for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
-                if (inimigoIt->verificarColisao(it->getSprite())) {
-                    inimigoIt = inimigos.erase(inimigoIt);
-                    it = projeteis.erase(it);
-                    projetilRemovido = true;
-                    break;
-                } else {
-                    ++inimigoIt;
+
+            if (it->verificarColisaoJanela(window)) {
+                it = projeteis.erase(it);
+                projetilRemovido = true;
+            }
+            if (!projetilRemovido){
+                for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
+                    if (inimigoIt->verificarColisao(it->getSprite())) {
+                        inimigoIt = inimigos.erase(inimigoIt);
+                        it = projeteis.erase(it);
+                        projetilRemovido = true;
+                        break;
+                    } else {
+                        ++inimigoIt;
+                    }
                 }
             }
             if (!projetilRemovido) {

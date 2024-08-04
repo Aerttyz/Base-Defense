@@ -21,6 +21,18 @@ bool Projetil::verificarColisao(const Sprite& sprite) {
     return false;
 }
 
+bool Projetil::verificarColisaoJanela(const RenderWindow& window) {
+        FloatRect spriteBounds = backgroundSprite_projetil.getGlobalBounds();
+        Vector2u windowSize = window.getSize();
+        
+        if (spriteBounds.left < 0 || spriteBounds.left + spriteBounds.width > windowSize.x ||
+            spriteBounds.top < 0 || spriteBounds.top + spriteBounds.height > windowSize.y) {
+            cout << "Colisão com a borda da janela detectada" << endl;
+            return true;
+        }
+        return false;
+    }
+
 Vector2f Projetil::getPosicao() const{
     return backgroundSprite_projetil.getPosition();
 }

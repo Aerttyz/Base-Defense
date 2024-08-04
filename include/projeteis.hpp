@@ -12,6 +12,7 @@ class Projetil{
         FloatRect getGlobalBounds() const;  
         Sprite getSprite() const;
         Vector2f getPosicao() const;
+        bool verificarColisaoJanela(const RenderWindow& window);
         bool verificarColisao(const Sprite& sprite);
         bool isTextureLoaded() const;
     private:

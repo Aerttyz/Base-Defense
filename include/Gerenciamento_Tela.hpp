@@ -18,7 +18,7 @@ class gerenciamentoTela {
         gerenciamentoTela(const string& backgroundFile,const string& backgroundMenuFile, const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize);  
         void eventos(RenderWindow& window);
         void renderizar(RenderWindow& window);
-        void atualizar();
+        void atualizar(RenderWindow& window);
         void setBackgroundScale(RenderWindow& window, Sprite& sprite);
         void setHeroiPosition(RenderWindow& window);
         Vector2f getPosicaoRandom(const Vector2u& windowSize);
