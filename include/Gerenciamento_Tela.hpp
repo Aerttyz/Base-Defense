@@ -27,6 +27,7 @@ class gerenciamentoTela {
         RectangleShape shape;
         Texture background;
         Texture background_menu;
+        Texture texturaProjetil;
         Sprite backgroundSprite;
         Sprite backgroundSprite_menu;
         Text textoMenu;

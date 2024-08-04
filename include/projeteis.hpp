@@ -6,7 +6,7 @@ using namespace sf;
 
 class Projetil{
     public:
-        Projetil(const Vector2f& posicaoInicial, const Vector2f& direcao, const Texture& texturaProjetil);
+        Projetil(const Vector2f& posicaoInicial, const Vector2f& direcao, const Texture& textura);
         void mover();
         void renderizar(RenderWindow& window);
         FloatRect getGlobalBounds() const;  

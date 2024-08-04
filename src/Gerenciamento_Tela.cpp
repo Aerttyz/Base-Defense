@@ -65,15 +65,10 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
         }
         if(event.type == Event::KeyPressed && event.key.code == Keyboard::Q) {
             if(heroi) {
-                Texture texturaProjetil;
-                if (!texturaProjetil.loadFromFile("assets/images/background/bullet1.png")) {
-                        cout << "Erro ao carregar imagem do projétil" << endl;
-                }else{
-                    Vector2i posicaoMouse = Mouse::getPosition(window);
-                    Vector2f direcao(static_cast<float>(posicaoMouse.x) - heroi->getSprite().getPosition().x, static_cast<float>(posicaoMouse.y) - heroi->getSprite().getPosition().y);
-                    heroi->atirar(direcao, texturaProjetil);
-                    cout << "Atirou" << endl;
-                }
+                Vector2i posicaoMouse = Mouse::getPosition(window);
+                Vector2f direcao(static_cast<float>(posicaoMouse.x) - heroi->getSprite().getPosition().x, static_cast<float>(posicaoMouse.y) - heroi->getSprite().getPosition().y);
+                heroi->atirar(direcao);
+                cout << "Atirou" << endl;
             }
         }
     }

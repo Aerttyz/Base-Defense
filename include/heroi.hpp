@@ -14,7 +14,8 @@ class Heroi {
         Sprite getSprite() const;
         void definirPosicao(const Vector2f& posicao);
         void mover();
-        void atirar(const Vector2f& direcao, const Texture& texturaProjetil);
+        void atirar(const Vector2f& direcao);
+        void carregarTextura(const string& projetilFile);
         void atualizarProjeteis();
         void setVida(int novaVida);
         int getVida();
@@ -27,6 +28,8 @@ class Heroi {
     private:
         float velocidade;
         int vida;
+        Texture texturaProjetil;
+        string projetilFile;
         vector<Projetil> projeteis;
         Texture background_heroi;
         Sprite backgroundSprite_heroi;
