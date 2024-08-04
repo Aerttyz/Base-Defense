@@ -15,7 +15,7 @@ class Heroi {
         void definirPosicao(const Vector2f& posicao);
         void mover();
         void atirar(const Vector2f& direcao);
-        void carregarTextura(const string& projetilFile);
+        Texture carregarTextura(const string& projetilFile);
         void atualizarProjeteis();
         void setVida(int novaVida);
         int getVida();
@@ -37,6 +37,10 @@ class Heroi {
         Text  textoVida;
         Clock relogio;
         Time dps;
+
+
+        Sprite backgroundSprite_projetil;
+        Texture background_projetil;
 };
 
 

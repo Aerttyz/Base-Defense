@@ -2,17 +2,11 @@
 #include <iostream>
 using namespace std;
 
-Projetil::Projetil(const Vector2f& posicaoInicial, const Vector2f& direcao, const Texture& textura) : direcao(direcao), velocidade(400.0f){
-     if (textura.getSize().x==0 || textura.getSize().y==0) {
-        cout << "Textura do projétil não está carregada corretamente." << endl;
-        textureLoaded = false;
-    } else {
-        cout << "Textura do projétil carregada com sucesso." << endl;
-        textureLoaded = true;
-        background_projetil = textura;
-        backgroundSprite_projetil.setTexture(background_projetil);
-        backgroundSprite_projetil.setPosition(posicaoInicial);
-    }
+Projetil::Projetil(const Vector2f& posicaoInicial, const Vector2f& direcao, const Sprite& spriteProjetil) : direcao(direcao), velocidade(400.0f){
+    backgroundSprite_projetil = spriteProjetil;
+    textureLoaded = backgroundSprite_projetil.getTexture() != nullptr;
+    backgroundSprite_projetil.setPosition(posicaoInicial);
+
 }
 
 Sprite Projetil::getSprite() const {
@@ -39,8 +33,8 @@ void Projetil::renderizar(RenderWindow& window) {
     if (backgroundSprite_projetil.getTexture() == nullptr) {
         cout << "Sprite do projétil não tem textura." << endl;
     }
-    backgroundSprite_projetil.setColor(Color::White);
     window.draw(backgroundSprite_projetil);
+
 }
 
 FloatRect Projetil::getGlobalBounds() const {

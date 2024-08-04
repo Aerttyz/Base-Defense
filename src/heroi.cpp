@@ -20,7 +20,12 @@ Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(1
     textoVida.setString("Heroi: " + to_string(vida));
 
     projetilFile = "assets/images/background/bullet1.png";   
-    carregarTextura(projetilFile);
+    if(!texturaProjetil.loadFromFile(projetilFile)) {
+        cout << "Erro ao carregar textura do projetil" << endl;
+    }
+
+    backgroundSprite_projetil.setTexture(texturaProjetil);
+    backgroundSprite_projetil.setPosition(posicao);
 }
 
 //Retorna o sprite do herói
@@ -50,17 +55,9 @@ void Heroi::mover() {
     }
 }
 
-void Heroi::carregarTextura(const string& projetilFile) {
-    if(!texturaProjetil.loadFromFile(projetilFile)) {
-        cout << "Erro ao carregar textura do projetil" << endl;
-    }else {
-        cout << "Textura do projetil" << endl;
-    }
-}
-
 void Heroi::atirar(const Vector2f& direcao) {
         Vector2f direcaoNormalizada = direcao / sqrt(direcao.x * direcao.x + direcao.y * direcao.y);
-        Projetil projetil(backgroundSprite_heroi.getPosition(), direcaoNormalizada, texturaProjetil);
+        Projetil projetil(backgroundSprite_heroi.getPosition(), direcaoNormalizada, backgroundSprite_projetil);
         projeteis.push_back(projetil);
 }
 

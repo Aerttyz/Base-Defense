@@ -210,12 +210,12 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
     }else if(estado == Estado::JOGO) {
         setBackgroundScale(window, backgroundSprite);
         window.draw(backgroundSprite);
-        if(heroi != nullptr) {
-            heroi->renderizar(window);
-        }
         
         if(base) {
             base->renderizar(window);
+        }
+        if(heroi != nullptr) {
+            heroi->renderizar(window);
         }
         for (auto& inimigo : inimigos) {
             inimigo.renderizar(window);
