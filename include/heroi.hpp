@@ -16,7 +16,7 @@ class Heroi {
         void definirPosicao(const Vector2f& posicao);
         void mover();
         void atirar(const Vector2f& direcao);
-        void atualizarProjeteis();
+        void atualizarProjeteis(float deltaTime);
         void setVida(int novaVida);
         int getVida();
         Vector2f getPosicao();

@@ -5,7 +5,6 @@ using namespace std;
 using namespace sf;
 
 Base::Base(int vidaBase, const string& baseFile, const Font& font, const Vector2f& windowSize) : vida(vidaBase), dps(seconds(0.01f)) {
-    cout << "Construtor Base com Vida" << endl;
     if(!background_base.loadFromFile(baseFile)) {
         cout << "Erro ao carregar imagem da base" << endl;
     }

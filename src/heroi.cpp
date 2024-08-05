@@ -70,9 +70,9 @@ void Heroi::atirar(const Vector2f& direcao) {
         bulletSong.play();
 }
 
-void Heroi::atualizarProjeteis() {
+void Heroi::atualizarProjeteis(float deltaTime) {
     for (auto& projetil : projeteis) {
-        projetil.mover();
+        projetil.mover(deltaTime);
     }
     projeteis.erase(remove_if(projeteis.begin(), projeteis.end(), [](const Projetil& p) {
         return p.getGlobalBounds().top + p.getGlobalBounds().height < 0;

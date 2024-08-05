@@ -37,8 +37,16 @@ Vector2f Projetil::getPosicao() const{
     return backgroundSprite_projetil.getPosition();
 }
 
-void Projetil::mover() {
-    backgroundSprite_projetil.move(direcao * velocidade * 0.01f);
+void Projetil::setPosicao(const sf::Vector2f& posicao) {
+    backgroundSprite_projetil.setPosition(posicao);
+}
+
+void Projetil::setDirecao(const sf::Vector2f& direcao) {
+    this->direcao = direcao;
+}
+
+void Projetil::mover(float deltaTime) {
+    backgroundSprite_projetil.move(direcao * velocidade * deltaTime);
 }
 
 void Projetil::renderizar(RenderWindow& window) {

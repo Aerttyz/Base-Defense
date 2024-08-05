@@ -39,6 +39,7 @@ class gerenciamentoTela {
         Font font;
         Clock spawRelogio;
         Time spawInimigo;
+        Clock relogio;
         enum class Estado {MENU, JOGO, GAMEOVER};
         Estado estado;
 
