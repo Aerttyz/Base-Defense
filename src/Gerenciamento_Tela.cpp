@@ -282,6 +282,8 @@ void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow
             if (heroi->verificarColisao(it->getSprite())) {
                 heroi->TomarDano();
                 it = projeteisInimigos.erase(it);
+            }else if(base && base->verificarColisao(it->getSprite())){
+                it = projeteisInimigos.erase(it);
             } else {
                 ++it;
             }
