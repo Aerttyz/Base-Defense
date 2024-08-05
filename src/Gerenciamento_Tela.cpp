@@ -160,7 +160,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                     ++it;
                 }
             }
-        }
+        } 
 
         //Verifica colisão do projétil com a janela e com o inimigo
         auto& projeteis = heroi->getProjeteis();
@@ -172,11 +172,11 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 it = projeteis.erase(it);
                 projetilRemovido = true;
             }
-            if(it->verificarColisao(heroi->getSprite())) {
+            /* if(it->verificarColisao(heroi->getSprite())) {
                 cout << "Projetil colidiu com heroi" << endl;
                 it = projeteis.erase(it);
                 projetilRemovido = true;
-            }
+            } */
             if (!projetilRemovido){
                 for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
                     if (inimigoIt->verificarColisao(it->getSprite())) {
