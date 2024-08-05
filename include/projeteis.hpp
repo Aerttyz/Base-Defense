@@ -9,6 +9,7 @@ class Projetil{
     public:
         Projetil(const Vector2f& posicaoInicial,const Vector2f& direcao, const Sprite& spriteProjetil);
         void mover(float deltaTime);
+        void moverInimigo(float deltaTime);
         void setPosicao(const sf::Vector2f& posicao);
         void setDirecao(const sf::Vector2f& direcao);
         void renderizar(RenderWindow& window);
@@ -22,6 +23,7 @@ class Projetil{
         Sprite backgroundSprite_projetil;
         Texture background_projetil;
         float velocidade;
+        float velocidadeInimigo;
         Vector2f direcao;
         bool textureLoaded;
 

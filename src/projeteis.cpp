@@ -2,7 +2,8 @@
 #include <iostream>
 using namespace std;
 
-Projetil::Projetil(const Vector2f& posicaoInicial, const Vector2f& direcao, const Sprite& spriteProjetil) : direcao(direcao), velocidade(400.0f){
+Projetil::Projetil(const Vector2f& posicaoInicial, const Vector2f& direcao, const Sprite& spriteProjetil) 
+: direcao(direcao), velocidade(400.0f), velocidadeInimigo(100.0f) {
     backgroundSprite_projetil = spriteProjetil;
     textureLoaded = backgroundSprite_projetil.getTexture() != nullptr;
     backgroundSprite_projetil.setPosition(posicaoInicial);
@@ -47,6 +48,10 @@ void Projetil::setDirecao(const sf::Vector2f& direcao) {
 
 void Projetil::mover(float deltaTime) {
     backgroundSprite_projetil.move(direcao * velocidade * deltaTime);
+}
+
+void Projetil::moverInimigo(float deltaTime) {
+    backgroundSprite_projetil.move(direcao * velocidadeInimigo * deltaTime);
 }
 
 void Projetil::renderizar(RenderWindow& window) {

@@ -52,7 +52,7 @@ void Inimigo::atirar(const Vector2f& direcao) {
 
 void Inimigo::atualizarProjeteis(float deltaTime, RenderWindow& window) {
     for (auto it = projeteis.begin(); it != projeteis.end();) {
-        it->mover(deltaTime); 
+        it->moverInimigo(deltaTime); 
         if (it->verificarColisaoJanela(window)) {
             it = projeteis.erase(it); 
         } else {

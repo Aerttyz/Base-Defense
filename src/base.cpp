@@ -39,15 +39,15 @@ int Base::getVidaBase() {
 //Verifica colisão com um sprite e diminui a vida da base
 bool Base::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_base.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
-        if(relogio.getElapsedTime() > dps) {
             vida -= 10;
+            cout << "Colisão detectada com a base" << endl;
             if(vida <= 0) {
                 vida = 0;
             }
             textoVidaBase.setString("Base: " + to_string(vida));
             return true;
             relogio.restart();
-        }
+        
     }
     return false;
 }

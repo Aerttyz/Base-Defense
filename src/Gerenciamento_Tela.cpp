@@ -138,6 +138,8 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             for (auto& inimigo : inimigos) {
                 inimigo.atualizarProjeteis(deltaTime, window);
                 heroi->verificarColisao(inimigo.getSprite());
+                
+                base->verificarColisao(inimigo.getSprite());
                 Vector2f direcao = heroi->getSprite().getPosition() - inimigo.getSprite().getPosition();
                 inimigo.atirar(direcao); 
             }
@@ -172,6 +174,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
         //Verifica colisão do inimigo com a base
         if (base) {
             for (auto it = inimigos.begin(); it != inimigos.end();) {
+                base->verificarColisao(it->getSprite());
                 if(base->verificarColisao(it->getSprite())){ 
                     cout << "Inimigo colidiu com a base!" << endl;
                     it = inimigos.erase(it);
@@ -183,6 +186,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
 
         for (auto it = inimigos.begin(); it != inimigos.end();) {
             it->mover();
+            base->verificarColisao(it->getSprite());
             if (base && it->verificarColisao(base->getSprite())) {
                 it = inimigos.erase(it);
             } else {
