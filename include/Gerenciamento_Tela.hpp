@@ -22,6 +22,11 @@ class gerenciamentoTela {
         void setBackgroundScale(RenderWindow& window, Sprite& sprite);
         void setHeroiPosition(RenderWindow& window);
         Vector2f getPosicaoRandom(const Vector2u& windowSize);
+
+        void atualizarProjeteisInimigos(float deltaTime, RenderWindow& window);
+        void renderizarProjeteisInimigos(RenderWindow& window);
+
+        //void atirarInimigo(const Vector2f& direcao,const Sprite& backgroundSprite_inimigo);
         
     private:
         RectangleShape shape;
@@ -36,8 +41,9 @@ class gerenciamentoTela {
         Base *base;
         vector<Inimigo> inimigos;
         vector<Projetil> projeteis;
-        vector<Projetil> projeteisInimigo;
-        vector<Projetil> projeteisInimigoGlobal;
+
+        vector<Projetil> projeteisInimigos;
+        
         Font font;
         Clock spawRelogio;
         Time spawInimigo;
@@ -45,6 +51,9 @@ class gerenciamentoTela {
         enum class Estado {MENU, JOGO, GAMEOVER};
         Estado estado;
 
+        Time intervaloDisparo;
+        string projetilFile;
+        Sprite backgroundSprite_projetil;
 
 };
 #endif // GERENCIAMENTO_TELA_HPP

@@ -89,8 +89,7 @@ int Heroi::getVida() {
 }
 
 void Heroi::TomarDano() {
-    vida -= 10;
-    textoVida.setString("Heroi: " + to_string(vida));
+   //TODO
 }
 
 
@@ -101,13 +100,11 @@ void Heroi::TomarDano() {
 bool Heroi::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
             vida -= 10;
-            if (vida < 0) {
-                vida = 0;
-            
+           
             textoVida.setString("Heroi: " + to_string(vida));
             relogio.restart(); 
             return true;  
-        }
+        
     }
     return false;
 }

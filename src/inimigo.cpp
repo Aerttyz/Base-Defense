@@ -34,6 +34,7 @@ void Inimigo::mover() {
     }
 }
 
+
 void Inimigo::atirar(const Vector2f& direcao) {
     if(relogio.getElapsedTime() > intervaloDisparo) {
 
