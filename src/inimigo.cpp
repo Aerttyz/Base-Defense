@@ -85,6 +85,11 @@ Sprite Inimigo::getSprite() const {
     return backgroundSprite_inimigo;
 }
 
+//Retorna os projéteis do inimigo
+vector<Projetil>& Inimigo::getProjeteis() {
+    return projeteis;
+}
+
 //Renderiza o inimigo
 void Inimigo::renderizar(RenderWindow& window) {
         if(textureLoaded){

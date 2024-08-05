@@ -88,19 +88,35 @@ int Heroi::getVida() {
     return vida;
 }
 
-//Verifica colisão com um sprite
-
-void Heroi::verificarColisao(const Sprite& sprite) {
-    if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
-        if(relogio.getElapsedTime() > dps) {
+bool Heroi::verificarColisaoProjeteis(const vector<Projetil>& projeteisInimigo) {
+    for (auto& projetil : projeteisInimigo) {
+        if (backgroundSprite_heroi.getGlobalBounds().intersects(projetil.getGlobalBounds())) {
             vida -= 10;
             if (vida < 0) {
                 vida = 0;
             }
             textoVida.setString("Heroi: " + to_string(vida));
-            relogio.restart();   
+            return true;
         }
     }
+    return false;
+}
+
+
+//Verifica colisão com um sprite
+
+bool Heroi::verificarColisao(const Sprite& sprite) {
+    if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
+            vida -= 10;
+            if (vida < 0) {
+                vida = 0;
+            
+            textoVida.setString("Heroi: " + to_string(vida));
+            relogio.restart(); 
+            return true;  
+        }
+    }
+    return false;
 }
 
 

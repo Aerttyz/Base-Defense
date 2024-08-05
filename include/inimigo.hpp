@@ -19,7 +19,9 @@ class Inimigo{
         void setPosicao(const Vector2f& posicao);
         Vector2f getPosicao() const;
         Sprite getSprite() const;
-        bool isTextureLoaded() const;   
+        bool isTextureLoaded() const; 
+
+        vector<Projetil>& getProjeteis();  
         
     private:
         float velocidade;

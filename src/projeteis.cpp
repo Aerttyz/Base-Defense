@@ -34,6 +34,8 @@ bool Projetil::verificarColisaoJanela(const RenderWindow& window) {
         return false;
     }
 
+
+
 Vector2f Projetil::getPosicao() const{
     return backgroundSprite_projetil.getPosition();
 }

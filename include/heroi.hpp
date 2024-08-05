@@ -20,8 +20,9 @@ class Heroi {
         void setVida(int novaVida);
         int getVida();
         Vector2f getPosicao();
-        void verificarColisao(const Sprite& sprite);
+        bool verificarColisao(const Sprite& sprite);
         void verificarColisao(const RectangleShape& shape);
+        bool verificarColisaoProjeteis(const vector<Projetil>& projeteisInimigo);
         void renderizar(RenderWindow& window);
         vector<Projetil>& getProjeteis();
     
