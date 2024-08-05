@@ -127,31 +127,42 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
 //Atualiza as informações do jogo
 void gerenciamentoTela::atualizar(RenderWindow& window) {
     if (estado == Estado::JOGO) {
+        float deltaTime = relogio.restart().asSeconds();
+        Time tempoDecorrido = spawRelogio.getElapsedTime();
+        
+        
         if (heroi) {
             heroi->mover();
-            heroi->atualizarProjeteis();
+            heroi->atualizarProjeteis(deltaTime);
+
+            
+            
             for (auto& inimigo : inimigos) {
+                inimigo.atualizarProjeteis(deltaTime, window);
                 heroi->verificarColisao(inimigo.getSprite());
-            }
-        }
-
-        if (base) {
-            for (auto& inimigo : inimigos) {
+                
                 base->verificarColisao(inimigo.getSprite());
+                Vector2f direcao = heroi->getSprite().getPosition() - inimigo.getSprite().getPosition();
+                inimigo.atirar(direcao); 
+                
             }
         }
-
-        for (auto it = inimigos.begin(); it != inimigos.end();) {
-            it->mover();
-            base->verificarColisao(it->getSprite());
-            if (base && it->verificarColisao(base->getSprite())) {
-                it = inimigos.erase(it);
-            } else {
-                ++it;
+        
+        for(auto& inimigo : inimigos) {
+            auto& projeteisInimigo = inimigo.getProjeteis();
+            for(auto it = projeteisInimigo.begin(); it != projeteisInimigo.end();) {
+                if(it->verificarColisao(heroi->getSprite())) {
+                    it = projeteisInimigo.erase(it);
+                    heroi->TomarDano();
+                }else {
+                    ++it;
+                }
             }
-        }
+        } 
 
+        //Verifica colisão do projétil com a janela e com o inimigo
         auto& projeteis = heroi->getProjeteis();
+        
         for (auto it = projeteis.begin(); it != projeteis.end();) {
             bool projetilRemovido = false;
 
@@ -176,6 +187,30 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             }
         }
 
+        //Verifica colisão do inimigo com a base
+        if (base) {
+            for (auto it = inimigos.begin(); it != inimigos.end();) {
+                base->verificarColisao(it->getSprite());
+                if(base->verificarColisao(it->getSprite())){ 
+                    cout << "Inimigo colidiu com a base!" << endl;
+                    it = inimigos.erase(it);
+                }else{
+                    ++it;
+                }
+            }
+        }
+
+        for (auto it = inimigos.begin(); it != inimigos.end();) {
+            it->mover();
+            base->verificarColisao(it->getSprite());
+            if (base && it->verificarColisao(base->getSprite())) {
+                it = inimigos.erase(it);
+            } else {
+                ++it;
+            }
+        }
+
+
         if (spawRelogio.getElapsedTime() >= spawInimigo) {
             Vector2f posicao;
             bool posicaoValida = false;
@@ -197,6 +232,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             if (inimigo->isTextureLoaded()) {
                 inimigo->setPosicao(posicao);
                 inimigos.push_back(*inimigo);
+
             } else {
                 delete inimigo;
             }

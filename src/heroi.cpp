@@ -7,7 +7,7 @@ using namespace std;
 using namespace sf; 
 
 //Construtor
-Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(100.0f), vida(vida), dps(seconds(1.0f)) {
+Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(100.0f), vida(vida), dps(seconds(0.5f)) {
     if(!background_heroi.loadFromFile(heroiFile)) {
         cout << "Erro ao carregar imagem do herói" << endl;
     }
@@ -70,9 +70,9 @@ void Heroi::atirar(const Vector2f& direcao) {
         bulletSong.play();
 }
 
-void Heroi::atualizarProjeteis() {
+void Heroi::atualizarProjeteis(float deltaTime) {
     for (auto& projetil : projeteis) {
-        projetil.mover();
+        projetil.mover(deltaTime);
     }
     projeteis.erase(remove_if(projeteis.begin(), projeteis.end(), [](const Projetil& p) {
         return p.getGlobalBounds().top + p.getGlobalBounds().height < 0;
@@ -88,19 +88,28 @@ int Heroi::getVida() {
     return vida;
 }
 
+void Heroi::TomarDano() {
+    vida -= 10;
+    textoVida.setString("Heroi: " + to_string(vida));
+}
+
+
+
+
 //Verifica colisão com um sprite
 
-void Heroi::verificarColisao(const Sprite& sprite) {
+bool Heroi::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
-        if(relogio.getElapsedTime() > dps) {
             vida -= 10;
             if (vida < 0) {
                 vida = 0;
-            }
+            
             textoVida.setString("Heroi: " + to_string(vida));
-            relogio.restart();   
+            relogio.restart(); 
+            return true;  
         }
     }
+    return false;
 }
 
 
