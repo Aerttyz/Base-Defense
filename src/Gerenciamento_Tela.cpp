@@ -135,7 +135,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             heroi->mover();
             heroi->atualizarProjeteis(deltaTime);
 
-            vector<Projetil> projeteisInimigo;
+            
             
             for (auto& inimigo : inimigos) {
                 inimigo.atualizarProjeteis(deltaTime, window);
@@ -144,11 +144,8 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 base->verificarColisao(inimigo.getSprite());
                 Vector2f direcao = heroi->getSprite().getPosition() - inimigo.getSprite().getPosition();
                 inimigo.atirar(direcao); 
-
-                auto projeteis = inimigo.getProjeteis();
-                projeteisInimigo.insert(projeteisInimigo.end(), projeteis.begin(), projeteis.end());
+                
             }
-            heroi->verificarColisaoProjeteis(projeteisInimigo);
         }
         
         for(auto& inimigo : inimigos) {
@@ -156,6 +153,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             for(auto it = projeteisInimigo.begin(); it != projeteisInimigo.end();) {
                 if(it->verificarColisao(heroi->getSprite())) {
                     it = projeteisInimigo.erase(it);
+                    heroi->TomarDano();
                 }else {
                     ++it;
                 }
@@ -172,11 +170,6 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 it = projeteis.erase(it);
                 projetilRemovido = true;
             }
-            /* if(it->verificarColisao(heroi->getSprite())) {
-                cout << "Projetil colidiu com heroi" << endl;
-                it = projeteis.erase(it);
-                projetilRemovido = true;
-            } */
             if (!projetilRemovido){
                 for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
                     if (inimigoIt->verificarColisao(it->getSprite())) {

@@ -36,6 +36,8 @@ class gerenciamentoTela {
         Base *base;
         vector<Inimigo> inimigos;
         vector<Projetil> projeteis;
+        vector<Projetil> projeteisInimigo;
+        vector<Projetil> projeteisInimigoGlobal;
         Font font;
         Clock spawRelogio;
         Time spawInimigo;

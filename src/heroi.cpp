@@ -7,7 +7,7 @@ using namespace std;
 using namespace sf; 
 
 //Construtor
-Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(100.0f), vida(vida), dps(seconds(1.0f)) {
+Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(100.0f), vida(vida), dps(seconds(0.5f)) {
     if(!background_heroi.loadFromFile(heroiFile)) {
         cout << "Erro ao carregar imagem do herói" << endl;
     }
@@ -88,19 +88,12 @@ int Heroi::getVida() {
     return vida;
 }
 
-bool Heroi::verificarColisaoProjeteis(const vector<Projetil>& projeteisInimigo) {
-    for (auto& projetil : projeteisInimigo) {
-        if (backgroundSprite_heroi.getGlobalBounds().intersects(projetil.getGlobalBounds())) {
-            vida -= 10;
-            if (vida < 0) {
-                vida = 0;
-            }
-            textoVida.setString("Heroi: " + to_string(vida));
-            return true;
-        }
-    }
-    return false;
+void Heroi::TomarDano() {
+    vida -= 10;
+    textoVida.setString("Heroi: " + to_string(vida));
 }
+
+
 
 
 //Verifica colisão com um sprite
