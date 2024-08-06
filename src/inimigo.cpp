@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "../include/inimigo.hpp"
 #include "../include/projeteis.hpp" 
+#include "../include/drops.hpp"
 #include "cmath"
 using namespace std;
 using namespace sf;
@@ -15,11 +16,13 @@ Inimigo::Inimigo(const string& inimigoFile) : textureLoaded(false), velocidade(1
             backgroundSprite_inimigo.setTexture(background_inimigo);
             textureLoaded = true;
         }
-        projetilFile = "assets/images/background/bullet1.png";   
+        
+        
         if(!texturaProjetil.loadFromFile(projetilFile)) {
         cout << "Erro ao carregar textura do projetil" << endl;
     }
     backgroundSprite_projetil.setTexture(texturaProjetil);
+   
 }
 
 //Move o inimigo
@@ -100,7 +103,8 @@ void Inimigo::renderizar(RenderWindow& window) {
             }
         } else {
             cerr << "Erro ao renderizar inimigo" << endl;
-        }     
+        }
+            
     }
 
 //Retorna se a textura foi carregada

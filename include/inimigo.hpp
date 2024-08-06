@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "../include/projeteis.hpp"
+#include "../include/drops.hpp"
 using namespace std;
 using namespace sf;
 
@@ -14,14 +15,16 @@ class Inimigo{
         void mover();
         void atualizarProjeteis(float deltaTime, RenderWindow& window);
         void atirar(const Vector2f& direcao);
-        void renderizar(RenderWindow& window);
         bool verificarColisao(const Sprite& sprite);
         void setPosicao(const Vector2f& posicao);
         Vector2f getPosicao() const;
         Sprite getSprite() const;
         bool isTextureLoaded() const; 
 
-        vector<Projetil>& getProjeteis();  
+        vector<Projetil>& getProjeteis();
+         
+        
+        void renderizar(RenderWindow& window);
         
     private:
         float velocidade;
@@ -30,12 +33,13 @@ class Inimigo{
         Vector2f posicao;
         Clock relogio;
         Time dps;
+        
 
         bool textureLoaded;
+        string projetilFile = "assets/images/background/bullet2.png";
 
         vector<Projetil> projeteis; 
         Time intervaloDisparo;
-        string projetilFile;
         Texture texturaProjetil;
         Sprite backgroundSprite_projetil;
 

@@ -22,10 +22,10 @@ int main() {
     //Inimigo novoInimigo("assets/images/characters/Cactus Man.png");
 
     //Carrega imagem da base
-    Base base(100, "assets/images/background/safezone.png", font, Vector2f(window.getSize()));
+    Base base(100, "assets/images/background/testBAse.png", font, Vector2f(window.getSize()));
 
     //Carrega imagem do herói
-    Heroi heroi(100, "assets/images/characters/Cactus Man.png", font);
+    Heroi heroi(100, "assets/images/characters/hero.png", font);
 
     //Carrega tela
     gerenciamentoTela gerenciamentoTela("assets/images/background/background1.png", "assets/images/background/backgroundInicio.png", "assets/music/dark_forest.ogg", &heroi, &base, Vector2f(window.getSize()));    

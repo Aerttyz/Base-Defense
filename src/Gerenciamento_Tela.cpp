@@ -5,6 +5,7 @@
 #include "../include/base.hpp"
 #include "../include/projeteis.hpp"
 #include "../include/inimigo.hpp"
+#include "../include/drops.hpp"
 using namespace std;
 using namespace sf;
 
@@ -26,6 +27,9 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     if(!texturaProjetil.loadFromFile("assets/images/background/bullet1.png")) {
         cout << "Erro ao carregar textura do projetil" << endl;
     }
+    if(!texturaDrop.loadFromFile("assets/images/background/drop.png")) {
+        cout << "Erro ao carregar textura do drop" << endl;
+    }
     if(!music.openFromFile(musicFile)) {
         cout << "Erro ao carregar música" << endl;
     }else {
@@ -33,6 +37,9 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
         music.play();
         
     }
+    //Configuração do drop
+    spriteDrop.setTexture(texturaDrop);
+
     //Configuração do projétil
     backgroundSprite_projetil.setTexture(texturaProjetil);
 
@@ -125,6 +132,11 @@ Vector2f gerenciamentoTela::getPosicaoRandom(const Vector2u& windowSize) {
     }
 }
 
+int gerenciamentoTela::getRandomChanceDrop(){
+    int chance = rand() % 2;
+    return chance;
+}
+
 //Calcula a distância entre duas posições
 float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
     return sqrt(pow(posicao1.x - posicao2.x, 2) + pow(posicao1.y - posicao2.y, 2));
@@ -190,6 +202,11 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         inimigoIt = inimigos.erase(inimigoIt);
                         it = projeteis.erase(it);
                         projetilRemovido = true;
+                        if(getRandomChanceDrop() == 1){
+                            Drop drop(spriteDrop, inimigoIt->getPosicao());
+                            drop.setPosicao(inimigoIt->getPosicao());
+                            drops.push_back(drop);
+                        }
                         break;
                     } else {
                         ++inimigoIt;
@@ -224,7 +241,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             }
         }
 
-
+        //TODO: Implementar a lógica de spawn de inimigos em waves
         if (spawRelogio.getElapsedTime() >= spawInimigo) {
             Vector2f posicao;
             bool posicaoValida = false;
@@ -242,7 +259,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 }
             }
 
-            Inimigo* inimigo = new Inimigo("assets/images/characters/alien_0.png");
+            Inimigo* inimigo = new Inimigo("assets/images/characters/enemy.png");
             if (inimigo->isTextureLoaded()) {
                 inimigo->setPosicao(posicao);
                 inimigos.push_back(*inimigo);
@@ -273,7 +290,11 @@ void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow
     }
 }
 
-
+void gerenciamentoTela::atualizarDrop(RenderWindow& window) {
+    for(auto& drop : drops) {
+        drop.renderizar(window);
+    }
+}
 
 //Renderiza a imagem de fundo e os sprites
 void gerenciamentoTela::renderizar(RenderWindow& window) {
@@ -297,6 +318,8 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
             inimigo.renderizar(window);
         }
         renderizarProjeteisInimigos(window);
+        atualizarDrop(window);
+        
         
     }
     window.display();

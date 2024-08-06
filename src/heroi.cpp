@@ -112,6 +112,10 @@ bool Heroi::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
             vida -= 10;
            
+            if(vida < 0 ){
+                vida = 0;
+                
+            }
             textoVida.setString("Heroi: " + to_string(vida));
             relogio.restart(); 
             return true;  
@@ -148,7 +152,7 @@ void Heroi::renderizar(RenderWindow& window) {
     FloatRect textRect = textoVida.getLocalBounds();
     textoVida.setPosition(window.getSize().x - textRect.width - 10, 10);
     FloatRect textRectMunicao = textoMunicao.getLocalBounds();
-    textoMunicao.setPosition(window.getSize().x - textRect.width - 10, 50);
+    textoMunicao.setPosition(window.getSize().x - textRect.width - 10, 70);
     window.draw(textoVida);
     window.draw(textoMunicao);
 

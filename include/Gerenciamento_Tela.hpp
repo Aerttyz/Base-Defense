@@ -26,6 +26,10 @@ class gerenciamentoTela {
         void atualizarProjeteisInimigos(float deltaTime, RenderWindow& window);
         void renderizarProjeteisInimigos(RenderWindow& window);
 
+        void atualizarDrop(RenderWindow& window);  
+        void renderizarDrop(RenderWindow& window);
+        int getRandomChanceDrop();
+
         //void atirarInimigo(const Vector2f& direcao,const Sprite& backgroundSprite_inimigo);
         
     private:
@@ -54,6 +58,11 @@ class gerenciamentoTela {
         Time intervaloDisparo;
         string projetilFile;
         Sprite backgroundSprite_projetil;
+
+        Texture texturaDrop;
+        Sprite spriteDrop;
+        vector<Drop> drops; 
+              
 
 };
 #endif // GERENCIAMENTO_TELA_HPP
