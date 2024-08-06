@@ -7,7 +7,7 @@ using namespace std;
 using namespace sf; 
 
 //Construtor
-Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(100.0f), vida(vida), dps(seconds(0.5f)) {
+Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(300.0f), quantidadeProjetil(10) ,vida(vida), dps(seconds(0.5f)) {
     if(!background_heroi.loadFromFile(heroiFile)) {
         cout << "Erro ao carregar imagem do herói" << endl;
     }
@@ -18,6 +18,11 @@ Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(1
     textoVida.setCharacterSize(20);
     textoVida.setFillColor(Color::White);
     textoVida.setString("Heroi: " + to_string(vida));
+
+    textoMunicao.setFont(font);
+    textoMunicao.setCharacterSize(20);
+    textoMunicao.setFillColor(Color::White);
+    textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
 
     projetilFile = "assets/images/background/bullet1.png";   
     if(!texturaProjetil.loadFromFile(projetilFile)) {
@@ -64,10 +69,16 @@ void Heroi::mover() {
 }
 
 void Heroi::atirar(const Vector2f& direcao) {
-        Vector2f direcaoNormalizada = direcao / sqrt(direcao.x * direcao.x + direcao.y * direcao.y);
-        Projetil projetil(backgroundSprite_heroi.getPosition(), direcaoNormalizada, backgroundSprite_projetil);
-        projeteis.push_back(projetil);
-        bulletSong.play();
+        if(quantidadeProjetil>0){
+            Vector2f direcaoNormalizada = direcao / sqrt(direcao.x * direcao.x + direcao.y * direcao.y);
+            Projetil projetil(backgroundSprite_heroi.getPosition(), direcaoNormalizada, backgroundSprite_projetil);
+            projeteis.push_back(projetil);
+            bulletSong.play();
+            quantidadeProjetil--;
+            textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
+        }else{
+            cout << "Sem munição" << endl;
+        }
 }
 
 void Heroi::atualizarProjeteis(float deltaTime) {
@@ -136,7 +147,10 @@ void Heroi::renderizar(RenderWindow& window) {
 
     FloatRect textRect = textoVida.getLocalBounds();
     textoVida.setPosition(window.getSize().x - textRect.width - 10, 10);
+    FloatRect textRectMunicao = textoMunicao.getLocalBounds();
+    textoMunicao.setPosition(window.getSize().x - textRect.width - 10, 50);
     window.draw(textoVida);
+    window.draw(textoMunicao);
 
     
 }

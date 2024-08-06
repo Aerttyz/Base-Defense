@@ -130,24 +130,6 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
     return sqrt(pow(posicao1.x - posicao2.x, 2) + pow(posicao1.y - posicao2.y, 2));
 }
 
-
-//Atira um projétil
-/* void gerenciamentoTela::atirarInimigo(const Vector2f& direcao,const Sprite& backgroundSprite_inimigo) {
-     if(relogio.getElapsedTime() > intervaloDisparo) {
-
-        Vector2f direcaoNormalizada = direcao;
-        float magnitude = sqrt(direcaoNormalizada.x * direcaoNormalizada.x + direcaoNormalizada.y * direcaoNormalizada.y);
-         if (magnitude != 0) {
-            direcaoNormalizada /= magnitude;
-        }
-        
-        Projetil projetil(backgroundSprite_inimigo.getPosition(), direcaoNormalizada, backgroundSprite_projetil);
-        projetil.setPosicao(backgroundSprite_inimigo.getPosition());
-        projeteis.push_back(projetil);
-        relogio.restart();
-    }
-}
- */
 //Atualiza as informações do jogo
 void gerenciamentoTela::atualizar(RenderWindow& window) {
     if (estado == Estado::JOGO) {
