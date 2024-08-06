@@ -11,7 +11,7 @@ using namespace sf;
 
 //Carrega a imagem de fundo e a música
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
-: heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(2)) {
+: heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(2)), intervaloDisparo(seconds(1)) {
 
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
@@ -23,6 +23,9 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     if(!background_menu.loadFromFile(backgroundMenuFile)) {
         cout << "Erro ao carregar imagem de fundo do menu" << endl;
     }
+    if(!texturaProjetil.loadFromFile("assets/images/background/bullet1.png")) {
+        cout << "Erro ao carregar textura do projetil" << endl;
+    }
     if(!music.openFromFile(musicFile)) {
         cout << "Erro ao carregar música" << endl;
     }else {
@@ -30,6 +33,9 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
         music.play();
         
     }
+    //Configuração do projétil
+    backgroundSprite_projetil.setTexture(texturaProjetil);
+
     //Seta a imagem de fundo
     backgroundSprite.setTexture(background);
     backgroundSprite_menu.setTexture(background_menu);
@@ -124,11 +130,30 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
     return sqrt(pow(posicao1.x - posicao2.x, 2) + pow(posicao1.y - posicao2.y, 2));
 }
 
+
+//Atira um projétil
+/* void gerenciamentoTela::atirarInimigo(const Vector2f& direcao,const Sprite& backgroundSprite_inimigo) {
+     if(relogio.getElapsedTime() > intervaloDisparo) {
+
+        Vector2f direcaoNormalizada = direcao;
+        float magnitude = sqrt(direcaoNormalizada.x * direcaoNormalizada.x + direcaoNormalizada.y * direcaoNormalizada.y);
+         if (magnitude != 0) {
+            direcaoNormalizada /= magnitude;
+        }
+        
+        Projetil projetil(backgroundSprite_inimigo.getPosition(), direcaoNormalizada, backgroundSprite_projetil);
+        projetil.setPosicao(backgroundSprite_inimigo.getPosition());
+        projeteis.push_back(projetil);
+        relogio.restart();
+    }
+}
+ */
 //Atualiza as informações do jogo
 void gerenciamentoTela::atualizar(RenderWindow& window) {
     if (estado == Estado::JOGO) {
         float deltaTime = relogio.restart().asSeconds();
         Time tempoDecorrido = spawRelogio.getElapsedTime();
+        
         
         
         if (heroi) {
@@ -144,9 +169,16 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 base->verificarColisao(inimigo.getSprite());
                 Vector2f direcao = heroi->getSprite().getPosition() - inimigo.getSprite().getPosition();
                 inimigo.atirar(direcao); 
-                
+                /* atirarInimigo(direcao, inimigo.getSprite()); */
+
+                for(auto& projetil : inimigo.getProjeteis()){
+                    projeteisInimigos.push_back(projetil);
+                }
+                inimigo.getProjeteis().clear();
             }
         }
+
+        atualizarProjeteisInimigos(deltaTime, window);
         
         for(auto& inimigo : inimigos) {
             auto& projeteisInimigo = inimigo.getProjeteis();
@@ -241,6 +273,25 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
     }
 }
 
+void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow& window) {
+    for (auto it = projeteisInimigos.begin(); it != projeteisInimigos.end();) {
+        it->moverInimigo(deltaTime);
+        if (it->verificarColisaoJanela(window)) {
+            it = projeteisInimigos.erase(it);
+        } else {
+            if (heroi->verificarColisao(it->getSprite())) {
+                heroi->TomarDano();
+                it = projeteisInimigos.erase(it);
+            }else if(base && base->verificarColisao(it->getSprite())){
+                it = projeteisInimigos.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+}
+
+
 
 //Renderiza a imagem de fundo e os sprites
 void gerenciamentoTela::renderizar(RenderWindow& window) {
@@ -263,7 +314,14 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         for (auto& inimigo : inimigos) {
             inimigo.renderizar(window);
         }
+        renderizarProjeteisInimigos(window);
         
     }
     window.display();
+}
+
+void gerenciamentoTela::renderizarProjeteisInimigos(RenderWindow& window) {
+    for (auto& projetil : projeteisInimigos) {
+        projetil.renderizar(window);
+    }
 }
