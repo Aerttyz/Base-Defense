@@ -28,7 +28,7 @@ int main() {
     Heroi heroi(100, "assets/images/characters/hero.png", font);
 
     //Carrega tela
-    gerenciamentoTela gerenciamentoTela("assets/images/background/background1.png", "assets/images/background/backgroundInicio.png", "assets/music/dark_forest.ogg", &heroi, &base, Vector2f(window.getSize()));    
+    gerenciamentoTela gerenciamentoTela("assets/images/background/background1.png", "assets/images/background/testeInicial.png", "assets/music/dark_forest.ogg", &heroi, &base, Vector2f(window.getSize()));    
     
     
     

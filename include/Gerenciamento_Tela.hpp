@@ -29,6 +29,7 @@ class gerenciamentoTela {
         void atualizarDrop(RenderWindow& window);  
         
         int getRandomChanceDrop();
+        int getRandomTipoDrop();
 
         //void atirarInimigo(const Vector2f& direcao,const Sprite& backgroundSprite_inimigo);
         

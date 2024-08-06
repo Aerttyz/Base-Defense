@@ -104,7 +104,7 @@ void Heroi::TomarDano() {
 }
 
 void Heroi::RecuperarVida() {
-    vida += 20;
+    vida += 10;
     textoVida.setString("Heroi: " + to_string(vida));
 }
 
@@ -132,6 +132,16 @@ bool Heroi::verificarColisao(const Sprite& sprite) {
     return false;
 }
 
+
+bool Heroi::verificarColisaoDrop(const Sprite& sprite) {
+    if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
+            textoVida.setString("Heroi: " + to_string(vida));
+            relogio.restart(); 
+            return true;  
+        
+    }
+    return false;
+}
 
 //Verifica colisão com um retângulo de testes
 

@@ -20,11 +20,7 @@ int Drop::getRandomTipoDrop(){
 }
 bool Drop::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_drop.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
-        if(getRandomTipoDrop() == 0){
-            heroi->RecuperarVida();
-        }else{
-            heroi->RecuperarMunicao();
-        }
+       
         return true;
     }
     return false;

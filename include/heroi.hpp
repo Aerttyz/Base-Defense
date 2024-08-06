@@ -25,6 +25,7 @@ class Heroi {
         Vector2f getPosicao();
         bool verificarColisao(const Sprite& sprite);
         void verificarColisao(const RectangleShape& shape);
+        bool verificarColisaoDrop(const Sprite& sprite);
         void renderizar(RenderWindow& window);
         vector<Projetil>& getProjeteis();
     

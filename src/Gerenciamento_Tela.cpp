@@ -137,6 +137,11 @@ int gerenciamentoTela::getRandomChanceDrop(){
     return chance;
 }
 
+int gerenciamentoTela::getRandomTipoDrop(){
+    int tipo = rand() % 2;
+    return tipo;
+}
+
 //Calcula a distância entre duas posições
 float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
     return sqrt(pow(posicao1.x - posicao2.x, 2) + pow(posicao1.y - posicao2.y, 2));
@@ -173,8 +178,12 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
         }
 
         for(auto& drop : drops) {
-            if(heroi->verificarColisao(drop.getSprite())) {
+            if(heroi->verificarColisaoDrop(drop.getSprite())) {
+                if(getRandomTipoDrop() == 1){
+                    heroi->RecuperarMunicao();
+                }else{
                 heroi->RecuperarVida();
+            }
                 drop.setPosicao(Vector2f(-1000, -1000));
             }
         }
