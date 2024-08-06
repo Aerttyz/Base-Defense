@@ -45,6 +45,9 @@ class Heroi {
 
         Sprite backgroundSprite_projetil;
         Texture background_projetil;
+
+        int quantidadeProjetil;
+        Text textoMunicao;
 };
 
 
