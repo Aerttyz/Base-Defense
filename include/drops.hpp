@@ -2,22 +2,26 @@
 #define DROP_HPP
 
 #include <SFML/Graphics.hpp>
+#include "../include/heroi.hpp"
 
 using namespace std;
 using namespace sf;
 
 class Drop{
     public:
-        Drop(const Sprite& dropSprite, const Vector2f& posicao);
+        Drop(const Sprite& dropSprite, const Vector2f& posicao, Heroi *heroi);
         void renderizar(RenderWindow& window);
         void setPosicao(const Vector2f& posicao);
         Vector2f getPosicao() const;
         Sprite getSprite() const;
-        
+        int getRandomTipoDrop();
+
+        bool verificarColisao(const Sprite& sprite);
     private:
         Vector2f posicao;
         bool textureLoaded;
         Sprite backgroundSprite_drop;
+        Heroi *heroi;
 };
 
 

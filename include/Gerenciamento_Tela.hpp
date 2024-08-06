@@ -27,7 +27,7 @@ class gerenciamentoTela {
         void renderizarProjeteisInimigos(RenderWindow& window);
 
         void atualizarDrop(RenderWindow& window);  
-        void renderizarDrop(RenderWindow& window);
+        
         int getRandomChanceDrop();
 
         //void atirarInimigo(const Vector2f& direcao,const Sprite& backgroundSprite_inimigo);

@@ -22,7 +22,7 @@ int main() {
     //Inimigo novoInimigo("assets/images/characters/Cactus Man.png");
 
     //Carrega imagem da base
-    Base base(100, "assets/images/background/testBAse.png", font, Vector2f(window.getSize()));
+    Base base(100, "assets/images/background/baseFinal.png", font, Vector2f(window.getSize()));
 
     //Carrega imagem do herói
     Heroi heroi(100, "assets/images/characters/hero.png", font);

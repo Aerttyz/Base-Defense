@@ -1,4 +1,5 @@
 #include "../include/drops.hpp"
+#include "../include/heroi.hpp"
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
@@ -6,12 +7,32 @@ using namespace std;
 using namespace sf;
 
 //Construtor
-Drop::Drop(const Sprite& dropSprite, const Vector2f& posicao) : textureLoaded(false), posicao(posicao) {
+Drop::Drop(const Sprite& dropSprite, const Vector2f& posicao, Heroi *heroi) : textureLoaded(false), posicao(posicao) {
     
     backgroundSprite_drop = dropSprite;
     backgroundSprite_drop.setPosition(posicao);
     textureLoaded = backgroundSprite_drop.getTexture() != nullptr;
 
+}
+
+int Drop::getRandomTipoDrop(){
+    return rand() % 2;
+}
+bool Drop::verificarColisao(const Sprite& sprite) {
+    if (backgroundSprite_drop.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
+        if(getRandomTipoDrop() == 0){
+            heroi->RecuperarVida();
+        }else{
+            heroi->RecuperarMunicao();
+        }
+        return true;
+    }
+    return false;
+}
+
+
+Vector2f Drop::getPosicao() const {
+    return backgroundSprite_drop.getPosition();
 }
 
 Sprite Drop::getSprite() const {

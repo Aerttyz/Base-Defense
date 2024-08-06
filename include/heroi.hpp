@@ -19,6 +19,8 @@ class Heroi {
         void atualizarProjeteis(float deltaTime);
         void setVida(int novaVida);
         int getVida();
+        void RecuperarVida();
+        void RecuperarMunicao();
         void TomarDano();
         Vector2f getPosicao();
         bool verificarColisao(const Sprite& sprite);

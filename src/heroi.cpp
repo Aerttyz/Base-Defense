@@ -103,7 +103,15 @@ void Heroi::TomarDano() {
    //TODO
 }
 
+void Heroi::RecuperarVida() {
+    vida += 20;
+    textoVida.setString("Heroi: " + to_string(vida));
+}
 
+void Heroi::RecuperarMunicao() {
+    quantidadeProjetil += 10;
+    textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
+}
 
 
 //Verifica colisão com um sprite

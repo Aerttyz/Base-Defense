@@ -172,6 +172,13 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             }
         }
 
+        for(auto& drop : drops) {
+            if(heroi->verificarColisao(drop.getSprite())) {
+                heroi->RecuperarVida();
+                drop.setPosicao(Vector2f(-1000, -1000));
+            }
+        }
+
         atualizarProjeteisInimigos(deltaTime, window);
         
         for(auto& inimigo : inimigos) {
@@ -199,14 +206,14 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             if (!projetilRemovido){
                 for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
                     if (inimigoIt->verificarColisao(it->getSprite())) {
-                        inimigoIt = inimigos.erase(inimigoIt);
-                        it = projeteis.erase(it);
-                        projetilRemovido = true;
                         if(getRandomChanceDrop() == 1){
-                            Drop drop(spriteDrop, inimigoIt->getPosicao());
+                            Drop drop(spriteDrop, inimigoIt->getPosicao(), heroi);
                             drop.setPosicao(inimigoIt->getPosicao());
                             drops.push_back(drop);
                         }
+                        inimigoIt = inimigos.erase(inimigoIt);
+                        it = projeteis.erase(it);
+                        projetilRemovido = true;
                         break;
                     } else {
                         ++inimigoIt;
