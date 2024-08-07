@@ -12,7 +12,7 @@ using namespace sf;
 
 //Carrega a imagem de fundo e a música
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
-: heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(0.5f)), intervaloDisparo(seconds(1)) {
+: heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(2)), intervaloDisparo(seconds(1)) {
 
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
@@ -58,6 +58,15 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
 
     //Inicia o relógio
     spawRelogio.restart();
+
+    //Configuração do texto das kills
+    textoKills.setFont(font);
+    textoKills.setCharacterSize(20);
+    textoKills.setFillColor(Color::White);
+    textoKills.setString("kills:" + to_string(Kills));
+    FloatRect textRectKill = textoKills.getLocalBounds();
+    textoKills.setOrigin(textRectKill.left + textRectKill.width/2.0f, textRectKill.top  + textRectKill.height/2.0f);
+    textoKills.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
 }
 
 //Verifica eventos do mouse
@@ -85,6 +94,10 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
             }
         }
     }
+}
+
+void gerenciamentoTela::setKills(){
+    textoKills.setString("kills:" + to_string(Kills));
 }
 
 //Ajusta o tamanho da imagem de fundo
@@ -223,6 +236,9 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         }
                         inimigoIt = inimigos.erase(inimigoIt);
                         it = projeteis.erase(it);
+                        Kills++;
+                        cout << "Kills: " << Kills << endl; 
+                        setKills();
                         projetilRemovido = true;
                         break;
                     } else {
@@ -240,7 +256,6 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             for (auto it = inimigos.begin(); it != inimigos.end();) {
                 base->verificarColisao(it->getSprite());
                 if(base->verificarColisao(it->getSprite())){ 
-                    cout << "Inimigo colidiu com a base!" << endl;
                     it = inimigos.erase(it);
                 }else{
                     ++it;
@@ -345,7 +360,6 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
     }else if(estado == Estado::JOGO) {
         setBackgroundScale(window, backgroundSprite);
         window.draw(backgroundSprite);
-        
         if(base) {
             base->renderizar(window);
         }
@@ -357,6 +371,7 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         }
         renderizarProjeteisInimigos(window);
         atualizarDrop(window);
+        window.draw(textoKills);
         
         
     }

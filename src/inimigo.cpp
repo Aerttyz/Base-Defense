@@ -8,7 +8,7 @@ using namespace std;
 using namespace sf;
 
 //Construtor
-Inimigo::Inimigo(const string& inimigoFile) : textureLoaded(false), velocidade(100.0f), posicao(Vector2f(400, 300)), dps(seconds(1.0f)), intervaloDisparo(seconds(1.0f)) { 
+Inimigo::Inimigo(const string& inimigoFile) : textureLoaded(false), velocidade(100.0f), posicao(Vector2f(400, 300)), dps(seconds(1.0f)), intervaloDisparo(seconds(2)) { 
         if (!background_inimigo.loadFromFile(inimigoFile)) {
             cerr << "Erro ao carregar a imagem do inimigo" << endl;
             exit(1);
@@ -68,7 +68,6 @@ void Inimigo::atualizarProjeteis(float deltaTime, RenderWindow& window) {
 //Verifica colisão com um sprite
 bool Inimigo::verificarColisao(const Sprite& sprite) {
     if(backgroundSprite_inimigo.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
-        cout << "Colisão detectada" << endl;
         return true;
     }
     return false;

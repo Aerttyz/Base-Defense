@@ -33,6 +33,7 @@ class gerenciamentoTela {
         int getRandomTipoDrop();
 
         //void atirarInimigo(const Vector2f& direcao,const Sprite& backgroundSprite_inimigo);
+        void setKills();
         
     private:
         RectangleShape shape;
@@ -64,6 +65,9 @@ class gerenciamentoTela {
         Texture texturaDrop;
         Sprite spriteDrop;
         vector<Drop> drops; 
+
+        int Kills;
+        Text textoKills;
               
 
 };
