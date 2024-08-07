@@ -103,7 +103,15 @@ void Heroi::TomarDano() {
    //TODO
 }
 
+void Heroi::RecuperarVida() {
+    vida += 10;
+    textoVida.setString("Heroi: " + to_string(vida));
+}
 
+void Heroi::RecuperarMunicao() {
+    quantidadeProjetil += 10;
+    textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
+}
 
 
 //Verifica colisão com um sprite
@@ -112,6 +120,10 @@ bool Heroi::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
             vida -= 10;
            
+            if(vida < 0 ){
+                vida = 0;
+                
+            }
             textoVida.setString("Heroi: " + to_string(vida));
             relogio.restart(); 
             return true;  
@@ -120,6 +132,16 @@ bool Heroi::verificarColisao(const Sprite& sprite) {
     return false;
 }
 
+
+bool Heroi::verificarColisaoDrop(const Sprite& sprite) {
+    if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
+            textoVida.setString("Heroi: " + to_string(vida));
+            relogio.restart(); 
+            return true;  
+        
+    }
+    return false;
+}
 
 //Verifica colisão com um retângulo de testes
 
@@ -148,7 +170,7 @@ void Heroi::renderizar(RenderWindow& window) {
     FloatRect textRect = textoVida.getLocalBounds();
     textoVida.setPosition(window.getSize().x - textRect.width - 10, 10);
     FloatRect textRectMunicao = textoMunicao.getLocalBounds();
-    textoMunicao.setPosition(window.getSize().x - textRect.width - 10, 50);
+    textoMunicao.setPosition(window.getSize().x - textRect.width - 10, 70);
     window.draw(textoVida);
     window.draw(textoMunicao);
 

@@ -19,10 +19,13 @@ class Heroi {
         void atualizarProjeteis(float deltaTime);
         void setVida(int novaVida);
         int getVida();
+        void RecuperarVida();
+        void RecuperarMunicao();
         void TomarDano();
         Vector2f getPosicao();
         bool verificarColisao(const Sprite& sprite);
         void verificarColisao(const RectangleShape& shape);
+        bool verificarColisaoDrop(const Sprite& sprite);
         void renderizar(RenderWindow& window);
         vector<Projetil>& getProjeteis();
     
