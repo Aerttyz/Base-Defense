@@ -12,7 +12,7 @@ using namespace sf;
 
 //Carrega a imagem de fundo e a música
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
-: heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(2)), intervaloDisparo(seconds(1)) {
+: heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(0.5f)), intervaloDisparo(seconds(1)) {
 
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
@@ -146,6 +146,7 @@ int gerenciamentoTela::getRandomTipoDrop(){
 float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
     return sqrt(pow(posicao1.x - posicao2.x, 2) + pow(posicao1.y - posicao2.y, 2));
 }
+
 
 //Atualiza as informações do jogo
 void gerenciamentoTela::atualizar(RenderWindow& window) {
@@ -288,18 +289,37 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
     }
 }
 
+bool gerenciamentoTela::verificarColisaoProjeteisInimigos(Projetil& projetil, Inimigo& inimigo) {
+    return projetil.getSprite().getGlobalBounds().intersects(inimigo.getSprite().getGlobalBounds());
+}
+
+
 void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow& window) {
     for (auto it = projeteisInimigos.begin(); it != projeteisInimigos.end();) {
         it->moverInimigo(deltaTime);
+        bool projetilRemovido = false;
         if (it->verificarColisaoJanela(window)) {
             it = projeteisInimigos.erase(it);
+            projetilRemovido = true;
         } else {
             if (heroi->verificarColisao(it->getSprite())) {
                 heroi->TomarDano();
                 it = projeteisInimigos.erase(it);
-            }else if(base && base->verificarColisao(it->getSprite())){
+                projetilRemovido = true;
+            } else if (base && base->verificarColisao(it->getSprite())) {
                 it = projeteisInimigos.erase(it);
+                projetilRemovido = true;
             } else {
+                for (auto& inimigo : inimigos) {
+                    if (&inimigo != it->getOwner() && verificarColisaoProjeteisInimigos(*it, inimigo)) {
+                        it = projeteisInimigos.erase(it);
+                        cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << endl;
+                        projetilRemovido = true;
+                        break;
+                    }
+                }
+            }
+            if (!projetilRemovido) {
                 ++it;
             }
         }

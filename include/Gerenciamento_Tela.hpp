@@ -24,6 +24,7 @@ class gerenciamentoTela {
         Vector2f getPosicaoRandom(const Vector2u& windowSize);
 
         void atualizarProjeteisInimigos(float deltaTime, RenderWindow& window);
+        bool verificarColisaoProjeteisInimigos(Projetil& projetil, Inimigo& inimigo);
         void renderizarProjeteisInimigos(RenderWindow& window);
 
         void atualizarDrop(RenderWindow& window);  

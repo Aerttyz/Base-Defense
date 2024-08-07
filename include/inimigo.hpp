@@ -8,6 +8,7 @@
 #include "../include/drops.hpp"
 using namespace std;
 using namespace sf;
+class Projetil;
 
 class Inimigo{
     public:
@@ -22,9 +23,11 @@ class Inimigo{
         bool isTextureLoaded() const; 
 
         vector<Projetil>& getProjeteis();
+        
          
         
         void renderizar(RenderWindow& window);
+
         
     private:
         float velocidade;

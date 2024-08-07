@@ -47,7 +47,7 @@ void Inimigo::atirar(const Vector2f& direcao) {
             direcaoNormalizada /= magnitude;
         }
         
-        Projetil projetil(backgroundSprite_inimigo.getPosition(), direcaoNormalizada, backgroundSprite_projetil);
+        Projetil projetil(backgroundSprite_inimigo.getPosition(), direcaoNormalizada, backgroundSprite_projetil, this);
         projetil.setPosicao(backgroundSprite_inimigo.getPosition());
         projeteis.push_back(projetil);
         relogio.restart();
