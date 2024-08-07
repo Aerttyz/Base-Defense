@@ -58,6 +58,15 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
 
     //Inicia o relógio
     spawRelogio.restart();
+
+    //Configuração do texto das kills
+    textoKills.setFont(font);
+    textoKills.setCharacterSize(20);
+    textoKills.setFillColor(Color::White);
+    textoKills.setString("kills:" + to_string(Kills));
+    FloatRect textRectKill = textoKills.getLocalBounds();
+    textoKills.setOrigin(textRectKill.left + textRectKill.width/2.0f, textRectKill.top  + textRectKill.height/2.0f);
+    textoKills.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
 }
 
 //Verifica eventos do mouse
@@ -85,6 +94,10 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
             }
         }
     }
+}
+
+void gerenciamentoTela::setKills(){
+    textoKills.setString("kills:" + to_string(Kills));
 }
 
 //Ajusta o tamanho da imagem de fundo
@@ -146,6 +159,7 @@ int gerenciamentoTela::getRandomTipoDrop(){
 float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
     return sqrt(pow(posicao1.x - posicao2.x, 2) + pow(posicao1.y - posicao2.y, 2));
 }
+
 
 //Atualiza as informações do jogo
 void gerenciamentoTela::atualizar(RenderWindow& window) {
@@ -222,6 +236,9 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         }
                         inimigoIt = inimigos.erase(inimigoIt);
                         it = projeteis.erase(it);
+                        Kills++;
+                        cout << "Kills: " << Kills << endl; 
+                        setKills();
                         projetilRemovido = true;
                         break;
                     } else {
@@ -239,7 +256,6 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             for (auto it = inimigos.begin(); it != inimigos.end();) {
                 base->verificarColisao(it->getSprite());
                 if(base->verificarColisao(it->getSprite())){ 
-                    cout << "Inimigo colidiu com a base!" << endl;
                     it = inimigos.erase(it);
                 }else{
                     ++it;
@@ -288,20 +304,41 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
     }
 }
 
+bool gerenciamentoTela::verificarColisaoProjeteisInimigos(Projetil& projetil, Inimigo& inimigo) {
+    return projetil.getSprite().getGlobalBounds().intersects(inimigo.getSprite().getGlobalBounds());
+}
+
+
 void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow& window) {
     for (auto it = projeteisInimigos.begin(); it != projeteisInimigos.end();) {
         it->moverInimigo(deltaTime);
+        bool projetilRemovido = false;
         if (it->verificarColisaoJanela(window)) {
             it = projeteisInimigos.erase(it);
+            projetilRemovido = true;
         } else {
             if (heroi->verificarColisao(it->getSprite())) {
                 heroi->TomarDano();
                 it = projeteisInimigos.erase(it);
-            }else if(base && base->verificarColisao(it->getSprite())){
+                projetilRemovido = true;
+            } else if (base && base->verificarColisao(it->getSprite())) {
                 it = projeteisInimigos.erase(it);
+                projetilRemovido = true;
             } else {
-                ++it;
+                for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
+                    if (&(*inimigoIt) != it->getOwner() && verificarColisaoProjeteisInimigos(*it, *inimigoIt)) {
+                        it = projeteisInimigos.erase(it);
+                        inimigoIt = inimigos.erase(inimigoIt);
+                        projetilRemovido = true;
+                        break;
+                    } else {
+                        ++inimigoIt;
+                    }
+                }
             }
+        }
+        if (!projetilRemovido) {
+            ++it;
         }
     }
 }
@@ -323,7 +360,6 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
     }else if(estado == Estado::JOGO) {
         setBackgroundScale(window, backgroundSprite);
         window.draw(backgroundSprite);
-        
         if(base) {
             base->renderizar(window);
         }
@@ -335,6 +371,7 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         }
         renderizarProjeteisInimigos(window);
         atualizarDrop(window);
+        window.draw(textoKills);
         
         
     }

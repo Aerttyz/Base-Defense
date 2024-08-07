@@ -7,6 +7,8 @@
 using namespace std;
 using namespace sf;
 
+class Heroi;
+
 class Drop{
     public:
         Drop(const Sprite& dropSprite, const Vector2f& posicao, Heroi *heroi);

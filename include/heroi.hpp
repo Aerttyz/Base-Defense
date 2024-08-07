@@ -7,7 +7,7 @@
 #include <vector>
 using namespace sf;
 using namespace std;
-
+class Projetil;
 
 class Heroi {
     public:

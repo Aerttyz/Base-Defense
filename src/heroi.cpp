@@ -71,7 +71,7 @@ void Heroi::mover() {
 void Heroi::atirar(const Vector2f& direcao) {
         if(quantidadeProjetil>0){
             Vector2f direcaoNormalizada = direcao / sqrt(direcao.x * direcao.x + direcao.y * direcao.y);
-            Projetil projetil(backgroundSprite_heroi.getPosition(), direcaoNormalizada, backgroundSprite_projetil);
+            Projetil projetil(backgroundSprite_heroi.getPosition(), direcaoNormalizada, backgroundSprite_projetil, nullptr);
             projeteis.push_back(projetil);
             bulletSong.play();
             quantidadeProjetil--;
@@ -105,6 +105,9 @@ void Heroi::TomarDano() {
 
 void Heroi::RecuperarVida() {
     vida += 10;
+    if(vida > 100){
+        vida = 100;
+    }
     textoVida.setString("Heroi: " + to_string(vida));
 }
 
@@ -115,7 +118,6 @@ void Heroi::RecuperarMunicao() {
 
 
 //Verifica colisão com um sprite
-
 bool Heroi::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
             vida -= 10;
@@ -170,7 +172,7 @@ void Heroi::renderizar(RenderWindow& window) {
     FloatRect textRect = textoVida.getLocalBounds();
     textoVida.setPosition(window.getSize().x - textRect.width - 10, 10);
     FloatRect textRectMunicao = textoMunicao.getLocalBounds();
-    textoMunicao.setPosition(window.getSize().x - textRect.width - 10, 70);
+    textoMunicao.setPosition(window.getSize().x - textRect.width - 20, 70);
     window.draw(textoVida);
     window.draw(textoMunicao);
 

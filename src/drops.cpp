@@ -6,6 +6,7 @@
 using namespace std;
 using namespace sf;
 
+
 //Construtor
 Drop::Drop(const Sprite& dropSprite, const Vector2f& posicao, Heroi *heroi) : textureLoaded(false), posicao(posicao) {
     
