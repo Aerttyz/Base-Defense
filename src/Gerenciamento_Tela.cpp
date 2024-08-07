@@ -310,18 +310,20 @@ void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow
                 it = projeteisInimigos.erase(it);
                 projetilRemovido = true;
             } else {
-                for (auto& inimigo : inimigos) {
-                    if (&inimigo != it->getOwner() && verificarColisaoProjeteisInimigos(*it, inimigo)) {
+                for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
+                    if (&(*inimigoIt) != it->getOwner() && verificarColisaoProjeteisInimigos(*it, *inimigoIt)) {
                         it = projeteisInimigos.erase(it);
-                        cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << endl;
+                        inimigoIt = inimigos.erase(inimigoIt);
                         projetilRemovido = true;
                         break;
+                    } else {
+                        ++inimigoIt;
                     }
                 }
             }
-            if (!projetilRemovido) {
-                ++it;
-            }
+        }
+        if (!projetilRemovido) {
+            ++it;
         }
     }
 }
