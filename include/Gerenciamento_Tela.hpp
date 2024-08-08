@@ -63,7 +63,9 @@ class gerenciamentoTela {
         Sprite backgroundSprite_projetil;
 
         Texture texturaDrop;
+        Texture texturaDrop1;
         Sprite spriteDrop;
+        Sprite spriteDrop1;
         vector<Drop> drops; 
 
         int Kills;

@@ -111,8 +111,13 @@ void Heroi::RecuperarVida() {
     textoVida.setString("Heroi: " + to_string(vida));
 }
 
+int Heroi::getRandomQuantidadeProjetil() {
+    int quantidade = rand() % 10;
+    return quantidade;
+}
+
 void Heroi::RecuperarMunicao() {
-    quantidadeProjetil += 10;
+    quantidadeProjetil += getRandomQuantidadeProjetil();
     textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
 }
 

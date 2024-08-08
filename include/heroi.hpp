@@ -28,6 +28,8 @@ class Heroi {
         bool verificarColisaoDrop(const Sprite& sprite);
         void renderizar(RenderWindow& window);
         vector<Projetil>& getProjeteis();
+
+        int getRandomQuantidadeProjetil();
     
     private:
         float velocidade;

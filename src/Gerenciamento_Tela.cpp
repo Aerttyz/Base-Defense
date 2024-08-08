@@ -30,6 +30,9 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     if(!texturaDrop.loadFromFile("assets/images/background/drop.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
+    if(!texturaDrop1.loadFromFile("assets/images/background/Heart.png")) {
+        cout << "Erro ao carregar textura do drop" << endl;
+    }
     if(!music.openFromFile(musicFile)) {
         cout << "Erro ao carregar música" << endl;
     }else {
@@ -39,6 +42,7 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     }
     //Configuração do drop
     spriteDrop.setTexture(texturaDrop);
+    spriteDrop1.setTexture(texturaDrop1);
 
     //Configuração do projétil
     backgroundSprite_projetil.setTexture(texturaProjetil);
@@ -193,12 +197,17 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
 
         for(auto& drop : drops) {
             if(heroi->verificarColisaoDrop(drop.getSprite())) {
-                if(getRandomTipoDrop() == 1){
+                if(drop.getTipo() == 1){
                     heroi->RecuperarMunicao();
                 }else{
                 heroi->RecuperarVida();
-            }
+                }
                 drop.setPosicao(Vector2f(-1000, -1000));
+                relogio.restart();
+                
+            }else if(spawRelogio.getElapsedTime() > seconds(5)){
+                drop.setPosicao(Vector2f(-1000, -1000));
+                
             }
         }
 
@@ -230,7 +239,11 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
                     if (inimigoIt->verificarColisao(it->getSprite())) {
                         if(getRandomChanceDrop() == 1){
-                            Drop drop(spriteDrop, inimigoIt->getPosicao(), heroi);
+                            Drop drop(spriteDrop, inimigoIt->getPosicao(), heroi, 1);
+                            drop.setPosicao(inimigoIt->getPosicao());
+                            drops.push_back(drop);
+                        }else if(getRandomChanceDrop() == 0){
+                            Drop drop(spriteDrop1, inimigoIt->getPosicao(), heroi, 0);
                             drop.setPosicao(inimigoIt->getPosicao());
                             drops.push_back(drop);
                         }
