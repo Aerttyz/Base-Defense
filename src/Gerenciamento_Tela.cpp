@@ -176,18 +176,18 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             
             
             for (auto& inimigo : inimigos) {
-                inimigo.atualizarProjeteis(deltaTime, window);
-                heroi->verificarColisao(inimigo.getSprite());
+                inimigo->atualizarProjeteis(deltaTime, window);
+                heroi->verificarColisao(inimigo->getSprite());
                 
-                base->verificarColisao(inimigo.getSprite());
-                Vector2f direcao = heroi->getSprite().getPosition() - inimigo.getSprite().getPosition();
-                inimigo.atirar(direcao); 
+                base->verificarColisao(inimigo->getSprite());
+                Vector2f direcao = heroi->getSprite().getPosition() - inimigo->getSprite().getPosition();
+                inimigo->atirar(direcao); 
                 /* atirarInimigo(direcao, inimigo.getSprite()); */
 
-                for(auto& projetil : inimigo.getProjeteis()){
+                for(auto& projetil : inimigo->getProjeteis()){
                     projeteisInimigos.push_back(projetil);
                 }
-                inimigo.getProjeteis().clear();
+                inimigo->getProjeteis().clear();
             }
         }
 
@@ -205,7 +205,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
         atualizarProjeteisInimigos(deltaTime, window);
         
         for(auto& inimigo : inimigos) {
-            auto& projeteisInimigo = inimigo.getProjeteis();
+            auto& projeteisInimigo = inimigo->getProjeteis();
             for(auto it = projeteisInimigo.begin(); it != projeteisInimigo.end();) {
                 if(it->verificarColisao(heroi->getSprite())) {
                     it = projeteisInimigo.erase(it);
@@ -228,10 +228,10 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             }
             if (!projetilRemovido){
                 for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
-                    if (inimigoIt->verificarColisao(it->getSprite())) {
+                    if ((*inimigoIt)->verificarColisao(it->getSprite())) {
                         if(getRandomChanceDrop() == 1){
-                            Drop drop(spriteDrop, inimigoIt->getPosicao(), heroi);
-                            drop.setPosicao(inimigoIt->getPosicao());
+                            Drop drop(spriteDrop, (*inimigoIt)->getPosicao(), heroi);
+                            drop.setPosicao((*inimigoIt)->getPosicao());
                             drops.push_back(drop);
                         }
                         inimigoIt = inimigos.erase(inimigoIt);
@@ -254,8 +254,8 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
         //Verifica colisão do inimigo com a base
         if (base) {
             for (auto it = inimigos.begin(); it != inimigos.end();) {
-                base->verificarColisao(it->getSprite());
-                if(base->verificarColisao(it->getSprite())){ 
+                base->verificarColisao((*it)->getSprite());
+                if(base->verificarColisao((*it)->getSprite())){ 
                     it = inimigos.erase(it);
                 }else{
                     ++it;
@@ -264,9 +264,9 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
         }
 
         for (auto it = inimigos.begin(); it != inimigos.end();) {
-            it->mover();
-            base->verificarColisao(it->getSprite());
-            if (base && it->verificarColisao(base->getSprite())) {
+            (*it)->mover();
+            base->verificarColisao((*it)->getSprite());
+            if (base && (*it)->verificarColisao(base->getSprite())) {
                 it = inimigos.erase(it);
             } else {
                 ++it;
@@ -284,7 +284,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 posicaoValida = true;
 
                 for (const auto& inimigo : inimigos) {
-                    if (calcularDistancia(posicao, inimigo.getPosicao()) < distanciaMinima) {
+                    if (calcularDistancia(posicao, (*inimigo).getPosicao()) < distanciaMinima) {
                         posicaoValida = false;
                         break;
                     }
@@ -294,7 +294,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             Inimigo* inimigo = new Inimigo("assets/images/characters/enemy.png");
             if (inimigo->isTextureLoaded()) {
                 inimigo->setPosicao(posicao);
-                inimigos.push_back(*inimigo);
+                inimigos.push_back(inimigo);
 
             } else {
                 delete inimigo;
@@ -303,11 +303,6 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
         }
     }
 }
-
-bool gerenciamentoTela::verificarColisaoProjeteisInimigos(Projetil& projetil, Inimigo& inimigo) {
-    return projetil.getSprite().getGlobalBounds().intersects(inimigo.getSprite().getGlobalBounds());
-}
-
 
 void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow& window) {
     for (auto it = projeteisInimigos.begin(); it != projeteisInimigos.end();) {
@@ -326,9 +321,9 @@ void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow
                 projetilRemovido = true;
             } else {
                 for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
-                    if (&(*inimigoIt) != it->getOwner() && verificarColisaoProjeteisInimigos(*it, *inimigoIt)) {
-                        it = projeteisInimigos.erase(it);
+                    if ((*inimigoIt)->verificarColisao(it->getSprite()) && it->getOwner() != *inimigoIt) {
                         inimigoIt = inimigos.erase(inimigoIt);
+                        it = projeteisInimigos.erase(it);
                         projetilRemovido = true;
                         break;
                     } else {
@@ -367,7 +362,7 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
             heroi->renderizar(window);
         }
         for (auto& inimigo : inimigos) {
-            inimigo.renderizar(window);
+            (*inimigo).renderizar(window);
         }
         renderizarProjeteisInimigos(window);
         atualizarDrop(window);
