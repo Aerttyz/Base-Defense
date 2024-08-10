@@ -24,7 +24,6 @@ class gerenciamentoTela {
         Vector2f getPosicaoRandom(const Vector2u& windowSize);
 
         void atualizarProjeteisInimigos(float deltaTime, RenderWindow& window);
-        bool verificarColisaoProjeteisInimigos(Projetil& projetil, Inimigo& inimigo);
         void renderizarProjeteisInimigos(RenderWindow& window);
 
         void atualizarDrop(RenderWindow& window);  
@@ -32,7 +31,7 @@ class gerenciamentoTela {
         int getRandomChanceDrop();
         int getRandomTipoDrop();
 
-        //void atirarInimigo(const Vector2f& direcao,const Sprite& backgroundSprite_inimigo);
+        void setFimDeJogo();
         void setKills();
         
     private:

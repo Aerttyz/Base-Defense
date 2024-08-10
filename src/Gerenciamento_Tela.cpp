@@ -12,7 +12,7 @@ using namespace sf;
 
 //Carrega a imagem de fundo e a música
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
-: heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(2)), intervaloDisparo(seconds(1)) {
+: heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(2)), intervaloDisparo(seconds(2)) {
 
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
@@ -99,10 +99,18 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
         }
     }
 }
-
+//Seta o texto das kills
 void gerenciamentoTela::setKills(){
     textoKills.setString("kills:" + to_string(Kills));
 }
+
+//Fim de jogo 
+void gerenciamentoTela::setFimDeJogo(){
+    if((heroi->getVida() <= 0) || (base->getVidaBase() <= 0 || spawRelogio.getElapsedTime() > seconds(2))){
+        estado = Estado::GAMEOVER;
+    }
+}
+
 
 //Ajusta o tamanho da imagem de fundo
 void gerenciamentoTela::setBackgroundScale(RenderWindow& window, Sprite& sprite) {
@@ -167,6 +175,7 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
 
 //Atualiza as informações do jogo
 void gerenciamentoTela::atualizar(RenderWindow& window) {
+    setFimDeJogo();
     if (estado == Estado::JOGO) {
         float deltaTime = relogio.restart().asSeconds();
         Time tempoDecorrido = spawRelogio.getElapsedTime();
@@ -310,6 +319,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             if (inimigo->isTextureLoaded()) {
                 inimigo->setPosicao(posicao);
                 inimigos.push_back(inimigo);
+                cout  << "Inimigo spawnado" << endl;
 
             } else {
                 delete inimigo;
@@ -381,9 +391,14 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         }
         renderizarProjeteisInimigos(window);
         atualizarDrop(window);
-        window.draw(textoKills);
-        
-        
+        window.draw(textoKills);   
+    }else if(estado == Estado::GAMEOVER) {
+        CircleShape shape(100);
+        shape.setFillColor(Color::Red);
+        shape.setOrigin(shape.getRadius(), shape.getRadius());
+        shape.setPosition(window.getSize().x / 2.0f, window.getSize().y / 2.0f);
+        window.draw(shape);
+        window.draw(backgroundSprite_menu);
     }
     window.display();
 }
