@@ -8,16 +8,20 @@ using namespace sf;
 
 
 //Construtor
-Drop::Drop(const Sprite& dropSprite, const Vector2f& posicao, Heroi *heroi) : textureLoaded(false), posicao(posicao) {
+Drop::Drop(const Sprite& dropSprite, const Vector2f& posicao, Heroi *heroi, int tipo) : textureLoaded(false), posicao(posicao) {
     
     backgroundSprite_drop = dropSprite;
     backgroundSprite_drop.setPosition(posicao);
     textureLoaded = backgroundSprite_drop.getTexture() != nullptr;
-
+    tipoDrop = tipo;
 }
 
 int Drop::getRandomTipoDrop(){
     return rand() % 2;
+}
+
+int Drop::getTipo() const {
+    return tipoDrop;
 }
 bool Drop::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_drop.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
