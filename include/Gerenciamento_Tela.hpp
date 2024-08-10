@@ -46,8 +46,8 @@ class gerenciamentoTela {
         Music music;
         Heroi *heroi;
         Base *base;
-        vector<Inimigo> inimigos;
-        vector<Projetil> projeteis;
+        vector<Inimigo *> inimigos;
+        vector<Projetil *> projeteis;
 
         vector<Projetil> projeteisInimigos;
         
