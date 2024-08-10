@@ -19,20 +19,20 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
     }
-    if(!font.loadFromFile("assets/fonts/fonts.ttf")) {
+    if(!font.loadFromFile("../assets/fonts/fonts.ttf")) {
         cerr << "Erro ao carregar a fonte" << endl;
         exit(1);
     }
     if(!background_menu.loadFromFile(backgroundMenuFile)) {
         cout << "Erro ao carregar imagem de fundo do menu" << endl;
     }
-    if(!texturaProjetil.loadFromFile("assets/images/background/bullet1.png")) {
+    if(!texturaProjetil.loadFromFile("../assets/images/background/bullet1.png")) {
         cout << "Erro ao carregar textura do projetil" << endl;
     }
-    if(!texturaDrop.loadFromFile("assets/images/background/drop.png")) {
+    if(!texturaDrop.loadFromFile("../assets/images/background/drop.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
-    if(!texturaDrop1.loadFromFile("assets/images/background/Heart.png")) {
+    if(!texturaDrop1.loadFromFile("../assets/images/background/Heart.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
     if(!music.openFromFile(musicFile)) {
@@ -87,7 +87,7 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
                 estado = Estado::JOGO;
             }else if(event.type == Event::KeyPressed && event.key.code == Keyboard::C){
                 estado = Estado::COOP;
-                tank = new Tank(300, "assets/images/characters/hero.png", font, heroi, base);
+                tank = new Tank(300, "../assets/images/characters/hero.png", font, heroi, base);
             }
         }else if(estado == Estado::JOGO) {
             if(tank){
@@ -344,7 +344,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 }
             }
 
-            Inimigo* inimigo = new Inimigo("assets/images/characters/enemy.png");
+            Inimigo* inimigo = new Inimigo("../assets/images/characters/enemy.png");
             if (inimigo->isTextureLoaded()) {
                 inimigo->setPosicao(posicao);
                 inimigos.push_back(inimigo);

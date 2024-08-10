@@ -39,7 +39,7 @@ class Inimigo{
         
 
         bool textureLoaded;
-        string projetilFile = "assets/images/background/bullet2.png";
+        string projetilFile = "../assets/images/background/bullet2.png";
 
         vector<Projetil> projeteis; 
         Time intervaloDisparo;
