@@ -104,7 +104,7 @@ void Heroi::TomarDano() {
 }
 
 void Heroi::darMunicao() {
-    quantidadeProjetil -+ 10;
+    quantidadeProjetil -= 5;
     textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
 }
 

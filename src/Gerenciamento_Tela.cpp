@@ -117,6 +117,10 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
                     cout << "Atirou" << endl;
                 }
             }
+            if(event.type == Event::KeyPressed && event.key.code == Keyboard::R){
+                    tank->trocarMunicaoPorVidaBase();
+                
+            }
         }
     }
 }
@@ -196,7 +200,7 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
 
 //Atualiza as informações do jogo
 void gerenciamentoTela::atualizar(RenderWindow& window) {
-    setFimDeJogo();
+    /* setFimDeJogo(); */
     if (estado == Estado::JOGO || estado == Estado::COOP) {
         float deltaTime = relogio.restart().asSeconds();
         Time tempoDecorrido = spawRelogio.getElapsedTime();
@@ -280,6 +284,8 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
 
                             Drop drop(spriteDrop, (*inimigoIt)->getPosicao(), heroi, 1);
                             drop.setPosicao((*inimigoIt)->getPosicao());
+
+                            drops.push_back(drop);
 
                         }else if(getRandomChanceDrop() == 0){
                             Drop drop(spriteDrop1, (*inimigoIt)->getPosicao(), heroi, 0);

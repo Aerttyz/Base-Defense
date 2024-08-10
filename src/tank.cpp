@@ -3,7 +3,7 @@
 #include <cmath>
 
 Tank::Tank(int vida, const string& tankFile, const Font& fonte, Heroi *heroi, Base *base)
-    : Heroi(vida, tankFile, fonte) {
+    : Heroi(vida, tankFile, fonte), heroi(heroi), base(base) {
     setVida(vida);  
     this->velocidade = 150.0f; 
     if (!background_tank.loadFromFile(tankFile)) {

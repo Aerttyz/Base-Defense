@@ -43,7 +43,6 @@ void Base::recuperarVida() {
             vida = 200;
         }
         textoVidaBase.setString("Base: " + to_string(vida));
-        relogio.restart();
     
 }
 
