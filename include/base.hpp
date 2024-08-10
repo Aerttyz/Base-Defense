@@ -13,6 +13,7 @@ class Base{
         Sprite getSprite() const;
         void setVidaBase(int novaVidaBase);
         int getVidaBase();
+        void recuperarVida();
     private:
         int vida;
         Text textoVidaBase;

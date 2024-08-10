@@ -6,6 +6,7 @@
 #include "../include/heroi.hpp"
 #include "../include/base.hpp"
 #include "../include/inimigo.hpp"
+#include "../include/tank.hpp"
 #include <vector>
 
 using namespace sf;
@@ -45,6 +46,7 @@ class gerenciamentoTela {
         Music music;
         Heroi *heroi;
         Base *base;
+        Tank *tank;
         vector<Inimigo *> inimigos;
         vector<Projetil *> projeteis;
 
@@ -54,7 +56,7 @@ class gerenciamentoTela {
         Clock spawRelogio;
         Time spawInimigo;
         Clock relogio;
-        enum class Estado {MENU, JOGO, GAMEOVER};
+        enum class Estado {MENU, JOGO, COOP, GAMEOVER};
         Estado estado;
 
         Time intervaloDisparo;

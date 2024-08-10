@@ -6,13 +6,15 @@
 #include "../include/projeteis.hpp"
 #include "../include/inimigo.hpp"
 #include "../include/drops.hpp"
-using namespace std;
+#include "../include/tank.hpp"
+
 using namespace sf;
+using namespace std;
 
 
 //Carrega a imagem de fundo e a música
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
-: heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(2)), intervaloDisparo(seconds(2)) {
+: heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(2)), intervaloDisparo(seconds(2)){
 
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
@@ -83,18 +85,37 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
         if(estado == Estado::MENU) {
             if(event.type == Event::KeyPressed && event.key.code == Keyboard::Enter) {
                 estado = Estado::JOGO;
+            }else if(event.type == Event::KeyPressed && event.key.code == Keyboard::C){
+                estado = Estado::COOP;
+                tank = new Tank(300, "assets/images/characters/hero.png", font, heroi, base);
             }
         }else if(estado == Estado::JOGO) {
+            if(tank){
+                delete tank;    
+                tank = nullptr;
+            }
             if(event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Right) {
                 setHeroiPosition(window);
             }
-        }
-        if(event.type == Event::KeyPressed && event.key.code == Keyboard::Q) {
-            if(heroi) {
-                Vector2i posicaoMouse = Mouse::getPosition(window);
-                Vector2f direcao(static_cast<float>(posicaoMouse.x) - heroi->getSprite().getPosition().x, static_cast<float>(posicaoMouse.y) - heroi->getSprite().getPosition().y);
-                heroi->atirar(direcao);
-                cout << "Atirou" << endl;
+            if(event.type == Event::KeyPressed && event.key.code == Keyboard::Q) {
+                if(heroi) {
+                    Vector2i posicaoMouse = Mouse::getPosition(window);
+                    Vector2f direcao(static_cast<float>(posicaoMouse.x) - heroi->getSprite().getPosition().x, static_cast<float>(posicaoMouse.y) - heroi->getSprite().getPosition().y);
+                    heroi->atirar(direcao);
+                    cout << "Atirou" << endl;
+                }
+            }
+        }else if(estado == Estado::COOP){
+            if(event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Right) {
+                setHeroiPosition(window);
+            }
+            if(event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
+                if(heroi) {
+                    Vector2i posicaoMouse = Mouse::getPosition(window);
+                    Vector2f direcao(static_cast<float>(posicaoMouse.x) - heroi->getSprite().getPosition().x, static_cast<float>(posicaoMouse.y) - heroi->getSprite().getPosition().y);
+                    heroi->atirar(direcao);
+                    cout << "Atirou" << endl;
+                }
             }
         }
     }
@@ -106,7 +127,7 @@ void gerenciamentoTela::setKills(){
 
 //Fim de jogo 
 void gerenciamentoTela::setFimDeJogo(){
-    if((heroi->getVida() <= 0) || (base->getVidaBase() <= 0 || spawRelogio.getElapsedTime() > seconds(2))){
+    if((heroi->getVida() <= 0) || (base->getVidaBase() <= 0 || spawRelogio.getElapsedTime() > seconds(60))){
         estado = Estado::GAMEOVER;
     }
 }
@@ -176,7 +197,7 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
 //Atualiza as informações do jogo
 void gerenciamentoTela::atualizar(RenderWindow& window) {
     setFimDeJogo();
-    if (estado == Estado::JOGO) {
+    if (estado == Estado::JOGO || estado == Estado::COOP) {
         float deltaTime = relogio.restart().asSeconds();
         Time tempoDecorrido = spawRelogio.getElapsedTime();
         
@@ -191,17 +212,23 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             for (auto& inimigo : inimigos) {
                 inimigo->atualizarProjeteis(deltaTime, window);
                 heroi->verificarColisao(inimigo->getSprite());
-                
+                if(estado == Estado::COOP && tank){
+                    tank->verificarColisao(inimigo->getSprite());
+                }
                 base->verificarColisao(inimigo->getSprite());
                 Vector2f direcao = heroi->getSprite().getPosition() - inimigo->getSprite().getPosition();
                 inimigo->atirar(direcao); 
-                /* atirarInimigo(direcao, inimigo.getSprite()); */
+                
 
                 for(auto& projetil : inimigo->getProjeteis()){
                     projeteisInimigos.push_back(projetil);
                 }
                 inimigo->getProjeteis().clear();
             }
+        }
+        if (estado == Estado::COOP && tank) {
+            tank->mover();  // Movimenta o tanque no modo coop
+            
         }
 
         for(auto& drop : drops) {
@@ -210,7 +237,9 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                     heroi->RecuperarMunicao();
                 }else{
                 heroi->RecuperarVida();
-                }
+                if(estado == Estado::COOP && tank){
+                    tank->RecuperarVida();
+                }}
                 drop.setPosicao(Vector2f(-1000, -1000));
                 relogio.restart();
                 
@@ -344,7 +373,13 @@ void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow
             } else if (base && base->verificarColisao(it->getSprite())) {
                 it = projeteisInimigos.erase(it);
                 projetilRemovido = true;
-            } else {
+            }else if(tank && tank->verificarColisao(it->getSprite())){
+                it = projeteisInimigos.erase(it);
+                projetilRemovido = true;
+
+            } 
+            
+            else {
                 for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
                     if ((*inimigoIt)->verificarColisao(it->getSprite()) && it->getOwner() != *inimigoIt) {
                         inimigoIt = inimigos.erase(inimigoIt);
@@ -377,7 +412,7 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         setBackgroundScale(window, backgroundSprite_menu);
         window.draw(backgroundSprite_menu);
         window.draw(textoMenu);
-    }else if(estado == Estado::JOGO) {
+    }else if(estado == Estado::JOGO || estado == Estado::COOP) {
         setBackgroundScale(window, backgroundSprite);
         window.draw(backgroundSprite);
         if(base) {
@@ -385,6 +420,9 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         }
         if(heroi != nullptr) {
             heroi->renderizar(window);
+        }
+        if(estado == Estado::COOP && tank){
+            tank->renderizar(window);
         }
         for (auto& inimigo : inimigos) {
             (*inimigo).renderizar(window);
@@ -399,6 +437,8 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         shape.setPosition(window.getSize().x / 2.0f, window.getSize().y / 2.0f);
         window.draw(shape);
         window.draw(backgroundSprite_menu);
+    }else if(estado == Estado::COOP){
+        tank->renderizar(window);
     }
     window.display();
 }
