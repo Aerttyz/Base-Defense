@@ -16,6 +16,7 @@ class Tank : public Heroi {
         bool verificarColisao(const Sprite& sprite) override;
         void renderizar(RenderWindow& window) override;
         void trocarMunicaoPorVidaBase();
+        bool verificarColisaoDrop(const Sprite& sprite) override;
     private:  
         Sprite backgroundSprite_tank;
         Texture background_tank;

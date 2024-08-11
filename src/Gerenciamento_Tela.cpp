@@ -14,7 +14,7 @@ using namespace std;
 
 //Carrega a imagem de fundo e a música
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
-: heroi(heroi), base(base), estado(Estado::MENU), spawInimigo(seconds(2)), intervaloDisparo(seconds(2)){
+: heroi(heroi), base(base), estado(Estado::MENU), spawnInimigo(seconds(0.2f)), intervaloDisparo(seconds(1)), waveInimigo(seconds(5)) {
 
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
@@ -40,7 +40,6 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     }else {
         music.setLoop(true);
         music.play();
-        
     }
     //Configuração do drop
     spriteDrop.setTexture(texturaDrop);
@@ -80,6 +79,7 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
     Event event;
     while (window.pollEvent(event)) {
         if (event.type == Event::Closed) {
+            music.stop();
             window.close();
         }
         if(estado == Estado::MENU) {
@@ -90,10 +90,6 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
                 tank = new Tank(300, "assets/images/characters/hero.png", font, heroi, base);
             }
         }else if(estado == Estado::JOGO) {
-            if(tank){
-                delete tank;    
-                tank = nullptr;
-            }
             if(event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Right) {
                 setHeroiPosition(window);
             }
@@ -215,7 +211,6 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             
             for (auto& inimigo : inimigos) {
                 inimigo->atualizarProjeteis(deltaTime, window);
-                heroi->verificarColisao(inimigo->getSprite());
                 if(estado == Estado::COOP && tank){
                     tank->verificarColisao(inimigo->getSprite());
                 }
@@ -235,37 +230,45 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             
         }
 
-        for(auto& drop : drops) {
-            if(heroi->verificarColisaoDrop(drop.getSprite())) {
-                if(drop.getTipo() == 1){
+        for(auto dropIt = drops.begin(); dropIt != drops.end();) {
+            if(spawRelogio.getElapsedTime() > seconds(5)){
+                dropIt = drops.erase(dropIt);
+            }else if(heroi->verificarColisaoDrop(dropIt->getSprite())){
+                if(dropIt->getTipo() == 1){
                     heroi->RecuperarMunicao();
                 }else{
-                heroi->RecuperarVida();
-                if(estado == Estado::COOP && tank){
-                    tank->RecuperarVida();
-                }}
-                drop.setPosicao(Vector2f(-1000, -1000));
+                    heroi->RecuperarVida();
+                    if(estado == Estado::COOP && tank){
+                        tank->RecuperarVida();
+                    }
+                }
+                dropIt = drops.erase(dropIt);
                 relogio.restart();
-                
-            }else if(spawRelogio.getElapsedTime() > seconds(5)){
-                drop.setPosicao(Vector2f(-1000, -1000));
-                
+            }else if(estado == Estado::COOP && tank && tank->verificarColisaoDrop(dropIt->getSprite())){
+                if(dropIt->getTipo() == 1){
+                    heroi->RecuperarMunicao();
+                }else{
+                    tank->RecuperarVida();
+                    heroi->RecuperarVida();
+                }
+                dropIt = drops.erase(dropIt);
+                relogio.restart();
+            }else{
+                ++dropIt;
             }
         }
 
         atualizarProjeteisInimigos(deltaTime, window);
-        
-        for(auto& inimigo : inimigos) {
-            auto& projeteisInimigo = inimigo->getProjeteis();
-            for(auto it = projeteisInimigo.begin(); it != projeteisInimigo.end();) {
-                if(it->verificarColisao(heroi->getSprite())) {
-                    it = projeteisInimigo.erase(it);
-                    heroi->TomarDano();
-                }else {
-                    ++it;
-                }
+
+        for(auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
+            if(heroi->verificarColisao((*inimigoIt)->getSprite())) {
+                inimigoIt = inimigos.erase(inimigoIt);
+            }else if(estado == Estado::COOP && tank && tank->verificarColisao((*inimigoIt)->getSprite())){
+                inimigoIt = inimigos.erase(inimigoIt);
+            }else{
+                ++inimigoIt;
             }
-        } 
+        }
 
         //Verifica colisão do projétil com a janela e com o inimigo
         auto& projeteis = heroi->getProjeteis();
@@ -333,34 +336,47 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
         }
 
         //TODO: Implementar a lógica de spawn de inimigos em waves
-        if (spawRelogio.getElapsedTime() >= spawInimigo) {
-            Vector2f posicao;
-            bool posicaoValida = false;
-            const float distanciaMinima = 50.0f;
+        if(waveRelogio.getElapsedTime() >= waveInimigo) { 
 
-            while (!posicaoValida) {
-                posicao = getPosicaoRandom(Vector2u(800, 600));
-                posicaoValida = true;
+            if (spawRelogio.getElapsedTime() >= spawnInimigo) {
+                Vector2f posicao;
+                bool posicaoValida = false;
+                const float distanciaMinima = 50.0f;
 
-                for (const auto& inimigo : inimigos) {
-                    if (calcularDistancia(posicao, (*inimigo).getPosicao()) < distanciaMinima) {
-                        posicaoValida = false;
-                        break;
+                while (!posicaoValida) {
+                    posicao = getPosicaoRandom(Vector2u(800, 600));
+                    posicaoValida = true;
+
+                    for (const auto& inimigo : inimigos) {
+                        if (calcularDistancia(posicao, (*inimigo).getPosicao()) < distanciaMinima) {
+                            posicaoValida = false;
+                            break;
+                        }
                     }
                 }
-            }
 
-            Inimigo* inimigo = new Inimigo("assets/images/characters/enemy.png");
-            if (inimigo->isTextureLoaded()) {
-                inimigo->setPosicao(posicao);
-                inimigos.push_back(inimigo);
-                cout  << "Inimigo spawnado" << endl;
+                Inimigo* inimigo = new Inimigo("assets/images/characters/enemy.png");
+                if (inimigo->isTextureLoaded()) {
+                    inimigo->setPosicao(posicao);
+                    inimigos.push_back(inimigo);
+                    cout  << "Inimigo spawnado" << endl;
 
-            } else {
-                delete inimigo;
+                } else {
+                    delete inimigo;
+                }
+                spawRelogio.restart();
             }
-            spawRelogio.restart();
+            
+            waveInimigos();
+            waveRelogio.restart();
         }
+    }
+}
+
+void gerenciamentoTela::waveInimigos(){
+    waveInimigo -= seconds(1);
+    if(waveInimigo <= seconds(1)){
+        waveInimigo = seconds(1);
     }
 }
 
@@ -373,7 +389,6 @@ void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow
             projetilRemovido = true;
         } else {
             if (heroi->verificarColisao(it->getSprite())) {
-                heroi->TomarDano();
                 it = projeteisInimigos.erase(it);
                 projetilRemovido = true;
             } else if (base && base->verificarColisao(it->getSprite())) {

@@ -34,6 +34,8 @@ class gerenciamentoTela {
 
         void setFimDeJogo();
         void setKills();
+
+        void waveInimigos();
         
     private:
         RectangleShape shape;
@@ -54,7 +56,9 @@ class gerenciamentoTela {
         
         Font font;
         Clock spawRelogio;
-        Time spawInimigo;
+        Time spawnInimigo;
+        Time waveInimigo;
+        Clock waveRelogio;
         Clock relogio;
         enum class Estado {MENU, JOGO, COOP, GAMEOVER};
         Estado estado;

@@ -26,6 +26,7 @@ void Tank::RecuperarVida() {
 }
 
 void Tank::trocarMunicaoPorVidaBase() {
+    
     heroi->darMunicao();
     base->recuperarVida();
 }
@@ -45,6 +46,12 @@ bool Tank::verificarColisao(const Sprite& sprite) {
         
     }
     return false;
+}
+
+bool Tank::verificarColisaoDrop(const Sprite& sprite) {
+    if (backgroundSprite_tank.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
+        return true;
+    }return false;   
 }
 
 // Sobrescreve o método para ajustar a velocidade do tanque
