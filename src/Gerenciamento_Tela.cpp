@@ -230,6 +230,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             
         }
 
+
         for(auto dropIt = drops.begin(); dropIt != drops.end();) {
             if(spawRelogio.getElapsedTime() > seconds(5)){
                 dropIt = drops.erase(dropIt);
@@ -255,6 +256,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 relogio.restart();
             }else{
                 ++dropIt;
+
             }
         }
 
@@ -284,7 +286,6 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
                     if ((*inimigoIt)->verificarColisao(it->getSprite())) {
                         if(getRandomChanceDrop() == 1){
-
                             Drop drop(spriteDrop, (*inimigoIt)->getPosicao(), heroi, 1);
                             drop.setPosicao((*inimigoIt)->getPosicao());
 
@@ -293,7 +294,6 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         }else if(getRandomChanceDrop() == 0){
                             Drop drop(spriteDrop1, (*inimigoIt)->getPosicao(), heroi, 0);
                             drop.setPosicao((*inimigoIt)->getPosicao());
-
                             drops.push_back(drop);
                         }
                         inimigoIt = inimigos.erase(inimigoIt);
