@@ -36,6 +36,16 @@ int Base::getVidaBase() {
     return vida;
 }
 
+void Base::recuperarVida() {
+    
+        vida += 10;
+        if(vida > 200) {
+            vida = 200;
+        }
+        textoVidaBase.setString("Base: " + to_string(vida));
+    
+}
+
 //Verifica colisão com um sprite e diminui a vida da base
 bool Base::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_base.getGlobalBounds().intersects(sprite.getGlobalBounds())) {

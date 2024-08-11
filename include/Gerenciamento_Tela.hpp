@@ -6,6 +6,7 @@
 #include "../include/heroi.hpp"
 #include "../include/base.hpp"
 #include "../include/inimigo.hpp"
+#include "../include/tank.hpp"
 #include <vector>
 
 using namespace sf;
@@ -24,7 +25,6 @@ class gerenciamentoTela {
         Vector2f getPosicaoRandom(const Vector2u& windowSize);
 
         void atualizarProjeteisInimigos(float deltaTime, RenderWindow& window);
-        bool verificarColisaoProjeteisInimigos(Projetil& projetil, Inimigo& inimigo);
         void renderizarProjeteisInimigos(RenderWindow& window);
 
         void atualizarDrop(RenderWindow& window);  
@@ -32,8 +32,10 @@ class gerenciamentoTela {
         int getRandomChanceDrop();
         int getRandomTipoDrop();
 
-        //void atirarInimigo(const Vector2f& direcao,const Sprite& backgroundSprite_inimigo);
+        void setFimDeJogo();
         void setKills();
+
+        void waveInimigos();
         
     private:
         RectangleShape shape;
@@ -46,16 +48,19 @@ class gerenciamentoTela {
         Music music;
         Heroi *heroi;
         Base *base;
-        vector<Inimigo> inimigos;
-        vector<Projetil> projeteis;
+        Tank *tank;
+        vector<Inimigo *> inimigos;
+        vector<Projetil *> projeteis;
 
         vector<Projetil> projeteisInimigos;
         
         Font font;
         Clock spawRelogio;
-        Time spawInimigo;
+        Time spawnInimigo;
+        Time waveInimigo;
+        Clock waveRelogio;
         Clock relogio;
-        enum class Estado {MENU, JOGO, GAMEOVER};
+        enum class Estado {MENU, JOGO, COOP, GAMEOVER};
         Estado estado;
 
         Time intervaloDisparo;

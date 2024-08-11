@@ -103,6 +103,11 @@ void Heroi::TomarDano() {
    //TODO
 }
 
+void Heroi::darMunicao() {
+    quantidadeProjetil -= 5;
+    textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
+}
+
 void Heroi::RecuperarVida() {
     vida += 10;
     if(vida > 100){

@@ -14,26 +14,27 @@ class Heroi {
         Heroi(int vida, const string& heroiFile, const Font& fonte);
         Sprite getSprite() const;
         void definirPosicao(const Vector2f& posicao);
-        void mover();
+        virtual void mover();
         void atirar(const Vector2f& direcao);
         void atualizarProjeteis(float deltaTime);
         void setVida(int novaVida);
         int getVida();
-        void RecuperarVida();
+        virtual void RecuperarVida();
         void RecuperarMunicao();
         void TomarDano();
+        void darMunicao();
         Vector2f getPosicao();
-        bool verificarColisao(const Sprite& sprite);
+        virtual bool verificarColisao(const Sprite& sprite);
         void verificarColisao(const RectangleShape& shape);
-        bool verificarColisaoDrop(const Sprite& sprite);
-        void renderizar(RenderWindow& window);
+        virtual bool verificarColisaoDrop(const Sprite& sprite);
+        virtual void renderizar(RenderWindow& window);
         vector<Projetil>& getProjeteis();
 
         int getRandomQuantidadeProjetil();
     
     private:
-        float velocidade;
-        int vida;
+        
+        
         string bulletSongFile;
         Sound bulletSong;
         SoundBuffer bufferBulletSong;
@@ -43,7 +44,7 @@ class Heroi {
         Texture background_heroi;
         Sprite backgroundSprite_heroi;
         Vector2f posicao;
-        Text  textoVida;
+        
         Clock relogio;
         Time dps;
 
@@ -53,6 +54,10 @@ class Heroi {
 
         int quantidadeProjetil;
         Text textoMunicao;
+    protected:
+        int vida;
+        float velocidade;
+        Text  textoVida;
 };
 
 

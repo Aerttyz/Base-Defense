@@ -8,7 +8,7 @@ using namespace std;
 using namespace sf;
 
 //Construtor
-Inimigo::Inimigo(const string& inimigoFile) : textureLoaded(false), velocidade(100.0f), posicao(Vector2f(400, 300)), dps(seconds(1.0f)), intervaloDisparo(seconds(2)) { 
+Inimigo::Inimigo(const string& inimigoFile) : textureLoaded(false), velocidade(50.0f), posicao(Vector2f(400, 300)), dps(seconds(1.0f)), intervaloDisparo(seconds(2)) { 
         if (!background_inimigo.loadFromFile(inimigoFile)) {
             cerr << "Erro ao carregar a imagem do inimigo" << endl;
             exit(1);
