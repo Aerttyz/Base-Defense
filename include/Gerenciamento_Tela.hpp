@@ -51,8 +51,13 @@ class gerenciamentoTela {
         Tank *tank;
         vector<Inimigo *> inimigos;
         vector<Projetil *> projeteis;
+        //BOTOES MENU (VETOR DE STRING COM OPCOES)    
+        vector<sf::Text> botoesMenu;  
+        //BOTOES DA DIFICULDADE (MESMA LOGICA DO MENU)
+        vector<sf::Text> botoesDificuldade;  
 
         vector<Projetil> projeteisInimigos;
+
         
         Font font;
         Clock spawRelogio;
@@ -60,7 +65,7 @@ class gerenciamentoTela {
         Time waveInimigo;
         Clock waveRelogio;
         Clock relogio;
-        enum class Estado {MENU, JOGO, COOP, GAMEOVER};
+        enum class Estado {MENU, JOGO, COOP, GAMEOVER, DIFICULDADE};
         Estado estado;
 
         Time intervaloDisparo;

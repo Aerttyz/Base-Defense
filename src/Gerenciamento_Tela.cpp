@@ -19,20 +19,20 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
     }
-    if(!font.loadFromFile("assets/fonts/fonts.ttf")) {
+    if(!font.loadFromFile("../assets/fonts/fonts.ttf")) {
         cerr << "Erro ao carregar a fonte" << endl;
         exit(1);
     }
     if(!background_menu.loadFromFile(backgroundMenuFile)) {
         cout << "Erro ao carregar imagem de fundo do menu" << endl;
     }
-    if(!texturaProjetil.loadFromFile("assets/images/background/bullet1.png")) {
+    if(!texturaProjetil.loadFromFile("../assets/images/background/bullet1.png")) {
         cout << "Erro ao carregar textura do projetil" << endl;
     }
-    if(!texturaDrop.loadFromFile("assets/images/background/drop.png")) {
+    if(!texturaDrop.loadFromFile("../assets/images/background/drop.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
-    if(!texturaDrop1.loadFromFile("assets/images/background/Heart.png")) {
+    if(!texturaDrop1.loadFromFile("../assets/images/background/Heart.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
     if(!music.openFromFile(musicFile)) {
@@ -72,7 +72,39 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     FloatRect textRectKill = textoKills.getLocalBounds();
     textoKills.setOrigin(textRectKill.left + textRectKill.width/2.0f, textRectKill.top  + textRectKill.height/2.0f);
     textoKills.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
+
+    //OPCOES DO MENU VETORIZADOS
+    std::vector<std::string> opcoes = {"Solo", "Dupla", "Dificuldade"};
+    for (size_t i = 0; i < opcoes.size(); ++i) {
+        sf::Text botao;
+        botao.setFont(font);
+        botao.setString(opcoes[i]);
+        botao.setCharacterSize(30);
+        botao.setFillColor(sf::Color::White); //cor padrao
+        botao.setOrigin(botao.getLocalBounds().width / 2, botao.getLocalBounds().height / 2);
+        //mover x e Y os botoes 
+        botao.setPosition(windowSize.x / 1.3f, (windowSize.y / 8.0f) + i * 50);
+        botoesMenu.push_back(botao);
+    }
+
+    //OPCOES DE DIFICULDADE 
+    std::vector<std::string> opcoesDificuldade = {"Facil", "Normal", "Dificil"};
+    for (size_t i = 0; i < opcoesDificuldade.size(); ++i) {
+        sf::Text botaoDificuldade;
+        botaoDificuldade.setFont(font);
+        botaoDificuldade.setString(opcoesDificuldade[i]);
+        botaoDificuldade.setCharacterSize(30);
+        botaoDificuldade.setFillColor(sf::Color::White);
+        botaoDificuldade.setOrigin(botaoDificuldade.getLocalBounds().width / 2, botaoDificuldade.getLocalBounds().height / 2);
+        botaoDificuldade.setPosition(windowSize.x / 1.3f, (windowSize.y / 8.0f) + i * 50);
+        botoesDificuldade.push_back(botaoDificuldade);
+    }
 }
+
+//TEMPOS PARA DEFINIR DIFICULDADE
+const sf::Time SPAWN_FACIL = sf::seconds(3);  
+const sf::Time SPAWN_NORMAL = sf::seconds(2); 
+const sf::Time SPAWN_DIFICIL = sf::seconds(1);  
 
 //Verifica eventos do mouse
 void gerenciamentoTela::eventos(RenderWindow& window) {
@@ -82,12 +114,25 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
             music.stop();
             window.close();
         }
-        if(estado == Estado::MENU) {
-            if(event.type == Event::KeyPressed && event.key.code == Keyboard::Enter) {
-                estado = Estado::JOGO;
-            }else if(event.type == Event::KeyPressed && event.key.code == Keyboard::C){
-                estado = Estado::COOP;
-                tank = new Tank(300, "assets/images/characters/hero.png", font, heroi, base);
+        if (estado == Estado::MENU) {
+            Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
+
+            for (size_t i = 0; i < botoesMenu.size(); ++i) {
+                if (botoesMenu[i].getGlobalBounds().contains(mousePos)) {
+                    botoesMenu[i].setFillColor(sf::Color::Yellow);  // Muda de cor (n decidi)
+                    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                        if (i == 0) {
+                            estado = Estado::JOGO;  // Jogar Solo
+                        } else if (i == 1) {
+                            estado = Estado::COOP;  // Jogar Duo
+                            tank = new Tank(300, "../assets/images/characters/hero.png", font, heroi, base);
+                        } else if (i == 2) {
+                            estado = Estado::DIFICULDADE;
+                        }
+                    }
+                } else {
+                    botoesMenu[i].setFillColor(sf::Color::White);  // Retorna à cor branca quando o mouse não está sobre o botão
+                }
             }
         }else if(estado == Estado::JOGO) {
             if(event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Right) {
@@ -116,6 +161,30 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
             if(event.type == Event::KeyPressed && event.key.code == Keyboard::R){
                     tank->trocarMunicaoPorVidaBase();
                 
+            }
+        }else if(estado == Estado::DIFICULDADE){
+             Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
+
+            for (size_t i = 0; i < botoesDificuldade.size(); ++i) {
+                if (botoesDificuldade[i].getGlobalBounds().contains(mousePos)) {
+                    botoesDificuldade[i].setFillColor(sf::Color::Yellow);
+                    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                        if (i == 0) {
+                            //FACIL
+                            spawInimigo = SPAWN_FACIL;
+                        } else if (i == 1) {
+                            //NORMAL
+                            spawInimigo = SPAWN_NORMAL;
+                        } else if (i == 2) {
+                            //DIFICIL
+                            spawInimigo = SPAWN_DIFICIL;
+                        }
+                        
+                        estado = Estado::MENU; // Volta ao menu ou inicia o jogo
+                    }
+                } else {
+                    botoesDificuldade[i].setFillColor(sf::Color::White);
+                }
             }
         }
     }
@@ -429,11 +498,19 @@ void gerenciamentoTela::atualizarDrop(RenderWindow& window) {
 void gerenciamentoTela::renderizar(RenderWindow& window) {
     window.clear();
 
-    if(estado == Estado::MENU) {
+    if(estado == Estado::MENU) { //Botoes menu renderizados
         setBackgroundScale(window, backgroundSprite_menu);
         window.draw(backgroundSprite_menu);
-        window.draw(textoMenu);
-    }else if(estado == Estado::JOGO || estado == Estado::COOP) {
+        for (const auto& botao : botoesMenu) {
+            window.draw(botao);
+        }
+    }else if (estado == Estado::DIFICULDADE) {
+        setBackgroundScale(window, backgroundSprite_menu);
+        window.draw(backgroundSprite_menu);
+        for (const auto& botao : botoesDificuldade) {
+            window.draw(botao);
+        }
+    } else if(estado == Estado::JOGO || estado == Estado::COOP) {
         setBackgroundScale(window, backgroundSprite);
         window.draw(backgroundSprite);
         if(base) {
