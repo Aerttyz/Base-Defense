@@ -51,9 +51,9 @@ class gerenciamentoTela {
         Tank *tank;
         vector<Inimigo *> inimigos;
         vector<Projetil *> projeteis;
-        //BOTOES MENU (VETOR DE STRING COM OPCOES)    
+          
         vector<sf::Text> botoesMenu;  
-        //BOTOES DA DIFICULDADE (MESMA LOGICA DO MENU)
+        
         vector<sf::Text> botoesDificuldade;  
 
         vector<Projetil> projeteisInimigos;
@@ -74,12 +74,18 @@ class gerenciamentoTela {
 
         Texture texturaDrop;
         Texture texturaDrop1;
+        Texture texturaDrop2;
         Sprite spriteDrop;
         Sprite spriteDrop1;
+        Sprite spriteDrop2;
         vector<Drop> drops; 
 
-        int Kills;
+        int Kills=0;
         Text textoKills;
+
+        bool regenerarVidaBase = false;
+        bool aumentarVidaBase = false;
+        int upLimite = 0;
               
 
 };

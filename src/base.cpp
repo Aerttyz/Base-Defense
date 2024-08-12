@@ -4,7 +4,7 @@
 using namespace std;
 using namespace sf;
 
-Base::Base(int vidaBase, const string& baseFile, const Font& font, const Vector2f& windowSize) : vida(vidaBase), dps(seconds(0.01f)) {
+Base::Base(int vidaBase, const string& baseFile, const Font& font, const Vector2f& windowSize) : vida(vidaBase), dps(seconds(1)) {
     if(!background_base.loadFromFile(baseFile)) {
         cout << "Erro ao carregar imagem da base" << endl;
     }
@@ -44,6 +44,25 @@ void Base::recuperarVida() {
         }
         textoVidaBase.setString("Base: " + to_string(vida));
     
+}
+
+void Base::baseUpRegenerarVida() {
+    if(relogio.getElapsedTime() > dps) {
+        vida += 1;
+        if(vida > 200) {
+            vida = 200;
+        }
+        textoVidaBase.setString("Base: " + to_string(vida));
+        relogio.restart();
+    }
+}
+
+void Base::aumentarVidaBase() {
+    vida += 50;
+    if(vida > 200) {
+        vida = 200;
+    }
+    textoVidaBase.setString("Base: " + to_string(vida));
 }
 
 //Verifica colisão com um sprite e diminui a vida da base
