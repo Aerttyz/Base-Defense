@@ -14,6 +14,9 @@ Tank::Tank(int vida, const string& tankFile, const Font& fonte, Heroi *heroi, Ba
 }
 
 
+Sprite Tank::getSprite() const {
+    return backgroundSprite_tank;
+}
 
 
 // Sobrescreve o método para recuperar vida

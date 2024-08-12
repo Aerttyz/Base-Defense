@@ -14,15 +14,14 @@ int main() {
     
 
     Font font;
-    if (!font.loadFromFile("assets/fonts/fonts.ttf")) {
+    if (!font.loadFromFile("assets/fonts/LilitaOne-Regular.ttf")) {
         cerr << "Erro ao carregar a fonte" << endl;
         return -1;
     }
 
-    //Inimigo novoInimigo("assets/images/characters/Cactus Man.png");
 
     //Carrega imagem da base
-    Base base(100, "assets/images/background/baseFinal.png", font, Vector2f(window.getSize()));
+    Base base(100, "assets/images/background/baseFinal1.png", font, Vector2f(window.getSize()));
 
     //Carrega imagem do herói
     Heroi heroi(100, "assets/images/characters/hero.png", font);

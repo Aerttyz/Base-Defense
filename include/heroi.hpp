@@ -12,7 +12,7 @@ class Projetil;
 class Heroi {
     public:
         Heroi(int vida, const string& heroiFile, const Font& fonte);
-        Sprite getSprite() const;
+        virtual Sprite getSprite() const;
         void definirPosicao(const Vector2f& posicao);
         virtual void mover();
         void atirar(const Vector2f& direcao);
