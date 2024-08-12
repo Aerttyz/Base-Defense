@@ -14,6 +14,8 @@ class Base{
         void setVidaBase(int novaVidaBase);
         int getVidaBase();
         void recuperarVida();
+        void baseUpRegenerarVida();
+        void aumentarVidaBase();
     private:
         int vida;
         Text textoVidaBase;

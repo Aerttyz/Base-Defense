@@ -35,6 +35,9 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     if(!texturaDrop1.loadFromFile("assets/images/background/Heart.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
+    if(!texturaDrop2.loadFromFile("assets/images/background/flare_1.png")) {
+        cout << "Erro ao carregar textura do drop" << endl;
+    }
     if(!music.openFromFile(musicFile)) {
         cout << "Erro ao carregar música" << endl;
     }else {
@@ -44,6 +47,7 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     //Configuração do drop
     spriteDrop.setTexture(texturaDrop);
     spriteDrop1.setTexture(texturaDrop1);
+    spriteDrop2.setTexture(texturaDrop2);
 
     //Configuração do projétil
     backgroundSprite_projetil.setTexture(texturaProjetil);
@@ -248,13 +252,8 @@ Vector2f gerenciamentoTela::getPosicaoRandom(const Vector2u& windowSize) {
 }
 
 int gerenciamentoTela::getRandomChanceDrop(){
-    int chance = rand() % 2;
+    int chance = rand() % 3;
     return chance;
-}
-
-int gerenciamentoTela::getRandomTipoDrop(){
-    int tipo = rand() % 2;
-    return tipo;
 }
 
 //Calcula a distância entre duas posições
@@ -271,6 +270,9 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
     if (estado == Estado::JOGO || estado == Estado::COOP) {
         float deltaTime = relogio.restart().asSeconds();
         Time tempoDecorrido = spawRelogio.getElapsedTime();
+        if(regenerarVidaBase){
+            base->baseUpRegenerarVida();
+        }
         
         if (heroi) {
             heroi->mover();
@@ -314,10 +316,19 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             }else if(heroi->verificarColisaoDrop(dropIt->getSprite())){
                 if(dropIt->getTipo() == 1){
                     heroi->RecuperarMunicao();
-                }else{
+                }else if(dropIt->getTipo() == 0){
                     heroi->RecuperarVida();
                     if(estado == Estado::COOP && tank){
                         tank->RecuperarVida();
+                    }
+                }else if(dropIt->getTipo() == 2){
+                    if(upLimite < 2){
+                        if(upLimite == 0){
+                            base->aumentarVidaBase();
+                        }else if(upLimite == 1){
+                            regenerarVidaBase = true;
+                        }
+                    upLimite++;
                     }
                 }
                 dropIt = drops.erase(dropIt);
@@ -372,6 +383,12 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                             Drop drop(spriteDrop1, (*inimigoIt)->getPosicao(), heroi, 0);
                             drop.setPosicao((*inimigoIt)->getPosicao());
                             drops.push_back(drop);
+                        }else if(getRandomChanceDrop() == 2){
+                            if(upLimite < 2){
+                                Drop drop(spriteDrop2, (*inimigoIt)->getPosicao(), heroi, 2);
+                                drop.setPosicao((*inimigoIt)->getPosicao());
+                                drops.push_back(drop);
+                            }
                         }
                         inimigoIt = inimigos.erase(inimigoIt);
                         it = projeteis.erase(it);
