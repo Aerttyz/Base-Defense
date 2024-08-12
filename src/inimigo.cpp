@@ -38,6 +38,34 @@ void Inimigo::mover() {
 }
 
 
+
+void Inimigo::atirarCOOP(const Vector2f& direcaoHeroi, const Vector2f& direcaoTank, const float distanciaHeroi, const float distanciaTank) {
+    if(relogio.getElapsedTime() > intervaloDisparo) {
+        if(distanciaTank < distanciaHeroi) {
+            Vector2f direcaoNormalizada = direcaoTank;
+            float magnitude = sqrt(direcaoNormalizada.x * direcaoNormalizada.x + direcaoNormalizada.y * direcaoNormalizada.y);
+            if (magnitude != 0) {
+                direcaoNormalizada /= magnitude;
+            }
+            Projetil projetil(backgroundSprite_inimigo.getPosition(), direcaoNormalizada, backgroundSprite_projetil, this);
+            projetil.setPosicao(backgroundSprite_inimigo.getPosition());
+            projeteis.push_back(projetil);
+            relogio.restart();
+        } else {
+            Vector2f direcaoNormalizada = direcaoHeroi;
+            float magnitude = sqrt(direcaoNormalizada.x * direcaoNormalizada.x + direcaoNormalizada.y * direcaoNormalizada.y);
+            if (magnitude != 0) {
+                direcaoNormalizada /= magnitude;
+            }
+            Projetil projetil(backgroundSprite_inimigo.getPosition(), direcaoNormalizada, backgroundSprite_projetil, this);
+            projetil.setPosicao(backgroundSprite_inimigo.getPosition());
+            projeteis.push_back(projetil);
+            relogio.restart();
+        }
+    }
+}
+
+
 void Inimigo::atirar(const Vector2f& direcao) {
     if(relogio.getElapsedTime() > intervaloDisparo) {
 

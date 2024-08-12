@@ -65,7 +65,7 @@ class gerenciamentoTela {
         Time waveInimigo;
         Clock waveRelogio;
         Clock relogio;
-        enum class Estado {MENU, JOGO, COOP, GAMEOVER, DIFICULDADE};
+        enum class Estado {MENU, DIFICULDADE, JOGO, COOP, GAMEOVER, PAUSE};
         Estado estado;
 
         Time intervaloDisparo;

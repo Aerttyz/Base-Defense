@@ -19,20 +19,20 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
     }
-    if(!font.loadFromFile("../assets/fonts/fonts.ttf")) {
+    if(!font.loadFromFile("assets/fonts/LilitaOne-Regular.ttf")) {
         cerr << "Erro ao carregar a fonte" << endl;
         exit(1);
     }
     if(!background_menu.loadFromFile(backgroundMenuFile)) {
         cout << "Erro ao carregar imagem de fundo do menu" << endl;
     }
-    if(!texturaProjetil.loadFromFile("../assets/images/background/bullet1.png")) {
+    if(!texturaProjetil.loadFromFile("assets/images/background/bullet1.png")) {
         cout << "Erro ao carregar textura do projetil" << endl;
     }
-    if(!texturaDrop.loadFromFile("../assets/images/background/drop.png")) {
+    if(!texturaDrop.loadFromFile("assets/images/background/drop.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
-    if(!texturaDrop1.loadFromFile("../assets/images/background/Heart.png")) {
+    if(!texturaDrop1.loadFromFile("assets/images/background/Heart.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
     if(!music.openFromFile(musicFile)) {
@@ -74,13 +74,13 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     textoKills.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
 
     //OPCOES DO MENU VETORIZADOS
-    std::vector<std::string> opcoes = {"Solo", "Dupla", "Dificuldade"};
+    vector<string> opcoes = {"Solo", "Dupla", "Dificuldade"};
     for (size_t i = 0; i < opcoes.size(); ++i) {
-        sf::Text botao;
+        Text botao;
         botao.setFont(font);
         botao.setString(opcoes[i]);
         botao.setCharacterSize(30);
-        botao.setFillColor(sf::Color::White); //cor padrao
+        botao.setFillColor(Color::White); //cor padrao
         botao.setOrigin(botao.getLocalBounds().width / 2, botao.getLocalBounds().height / 2);
         //mover x e Y os botoes 
         botao.setPosition(windowSize.x / 1.3f, (windowSize.y / 8.0f) + i * 50);
@@ -88,13 +88,13 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     }
 
     //OPCOES DE DIFICULDADE 
-    std::vector<std::string> opcoesDificuldade = {"Facil", "Normal", "Dificil"};
+    vector<string> opcoesDificuldade = {"Facil", "Normal", "Dificil"};
     for (size_t i = 0; i < opcoesDificuldade.size(); ++i) {
-        sf::Text botaoDificuldade;
+        Text botaoDificuldade;
         botaoDificuldade.setFont(font);
         botaoDificuldade.setString(opcoesDificuldade[i]);
         botaoDificuldade.setCharacterSize(30);
-        botaoDificuldade.setFillColor(sf::Color::White);
+        botaoDificuldade.setFillColor(Color::White);
         botaoDificuldade.setOrigin(botaoDificuldade.getLocalBounds().width / 2, botaoDificuldade.getLocalBounds().height / 2);
         botaoDificuldade.setPosition(windowSize.x / 1.3f, (windowSize.y / 8.0f) + i * 50);
         botoesDificuldade.push_back(botaoDificuldade);
@@ -102,9 +102,9 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
 }
 
 //TEMPOS PARA DEFINIR DIFICULDADE
-const sf::Time SPAWN_FACIL = sf::seconds(3);  
-const sf::Time SPAWN_NORMAL = sf::seconds(2); 
-const sf::Time SPAWN_DIFICIL = sf::seconds(1);  
+const Time SPAWN_FACIL = seconds(3);  
+const Time SPAWN_NORMAL = seconds(2); 
+const Time SPAWN_DIFICIL = seconds(1);  
 
 //Verifica eventos do mouse
 void gerenciamentoTela::eventos(RenderWindow& window) {
@@ -119,19 +119,19 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
 
             for (size_t i = 0; i < botoesMenu.size(); ++i) {
                 if (botoesMenu[i].getGlobalBounds().contains(mousePos)) {
-                    botoesMenu[i].setFillColor(sf::Color::Yellow);  // Muda de cor (n decidi)
-                    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                    botoesMenu[i].setFillColor(Color::Yellow);  // Muda de cor (n decidi)
+                    if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                         if (i == 0) {
                             estado = Estado::JOGO;  // Jogar Solo
                         } else if (i == 1) {
                             estado = Estado::COOP;  // Jogar Duo
-                            tank = new Tank(300, "../assets/images/characters/hero.png", font, heroi, base);
+                            tank = new Tank(300, "assets/images/characters/hero.png", font, heroi, base);
                         } else if (i == 2) {
                             estado = Estado::DIFICULDADE;
                         }
                     }
                 } else {
-                    botoesMenu[i].setFillColor(sf::Color::White);  // Retorna à cor branca quando o mouse não está sobre o botão
+                    botoesMenu[i].setFillColor(Color::White);  // Retorna à cor branca quando o mouse não está sobre o botão
                 }
             }
         }else if(estado == Estado::JOGO) {
@@ -167,23 +167,23 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
 
             for (size_t i = 0; i < botoesDificuldade.size(); ++i) {
                 if (botoesDificuldade[i].getGlobalBounds().contains(mousePos)) {
-                    botoesDificuldade[i].setFillColor(sf::Color::Yellow);
-                    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                    botoesDificuldade[i].setFillColor(Color::Yellow);
+                    if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                         if (i == 0) {
                             //FACIL
-                            spawInimigo = SPAWN_FACIL;
+                            waveInimigo = SPAWN_FACIL;
                         } else if (i == 1) {
                             //NORMAL
-                            spawInimigo = SPAWN_NORMAL;
+                            waveInimigo = SPAWN_NORMAL;
                         } else if (i == 2) {
                             //DIFICIL
-                            spawInimigo = SPAWN_DIFICIL;
+                            waveInimigo = SPAWN_DIFICIL;
                         }
                         
                         estado = Estado::MENU; // Volta ao menu ou inicia o jogo
                     }
                 } else {
-                    botoesDificuldade[i].setFillColor(sf::Color::White);
+                    botoesDificuldade[i].setFillColor(Color::White);
                 }
             }
         }
@@ -266,26 +266,34 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
 //Atualiza as informações do jogo
 void gerenciamentoTela::atualizar(RenderWindow& window) {
     /* setFimDeJogo(); */
+    
+
     if (estado == Estado::JOGO || estado == Estado::COOP) {
         float deltaTime = relogio.restart().asSeconds();
         Time tempoDecorrido = spawRelogio.getElapsedTime();
-        
-        
         
         if (heroi) {
             heroi->mover();
             heroi->atualizarProjeteis(deltaTime);
 
-            
-            
             for (auto& inimigo : inimigos) {
                 inimigo->atualizarProjeteis(deltaTime, window);
                 if(estado == Estado::COOP && tank){
                     tank->verificarColisao(inimigo->getSprite());
                 }
                 base->verificarColisao(inimigo->getSprite());
+
+                //Verifica em quem o inimigo vai atirar
                 Vector2f direcao = heroi->getSprite().getPosition() - inimigo->getSprite().getPosition();
-                inimigo->atirar(direcao); 
+                
+                if(estado == Estado::COOP && tank){
+                    Vector2f direcaoTank = tank->getSprite().getPosition() - inimigo->getSprite().getPosition();
+                    float distanciaTank = calcularDistancia(inimigo->getSprite().getPosition(), tank->getSprite().getPosition());
+                    float distanciaHeroi = calcularDistancia(inimigo->getSprite().getPosition(), heroi->getSprite().getPosition());
+                    inimigo->atirarCOOP(direcao, direcaoTank, distanciaHeroi, distanciaTank);
+                }else{
+                    inimigo->atirar(direcao);
+                }
                 
 
                 for(auto& projetil : inimigo->getProjeteis()){
@@ -443,7 +451,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
 }
 
 void gerenciamentoTela::waveInimigos(){
-    waveInimigo -= seconds(1);
+    waveInimigo -= seconds(0.2);
     if(waveInimigo <= seconds(1)){
         waveInimigo = seconds(1);
     }
@@ -463,7 +471,7 @@ void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow
             } else if (base && base->verificarColisao(it->getSprite())) {
                 it = projeteisInimigos.erase(it);
                 projetilRemovido = true;
-            }else if(tank && tank->verificarColisao(it->getSprite())){
+            }else if(estado == Estado::COOP && tank && tank->verificarColisao(it->getSprite())){
                 it = projeteisInimigos.erase(it);
                 projetilRemovido = true;
 
