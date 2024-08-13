@@ -279,30 +279,28 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             heroi->mover();
             heroi->atualizarProjeteis(deltaTime);
             
-            for (auto& tankInimigo : tanks){
+            
             for (auto& inimigo : inimigos) {
-                tankInimigo->atualizarProjeteis(deltaTime, window);
+                
                 inimigo->atualizarProjeteis(deltaTime, window);
                 if(estado == Estado::COOP && tank){
                     tank->verificarColisao(inimigo->getSprite());
-                    tank->verificarColisao(tankInimigo->getSprite());
+                    
                 }
                 base->verificarColisao(inimigo->getSprite());
-                base->verificarColisao(tankInimigo->getSprite());
+                
 
                 //Verifica em quem o inimigo vai atirar
-                Vector2f direcao = heroi->getSprite().getPosition() - inimigo->getSprite().getPosition();
-                Vector2f direcaoTankInimigo = heroi->getSprite().getPosition() - tankInimigo->getSprite().getPosition();
+                Vector2f direcaoHeroiInimigo = heroi->getSprite().getPosition() - inimigo->getSprite().getPosition();
 
                 
                 if(estado == Estado::COOP && tank){
-                    Vector2f direcaoTank = tank->getSprite().getPosition() - inimigo->getSprite().getPosition();
-                    float distanciaTank = calcularDistancia(inimigo->getSprite().getPosition(), tank->getSprite().getPosition());
-                    float distanciaHeroi = calcularDistancia(inimigo->getSprite().getPosition(), heroi->getSprite().getPosition());
-                    inimigo->atirarCOOP(direcao, direcaoTank, distanciaHeroi, distanciaTank);
+                    Vector2f direcaoTankAliadoInimigo = tank->getSprite().getPosition() - inimigo->getSprite().getPosition();
+                    float distanciaTankAliadoInimigo = calcularDistancia(inimigo->getSprite().getPosition(), tank->getSprite().getPosition());
+                    float distanciaHeroiInimigo = calcularDistancia(inimigo->getSprite().getPosition(), heroi->getSprite().getPosition());
+                    inimigo->atirarCOOP(direcaoHeroiInimigo, direcaoTankAliadoInimigo, distanciaHeroiInimigo, distanciaTankAliadoInimigo);
                 }else{
-                    inimigo->atirar(direcao);
-                    tankInimigo->atirar(direcaoTankInimigo);
+                    inimigo->atirar(direcaoHeroiInimigo);
                     
                 }
                 
@@ -311,7 +309,30 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                     projeteisInimigos.push_back(projetil);
                 }
                 inimigo->getProjeteis().clear();
-            }}
+            }
+
+            for (auto& inimigoTank : tanks) {
+                inimigoTank->atualizarProjeteis(deltaTime, window);
+                if(estado == Estado::COOP && tank){
+                    tank->verificarColisao(inimigoTank->getSprite());
+                }
+                base->verificarColisao(inimigoTank->getSprite());
+
+                //Verifica em quem o inimigo vai atirar
+                Vector2f direcao = heroi->getSprite().getPosition() - inimigoTank->getSprite().getPosition();
+                if(estado == Estado::COOP && tank){
+                    Vector2f direcaoTank = tank->getSprite().getPosition() - inimigoTank->getSprite().getPosition();
+                    float distanciaTank = calcularDistancia(inimigoTank->getSprite().getPosition(), tank->getSprite().getPosition());
+                    float distanciaHeroi = calcularDistancia(inimigoTank->getSprite().getPosition(), heroi->getSprite().getPosition());
+                    inimigoTank->atirarCOOP(direcao, direcaoTank, distanciaHeroi, distanciaTank);
+                }else{
+                    inimigoTank->atirar(direcao);                    
+                }
+                for(auto& projetil : inimigoTank->getProjeteis()){
+                        projeteisInimigos.push_back(projetil);
+                    }
+                    inimigoTank->getProjeteis().clear();
+            }
         }
         if (estado == Estado::COOP && tank) {
             tank->mover();  // Movimenta o tanque no modo coop
