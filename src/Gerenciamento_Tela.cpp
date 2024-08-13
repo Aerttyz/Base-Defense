@@ -265,8 +265,8 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
 
 //Atualiza as informações do jogo
 void gerenciamentoTela::atualizar(RenderWindow& window) {
-      setFimDeJogo();  
-    
+      /* setFimDeJogo();  
+     */
 
     if (estado == Estado::JOGO || estado == Estado::COOP) {
         float deltaTime = relogio.restart().asSeconds();
@@ -339,12 +339,13 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             
         }
 
-
-        for(auto dropIt = drops.begin(); dropIt != drops.end();) {
-            if(dropRelogio.getElapsedTime() > seconds(5)){
+        dropRelogio.restart();
+        for(auto dropIt = drops.begin(); dropIt != drops.end();) {      
+            if(dropRelogio.getElapsedTime() > seconds(10)){
                 dropIt = drops.erase(dropIt);
                 dropRelogio.restart();
-            }else if(heroi->verificarColisaoDrop(dropIt->getSprite())){
+                cout << "Drop removido POR TEMPO" << endl;
+            }if(heroi->verificarColisaoDrop(dropIt->getSprite())){
                 if(dropIt->getTipo() == 1){
                     heroi->RecuperarMunicao();
                 }else if(dropIt->getTipo() == 0){
@@ -366,14 +367,20 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             }else if(estado == Estado::COOP && tank && tank->verificarColisaoDrop(dropIt->getSprite())){
                 if(dropIt->getTipo() == 1){
                     heroi->RecuperarMunicao();
-                }else{
+                }else if(dropIt->getTipo() == 0){
                     tank->RecuperarVida();
                     heroi->RecuperarVida();
+                }else if(dropIt->getTipo() == 2){
+                    if(upLimite < 2){
+                        if(upLimite == 0){
+                            base->aumentarVidaBase();
+                        }else if(upLimite == 1){
+                            regenerarVidaBase = true;
+                        }
+                    upLimite++;
+                    }
                 }
-                dropIt = drops.erase(dropIt);  
-            }else{
-                ++dropIt;
-
+                dropIt = drops.erase(dropIt);
             }
         }
 
@@ -427,14 +434,36 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         (*tankIt)->tomarDano();
                         if((*tankIt)->getVidaInimigo() <= 0){
                             tankIt = tanks.erase(tankIt);
+                            Kills++;
+                            setKills();
+                            if(int chance = rand() % 3 == 0){
+                                if(getRandomChanceDrop() == 2){
+                                    if(upLimite < 2){
+                                        Drop drop(spriteDrop2, (*tankIt)->getPosicao(), heroi, 2);
+                                        drop.setPosicao((*tankIt)->getPosicao());
+                                        drops.push_back(drop);
+                                    }
+                                }    
+                            }
                         }
+                        it = projeteis.erase(it);
+                        projetilRemovido = true;
+                        break;
+                    } else {
+                        ++tankIt;
+                    }
+                }
+                for (auto runnerIt = runners.begin(); runnerIt != runners.end();) {
+                    if ((*runnerIt)->verificarColisao((it)->getSprite())) {
+                        cout << "Runner atingido" << endl;                       
+                        runnerIt = runners.erase(runnerIt);                       
                         it = projeteis.erase(it);
                         Kills++;
                         setKills();
                         projetilRemovido = true;
                         break;
                     } else {
-                        ++tankIt;
+                        ++runnerIt;
                     }
                 }
                 for (auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
