@@ -40,7 +40,6 @@ class gerenciamentoTela {
         void waveInimigos();
         
     private:
-        RectangleShape shape;
         Texture background;
         Texture background_menu;
         Texture texturaProjetil;
@@ -55,15 +54,12 @@ class gerenciamentoTela {
         Inimigo *runner;
         InimigoTank *inimigoTank;
         vector<Inimigo *> inimigos;
-        vector<Inimigo *> runners;
+        vector<Runner *> runners;
         vector<InimigoTank *> tanks;
         int inimigoTankVida = 2;
         vector<Projetil *> projeteis;
-          
         vector<sf::Text> botoesMenu;  
-        
         vector<sf::Text> botoesDificuldade;  
-
         vector<Projetil> projeteisInimigos;
 
         

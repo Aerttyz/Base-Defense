@@ -7,7 +7,6 @@
 class Runner : public Inimigo {
     public:
         Runner(const string& inimigoFile);
-        void mover();
     private:
         Sprite backgroundSprite_runner;
         Texture background_runner;

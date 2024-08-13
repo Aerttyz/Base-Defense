@@ -13,6 +13,7 @@
 using namespace sf;
 using namespace std;
 
+//TODO: Implementar colisão do runner com heroi e tank
 
 //Carrega a imagem de fundo e a música
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
@@ -386,6 +387,16 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 inimigoIt = inimigos.erase(inimigoIt);
             }else{
                 ++inimigoIt;
+            }
+        }
+
+        for(auto tankIt = tanks.begin(); tankIt != tanks.end();) {
+            if(heroi->verificarColisao((*tankIt)->getSprite())) {
+                tankIt = tanks.erase(tankIt);
+            }else if(estado == Estado::COOP && tank && tank->verificarColisao((*tankIt)->getSprite())){
+                tankIt = tanks.erase(tankIt);
+            }else {
+                ++tankIt;
             }
         }
 
