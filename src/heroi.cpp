@@ -7,7 +7,7 @@ using namespace std;
 using namespace sf; 
 
 //Construtor
-Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(300.0f), quantidadeProjetil(10) ,vida(vida), dps(seconds(0.5f)) {
+Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(300.0f), quantidadeProjetil(1000) ,vida(vida), dps(seconds(0.5f)) {
     if(!background_heroi.loadFromFile(heroiFile)) {
         cout << "Erro ao carregar imagem do herói" << endl;
     }
@@ -29,7 +29,7 @@ Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(3
         cout << "Erro ao carregar textura do projetil" << endl;
     }
     
-    bulletSongFile = "assets/music/bulletsong.ogg";
+    
     if(!bufferBulletSong.loadFromFile(bulletSongFile)) {
         cout << "Erro ao carregar música do projetil" << endl;
     }else {
