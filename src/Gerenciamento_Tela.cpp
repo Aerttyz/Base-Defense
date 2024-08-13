@@ -23,8 +23,7 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
         cout << "Erro ao carregar imagem de fundo" << endl;
     }
     if(!font.loadFromFile("assets/fonts/LilitaOne-Regular.ttf")) {
-        cerr << "Erro ao carregar a fonte" << endl;
-        exit(1);
+        cout << "Erro ao carregar fonte" << endl;
     }
     if(!background_menu.loadFromFile(backgroundMenuFile)) {
         cout << "Erro ao carregar imagem de fundo do menu" << endl;
@@ -266,7 +265,7 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
 
 //Atualiza as informações do jogo
 void gerenciamentoTela::atualizar(RenderWindow& window) {
-     /* setFimDeJogo();  */
+      setFimDeJogo();  
     
 
     if (estado == Estado::JOGO || estado == Estado::COOP) {
@@ -397,6 +396,16 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 tankIt = tanks.erase(tankIt);
             }else {
                 ++tankIt;
+            }
+        }
+
+        for(auto runnerIt = runners.begin(); runnerIt != runners.end();) {
+            if(heroi->verificarColisao((*runnerIt)->getSprite())) {
+                runnerIt = runners.erase(runnerIt);
+            }else if(estado == Estado::COOP && tank && tank->verificarColisao((*runnerIt)->getSprite())){
+                runnerIt = runners.erase(runnerIt);
+            }else {
+                ++runnerIt;
             }
         }
 
@@ -655,6 +664,7 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         if(base) {
             base->renderizar(window);
         }
+        window.draw(textoKills);   
         if(heroi != nullptr) {
             heroi->renderizar(window);
         }
@@ -672,7 +682,6 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         }
         renderizarProjeteisInimigos(window);
         atualizarDrop(window);
-        window.draw(textoKills);   
     }else if(estado == Estado::GAMEOVER) {
         CircleShape shape(100);
         shape.setFillColor(Color::Red);

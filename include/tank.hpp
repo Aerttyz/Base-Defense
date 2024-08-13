@@ -26,6 +26,8 @@ class Tank : public Heroi {
 
         Heroi *heroi;
         Base *base;
+
+        Text textoVidaTank;
 };
 
 

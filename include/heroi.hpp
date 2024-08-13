@@ -25,7 +25,6 @@ class Heroi {
         void darMunicao();
         Vector2f getPosicao();
         virtual bool verificarColisao(const Sprite& sprite);
-        void verificarColisao(const RectangleShape& shape);
         virtual bool verificarColisaoDrop(const Sprite& sprite);
         virtual void renderizar(RenderWindow& window);
         vector<Projetil>& getProjeteis();
@@ -58,6 +57,19 @@ class Heroi {
         int vida;
         float velocidade;
         Text  textoVida;
+
+        int barraIndex = 0;
+        IntRect barra1 = IntRect(0, 0, 28, 8);    // Primeira barra (verde)
+        IntRect barra2 = IntRect(0, 8, 28, 8);    // Segunda barra (verde)
+        IntRect barra3 = IntRect(0, 16, 28, 8);   // Terceira barra (verde)
+        IntRect barra4 = IntRect(0, 24, 28, 8);   // Quarta barra (verde)
+        IntRect barra5 = IntRect(0, 32, 28, 8);   // Quinta barra (amarela)
+        IntRect barra6 = IntRect(0, 40, 28, 8);   // Sexta barra (amarela)
+        IntRect barra7 = IntRect(0, 48, 28, 8);   // Sétima barra (vermelha)
+        IntRect barra8 = IntRect(0, 56, 28, 8);   // Oitava barra (vermelha)
+        vector<IntRect> barrasVida = {barra1, barra2, barra3, barra4, barra5, barra6, barra7, barra8};
+        Texture barraVida;
+        Sprite barraSprite;
 };
 
 
