@@ -13,9 +13,20 @@
 using namespace sf;
 using namespace std;
 
-//TODO: Implementar colisão do runner com heroi e tank
-
-//Carrega a imagem de fundo e a música
+/**
+ * @brief Construtor da classe gerenciamentoTela.
+ * 
+ * Este construtor inicializa a tela do jogo, carregando imagens e fontes, configurando texturas e sprites, e
+ * configurando a música de fundo. Também configura os elementos do menu e outras variáveis necessárias para
+ * o gerenciamento da tela do jogo.
+ * 
+ * @param backgroundFile O caminho para o arquivo de imagem do fundo da tela.
+ * @param backgroundMenuFile O caminho para o arquivo de imagem do fundo do menu.
+ * @param musicFile O caminho para o arquivo de música de fundo.
+ * @param heroi Ponteiro para o objeto do tipo Heroi, representando o herói no jogo.
+ * @param base Ponteiro para o objeto do tipo Base, representando a base no jogo.
+ * @param windowSize Tamanho da janela do jogo (largura e altura).
+ */
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
 : heroi(heroi), base(base), estado(Estado::MENU), spawnInimigo(seconds(0.2f)), intervaloDisparo(seconds(1)), waveInimigo(seconds(5)) {
 
@@ -46,19 +57,18 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
         music.setLoop(true);
         music.play();
     }
-    //Configuração do drop
+    
     spriteDrop.setTexture(texturaDrop);
     spriteDrop1.setTexture(texturaDrop1);
     spriteDrop2.setTexture(texturaDrop2);
 
-    //Configuração do projétil
     backgroundSprite_projetil.setTexture(texturaProjetil);
 
-    //Seta a imagem de fundo
+   
     backgroundSprite.setTexture(background);
     backgroundSprite_menu.setTexture(background_menu);
 
-    //Configuração do texto do menu
+    
     textoMenu.setFont(font);
     textoMenu.setCharacterSize(30);
     textoMenu.setFillColor(Color::White);
@@ -67,10 +77,10 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     textoMenu.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
     textoMenu.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
 
-    //Inicia o relógio
+    
     spawRelogio.restart();
 
-    //Configuração do texto das kills
+    
     textoKills.setFont(font);
     textoKills.setCharacterSize(20);
     textoKills.setFillColor(Color::White);
@@ -79,21 +89,21 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     textoKills.setOrigin(textRectKill.left + textRectKill.width/2.0f, textRectKill.top  + textRectKill.height/2.0f);
     textoKills.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
 
-    //OPCOES DO MENU VETORIZADOS
+    
     vector<string> opcoes = {"Solo", "Dupla", "Dificuldade"};
     for (size_t i = 0; i < opcoes.size(); ++i) {
         Text botao;
         botao.setFont(font);
         botao.setString(opcoes[i]);
         botao.setCharacterSize(30);
-        botao.setFillColor(Color::White); //cor padrao
+        botao.setFillColor(Color::White); 
         botao.setOrigin(botao.getLocalBounds().width / 2, botao.getLocalBounds().height / 2);
-        //mover x e Y os botoes 
+        
         botao.setPosition(windowSize.x / 1.3f, (windowSize.y / 8.0f) + i * 50);
         botoesMenu.push_back(botao);
     }
 
-    //OPCOES DE DIFICULDADE 
+   
     vector<string> opcoesDificuldade = {"Facil", "Normal", "Dificil"};
     for (size_t i = 0; i < opcoesDificuldade.size(); ++i) {
         Text botaoDificuldade;
@@ -106,7 +116,34 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
         botoesDificuldade.push_back(botaoDificuldade);
     }
 }
-//Verifica eventos do mouse
+
+/**
+ * @brief Gerencia os eventos de entrada do usuário para a tela atual do jogo.
+ * 
+ * Esta função lida com os eventos do mouse e teclado, alterando o estado do jogo e executando ações específicas
+ * com base no estado atual da tela e nas interações do usuário. Dependendo do estado, pode lidar com eventos de 
+ * clique do mouse para mudar o estado do jogo, posicionar o herói, disparar projéteis ou alterar a dificuldade do jogo.
+ * 
+ * @param window A janela do jogo onde os eventos estão sendo processados.
+ * 
+ * @details
+ * - No estado `MENU`, a função verifica se o usuário está sobre um botão do menu e altera sua cor. 
+ *   Quando um botão é clicado, o estado do jogo é alterado conforme o botão clicado:
+ *   - Botão 0: Muda para o estado `JOGO`.
+ *   - Botão 1: Muda para o estado `COOP` e cria um novo tanque.
+ *   - Botão 2: Muda para o estado `DIFICULDADE`.
+ * 
+ * - No estado `JOGO`, a função permite que o usuário:
+ *   - Posicione o herói com o botão direito do mouse.
+ *   - Dispare projéteis com o botão Q.
+ * 
+ * - No estado `COOP`, além das ações do estado `JOGO`, o usuário pode:
+ *   - Disparar projéteis com o botão esquerdo do mouse.
+ *   - Trocar munição por vida base com a tecla R.
+ * 
+ * - No estado `DIFICULDADE`, a função verifica a posição do mouse sobre os botões de dificuldade e altera
+ *   a dificuldade do jogo com base no botão clicado. Após selecionar a dificuldade, retorna ao estado `MENU`.
+ */
 void gerenciamentoTela::eventos(RenderWindow& window) {
     Event event;
     while (window.pollEvent(event)) {
@@ -116,22 +153,21 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
         }
         if (estado == Estado::MENU) {
             Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
-
             for (size_t i = 0; i < botoesMenu.size(); ++i) {
                 if (botoesMenu[i].getGlobalBounds().contains(mousePos)) {
-                    botoesMenu[i].setFillColor(Color::Yellow);  // Muda de cor (n decidi)
+                    botoesMenu[i].setFillColor(Color::Yellow);  
                     if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                         if (i == 0) {
-                            estado = Estado::JOGO;  // Jogar Solo
+                            estado = Estado::JOGO;  
                         } else if (i == 1) {
-                            estado = Estado::COOP;  // Jogar Duo
+                            estado = Estado::COOP;  
                             tank = new Tank(300, "assets/images/characters/TankSup.png", font, heroi, base);
                         } else if (i == 2) {
                             estado = Estado::DIFICULDADE;
                         }
                     }
                 } else {
-                    botoesMenu[i].setFillColor(Color::White);  // Retorna à cor branca quando o mouse não está sobre o botão
+                    botoesMenu[i].setFillColor(Color::White);  
                 }
             }
         }else if(estado == Estado::JOGO) {
@@ -170,17 +206,14 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
                     botoesDificuldade[i].setFillColor(Color::Yellow);
                     if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                         if (i == 0) {
-                            //FACIL
                             waveInimigo = SPAWN_FACIL;
                         } else if (i == 1) {
-                            //NORMAL
                             waveInimigo = SPAWN_NORMAL;
                         } else if (i == 2) {
-                            //DIFICIL
                             waveInimigo = SPAWN_DIFICIL;
                         }
                         
-                        estado = Estado::MENU; // Volta ao menu ou inicia o jogo
+                        estado = Estado::MENU; 
                     }
                 } else {
                     botoesDificuldade[i].setFillColor(Color::White);
@@ -189,28 +222,53 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
         }
     }
 }
-//Seta o texto das kills
+
+/**
+ * @brief Gerencia a renderização das kills na tela.
+ * 
+ * Esta função renderiza o texto das kills na tela, exibindo a quantidade de inimigos eliminados pelo jogador.
+ * 
+ */
 void gerenciamentoTela::setKills(){
     textoKills.setString("kills:" + to_string(Kills));
 }
 
-//Fim de jogo 
+/**
+ * @brief Gerencia o fim do jogo.
+ * 
+ * Esta função verifica se o jogo chegou ao fim, alterando o estado do jogo para GAMEOVER caso o herói ou a base
+ * tenham sido destruídos ou o tempo de jogo tenha se esgotado.
+ * 
+ */
 void gerenciamentoTela::setFimDeJogo(){
     if((heroi->getVida() <= 0) || (base->getVidaBase() <= 0 || spawRelogio.getElapsedTime() > seconds(60))){
         estado = Estado::GAMEOVER;
     }
 }
 
-
-//Ajusta o tamanho da imagem de fundo
+/**
+ * @brief Ajuda a ajustar a escala do fundo da tela.
+ * 
+ * Esta função ajusta a escala do fundo da tela com base no tamanho da janela do jogo.
+ * 
+ * @param window A janela do jogo.
+ * @param sprite O sprite do fundo da tela.
+ *
+ */
 void gerenciamentoTela::setBackgroundScale(RenderWindow& window, Sprite& sprite) {
     Vector2u textureSize = background.getSize();
     Vector2u windowSize = window.getSize();
     backgroundSprite.setScale((float) windowSize.x / textureSize.x, (float) windowSize.y / textureSize.y);
-    //backgroundSprite_menu.setScale((float) windowSize.x / textureSize.x, (float) windowSize.y / textureSize.y);
 }
 
-//Ajusta a posição do herói
+/**
+ * @brief Define a posição do herói na tela.
+ * 
+ * Esta função define a posição do herói na tela com base na posição do mouse.
+ * 
+ * @param window A janela do jogo.
+ *
+ */
 void gerenciamentoTela::setHeroiPosition(RenderWindow& window) {
    Vector2i mousePosition = Mouse::getPosition(window);
    Vector2f novaPosicao(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y));
@@ -219,7 +277,16 @@ void gerenciamentoTela::setHeroiPosition(RenderWindow& window) {
    }
 }
 
-//Gera uma posição aleatória para o inimigo
+/**
+ * @brief Retorna uma posição aleatória na tela.
+ * 
+ * Esta função retorna uma posição aleatória na tela com base no tamanho da janela.
+ * 
+ * @param windowSize O tamanho da janela do jogo.
+ * 
+ * @return A posição aleatória na tela.
+ *
+ */
 Vector2f gerenciamentoTela::getPosicaoRandom(const Vector2u& windowSize) {
     //Offset para evitar que o inimigo apareça fora da tela
     const int offset = 0;
@@ -247,23 +314,64 @@ Vector2f gerenciamentoTela::getPosicaoRandom(const Vector2u& windowSize) {
     }
 }
 
+/**
+ * @brief Retorna um valor aleatório para a chance de drop.
+ */
 int gerenciamentoTela::getRandomChanceDrop(){
     int chance = rand() % 3;
     return chance;
 }
 
+/**
+ * @brief Retorna um valor aleatório para o tipo de inimigo.
+ */
 int gerenciamentoTela::getRandomInimigo(){
     int inimigo = rand() % 3;
     return inimigo;
 }
 
-//Calcula a distância entre duas posições
+/**
+ * @brief calcula a distância entre duas posições.
+ * 
+ * Esta função calcula a distância entre duas posições no plano cartesiano.
+ * 
+ * @param posicao1  
+ * @param posicao2 
+ * @return float 
+ */
 float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
     return sqrt(pow(posicao1.x - posicao2.x, 2) + pow(posicao1.y - posicao2.y, 2));
 }
 
 
-//Atualiza as informações do jogo
+/**
+ * @brief Atualiza o estado do jogo e os objetos presentes na tela.
+ * 
+ * Esta função é responsável por atualizar a posição dos personagens e inimigos, verificar colisões, 
+ * processar a lógica dos projéteis e gerar novos inimigos com base no tempo decorrido. Ela lida com 
+ * diferentes estados do jogo, como `JOGO` e `COOP`, e realiza ações específicas dependendo do estado atual.
+ * 
+ * @param window A janela do jogo onde as atualizações são aplicadas.
+ * 
+ * @details
+ * - No estado `JOGO` e `COOP`, a função realiza as seguintes ações:
+ *   - Atualiza o tempo decorrido e verifica a regeneração da vida da base.
+ *   - Atualiza o herói e seus projéteis.
+ *   - Atualiza os inimigos e seus projéteis, verificando colisões com o herói, o tanque aliado (se aplicável) e a base.
+ *   - Dependendo do estado, os inimigos podem atirar no herói ou no tanque aliado.
+ *   - Atualiza e remove os drops, recuperando munição e vida conforme o tipo de drop.
+ *   - Atualiza a lista de projéteis inimigos e verifica colisões com a janela e com outros objetos, removendo projéteis e inimigos quando necessário.
+ *   - Verifica a colisão do projétil com inimigos, tanques e corredores, gerando drops conforme o tipo de inimigo atingido.
+ *   - Verifica a colisão dos inimigos com a base e remove-os se necessário.
+ *   - Atualiza a posição dos inimigos e verifica se colidem com a base, removendo-os se a colisão ocorrer.
+ *   - Realiza o spawn de novos inimigos com base em intervalos de tempo definidos e em condições específicas.
+ * 
+ * - No estado `COOP`, além das ações descritas acima, o tanque aliado também é atualizado e verifica colisões com drops e projéteis.
+ * 
+ * - A função também realiza a lógica de spawn de novos inimigos, garantindo que a posição dos inimigos seja válida e não se sobreponha a outras entidades.
+ * 
+ * - Os inimigos são spawnados de forma aleatória com base em uma chance definida e em um tempo específico.
+ */
 void gerenciamentoTela::atualizar(RenderWindow& window) {
       /* setFimDeJogo();  
      */
@@ -335,55 +443,60 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
             }
         }
         if (estado == Estado::COOP && tank) {
-            tank->mover();  // Movimenta o tanque no modo coop
+            tank->mover();  
             
         }
 
-        dropRelogio.restart();
-        for(auto dropIt = drops.begin(); dropIt != drops.end();) {      
-            if(dropRelogio.getElapsedTime() > seconds(10)){
-                dropIt = drops.erase(dropIt);
-                dropRelogio.restart();
-                cout << "Drop removido POR TEMPO" << endl;
-            }if(heroi->verificarColisaoDrop(dropIt->getSprite())){
-                if(dropIt->getTipo() == 1){
+
+        for(auto dropIt = drops.begin(); dropIt != drops.end();) {
+            bool dropRemovido = false;
+
+            if (!dropRemovido && heroi->verificarColisaoDrop(dropIt->getSprite())) {
+                if (dropIt->getTipo() == 1) {
                     heroi->RecuperarMunicao();
-                }else if(dropIt->getTipo() == 0){
+                } else if (dropIt->getTipo() == 0) {
                     heroi->RecuperarVida();
-                    if(estado == Estado::COOP && tank){
+                    if (estado == Estado::COOP && tank) {
                         tank->RecuperarVida();
                     }
-                }else if(dropIt->getTipo() == 2){
-                    if(upLimite < 2){
-                        if(upLimite == 0){
+                } else if (dropIt->getTipo() == 2) {
+                    if (upLimite < 2) {
+                        if (upLimite == 0) {
                             base->aumentarVidaBase();
-                        }else if(upLimite == 1){
+                        } else if (upLimite == 1) {
                             regenerarVidaBase = true;
                         }
-                    upLimite++;
+                        upLimite++;
                     }
                 }
                 dropIt = drops.erase(dropIt);
-            }else if(estado == Estado::COOP && tank && tank->verificarColisaoDrop(dropIt->getSprite())){
-                if(dropIt->getTipo() == 1){
+                dropRemovido = true;
+            }
+
+            if (!dropRemovido && estado == Estado::COOP && tank && tank->verificarColisaoDrop(dropIt->getSprite())) {
+                if (dropIt->getTipo() == 1) {
                     heroi->RecuperarMunicao();
-                }else if(dropIt->getTipo() == 0){
+                } else if (dropIt->getTipo() == 0) {
                     tank->RecuperarVida();
                     heroi->RecuperarVida();
-                }else if(dropIt->getTipo() == 2){
-                    if(upLimite < 2){
-                        if(upLimite == 0){
+                } else if (dropIt->getTipo() == 2) {
+                    if (upLimite < 2) {
+                        if (upLimite == 0) {
                             base->aumentarVidaBase();
-                        }else if(upLimite == 1){
+                        } else if (upLimite == 1) {
                             regenerarVidaBase = true;
                         }
-                    upLimite++;
+                        upLimite++;
                     }
                 }
                 dropIt = drops.erase(dropIt);
+                dropRemovido = true;
+            }
+
+            if (!dropRemovido) {
+                ++dropIt;
             }
         }
-
         atualizarProjeteisInimigos(deltaTime, window);
 
         for(auto inimigoIt = inimigos.begin(); inimigoIt != inimigos.end();) {
@@ -562,12 +675,8 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                             break;
                         }
                     }
-                }
-
-                
-                
-                
-                if(getRandomInimigo() == 0){
+                }        
+                if(getRandomInimigo() == 1){
                     Runner* runner = new Runner("assets/images/characters/alien_1.png");
                     if(runner->isTextureLoaded()){
                         runner->setPosicao(posicao);
@@ -577,7 +686,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         delete runner;
                     }
                     spawRelogio.restart();
-                }else if(getRandomInimigo() == 1){
+                }else if(getRandomInimigo() == 0){
                     Inimigo* inimigo = new Inimigo("assets/images/characters/enemy.png");
                     if (inimigo->isTextureLoaded()) {
                         inimigo->setPosicao(posicao);
@@ -588,7 +697,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         delete inimigo;
                     }
                     spawRelogio.restart();
-                }else{
+                }else if(getRandomInimigo() == 2){
                     InimigoTank* inimigoTank = new InimigoTank("assets/images/characters/pixel-tank.png");
                     if (inimigoTank->isTextureLoaded()) {
                         inimigoTank->setPosicao(posicao);
@@ -609,6 +718,12 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
     }
 }
 
+/**
+ * @brief Gerencia o spawn de inimigos em waves.
+ * 
+ * Esta função gerencia o spawn de inimigos em waves, ajustando o tempo de spawn de inimigos com base no tempo decorrido.
+ * 
+ */
 void gerenciamentoTela::waveInimigos(){
     waveInimigo -= seconds(0.2);
     if(waveInimigo <= seconds(1)){
@@ -616,6 +731,20 @@ void gerenciamentoTela::waveInimigos(){
     }
 }
 
+/**
+ * @brief Atualiza a posição dos projéteis inimigos na tela.
+ * 
+ * Esta função atualiza a posição dos projéteis inimigos na tela, verificando colisões com a janela e com outros objetos.
+ * 
+ * @param deltaTime O tempo decorrido desde a última atualização.
+ * @param window A janela do jogo onde as atualizações são aplicadas.
+ * 
+ * @details
+ * - A função atualiza a posição dos projéteis inimigos e verifica colisões com a janela, removendo os projéteis se necessário.
+ * - Verifica colisões dos projéteis inimigos com o herói, a base e os inimigos, removendo os projéteis e os inimigos atingidos.
+ * - Verifica colisões dos projéteis inimigos com o tanque aliado (se aplicável), removendo os projéteis e o tanque se atingidos.
+ * 
+ */
 void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow& window) {
     for (auto it = projeteisInimigos.begin(); it != projeteisInimigos.end();) {
         it->moverInimigo(deltaTime);
@@ -665,13 +794,32 @@ void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow
     }
 }
 
+/**
+ * @brief Atualiza a posição dos drops na tela.
+ * 
+ * @param window A janela do jogo onde as atualizações são aplicadas.
+ * 
+ */
 void gerenciamentoTela::atualizarDrop(RenderWindow& window) {
     for(auto& drop : drops) {
         drop.renderizar(window);
     }
 }
 
-//Renderiza a imagem de fundo e os sprites
+/**
+ * @brief Renderiza os objetos na tela.
+ * 
+ * Esta função renderiza os objetos na tela, como o fundo, os botões do menu, os inimigos, os projéteis e os drops.
+ * 
+ * @param window A janela do jogo onde os objetos são renderizados.
+ * 
+ * @details
+ * - No estado `MENU`, a função renderiza o fundo e os botões do menu.
+ * - No estado `DIFICULDADE`, a função renderiza o fundo e os botões de dificuldade.
+ * - No estado `JOGO` e `COOP`, a função renderiza o fundo, o herói, a base, os inimigos, os projéteis e os drops.
+ * - No estado `GAMEOVER`, a função renderiza um círculo vermelho na tela.
+ * - No estado `COOP`, a função renderiza o tanque aliado.
+ */
 void gerenciamentoTela::renderizar(RenderWindow& window) {
     window.clear();
 
@@ -724,6 +872,14 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
     window.display();
 }
 
+/**
+ * @brief Renderiza os projéteis inimigos na tela.
+ * 
+ * Esta função renderiza os projéteis inimigos na tela, exibindo os projéteis disparados pelos inimigos.
+ * 
+ * @param window A janela do jogo onde os projéteis são renderizados.
+ * 
+ */
 void gerenciamentoTela::renderizarProjeteisInimigos(RenderWindow& window) {
     for (auto& projetil : projeteisInimigos) {
         projetil.renderizar(window);

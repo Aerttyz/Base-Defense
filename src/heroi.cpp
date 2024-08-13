@@ -119,7 +119,9 @@ void Heroi::RecuperarVida() {
     if(vida > 100){
         vida = 100;
     }
-    textoVida.setString("Heroi: " + to_string(vida));
+    int totalBarras = barrasVida.size();
+    barraIndex = ((100 - vida) * (totalBarras - 1)) / 100;
+    barraSprite.setTextureRect(barrasVida[barraIndex]);
 }
 
 int Heroi::getRandomQuantidadeProjetil() {
@@ -153,10 +155,11 @@ bool Heroi::verificarColisao(const Sprite& sprite) {
 
 bool Heroi::verificarColisaoDrop(const Sprite& sprite) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
-            textoVida.setString("Heroi: " + to_string(vida));
-            relogio.restart(); 
-            return true;  
-        
+        int totalBarras = barrasVida.size();
+        barraIndex = ((100 - vida) * (totalBarras - 1)) / 100;
+        barraSprite.setTextureRect(barrasVida[barraIndex]); 
+        relogio.restart(); 
+        return true;  
     }
     return false;
 }
