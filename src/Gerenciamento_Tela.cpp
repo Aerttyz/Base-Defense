@@ -598,6 +598,16 @@ void gerenciamentoTela::atualizarProjeteisInimigos(float deltaTime, RenderWindow
                         ++inimigoIt;
                     }
                 }
+                for (auto tankIt = tanks.begin(); tankIt != tanks.end();) {
+                    if ((*tankIt)->verificarColisao(it->getSprite()) && it->getOwner() != *tankIt) {
+                        tankIt = tanks.erase(tankIt);
+                        it = projeteisInimigos.erase(it);
+                        projetilRemovido = true;
+                        break;
+                    } else {
+                        ++tankIt;
+                    }
+                }
             }
         }
         if (!projetilRemovido) {
