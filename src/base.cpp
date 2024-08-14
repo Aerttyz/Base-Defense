@@ -4,6 +4,16 @@
 using namespace std;
 using namespace sf;
 
+/**
+ * @brief Construtor da classe Base    
+ * 
+ * Este construtor inicializa a base com uma certa quantidade de vida, uma imagem, e uma fonte para o texto.
+ * 
+ * @param vidaBase 
+ * @param baseFile caminho da imagem da base
+ * @param font fonte do texto
+ * @param windowSize janela do jogo
+ */
 Base::Base(int vidaBase, const string& baseFile, const Font& font, const Vector2f& windowSize) : vida(vidaBase), dps(seconds(1)) {
     if(!background_base.loadFromFile(baseFile)) {
         cout << "Erro ao carregar imagem da base" << endl;
@@ -19,23 +29,41 @@ Base::Base(int vidaBase, const string& baseFile, const Font& font, const Vector2
     textoVidaBase.setString("Base: " + to_string(vidaBase));
 }
 
-//Retorna o sprite da base
+/**
+ * @brief retorna o sprite da base
+ * 
+ * @return Sprite 
+ */
 Sprite Base::getSprite() const {
     return backgroundSprite_base;
 }
 
-//Define a vida da base
+/**
+ * @brief Altera a vida da base
+ * 
+ * @param novaVidaBase nova vida da base
+ */
 void Base::setVidaBase(int novaVidaBase) {
     cout << "Vida Base: " << novaVidaBase << endl;
     vida = novaVidaBase;
     textoVidaBase.setString("Base: " + to_string(vida));
 }
 
-
+/**
+ * @brief Retorna a vida da base
+ * 
+ * @return int 
+ */
 int Base::getVidaBase() {
     return vida;
 }
 
+/**
+ * @brief Recupera a vida da base
+ * 
+ * Aumenta a vida da base em 10, mas não pode ultrapassar 200
+ * 
+ */
 void Base::recuperarVida() {
     
         vida += 10;
@@ -46,6 +74,12 @@ void Base::recuperarVida() {
     
 }
 
+/**
+ * @brief Regenera a vida da base
+ * 
+ * Regenera a vida da base em 1 a cada segundo
+ * 
+ */
 void Base::baseUpRegenerarVida() {
     if(relogio.getElapsedTime() > dps) {
         vida += 1;
@@ -57,6 +91,12 @@ void Base::baseUpRegenerarVida() {
     }
 }
 
+/**
+ * @brief Aumenta a vida da base
+ * 
+ * Aumenta a vida da base em 50, mas não pode ultrapassar 200
+ * 
+ */
 void Base::aumentarVidaBase() {
     vida += 50;
     if(vida > 200) {
@@ -65,7 +105,15 @@ void Base::aumentarVidaBase() {
     textoVidaBase.setString("Base: " + to_string(vida));
 }
 
-//Verifica colisão com um sprite e diminui a vida da base
+/**
+ * @brief Verifica colisão com um sprite
+ * 
+ * Diminui a vida da base em 10 se houver colisão com um sprite
+ * Atualiza o texto da vida da base
+ * 
+ * @param sprite sprite a ser verificado
+ * @return true se houve colisão, false caso contrário
+ */
 bool Base::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_base.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
             vida -= 10;
@@ -81,6 +129,12 @@ bool Base::verificarColisao(const Sprite& sprite) {
     return false;
 }
 
+/**
+ * @brief Renderiza a base e o texto da vida da base
+ * 
+ * 
+ * @param window janela do jogo
+ */
 void Base::renderizar(RenderWindow& window) {
     window.draw(backgroundSprite_base);
     FloatRect textRect = textoVidaBase.getLocalBounds();

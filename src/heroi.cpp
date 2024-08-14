@@ -151,6 +151,18 @@ int Heroi::getVida() {
     return vida;
 }
 
+/**
+ * @brief Define a vida do herói
+ * 
+ * Define a vida do herói para a nova vida passada como parâmetro.
+ * 
+ * @param novaVida Nova vida do herói
+ */
+void Heroi::setVida(int novaVida) {
+    vida = novaVida;
+    textoVida.setString("Heroi: " + to_string(vida));
+}
+
 
 void Heroi::TomarDano() {
    //TODO

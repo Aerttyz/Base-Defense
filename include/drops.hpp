@@ -16,7 +16,6 @@ class Drop{
         void setPosicao(const Vector2f& posicao);
         Vector2f getPosicao() const;
         Sprite getSprite() const;
-        int getRandomTipoDrop();
 
         bool verificarColisao(const Sprite& sprite);
         int getTipo() const;
