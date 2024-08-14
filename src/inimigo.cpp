@@ -7,7 +7,6 @@
 using namespace std;
 using namespace sf;
 
-//Construtor
 Inimigo::Inimigo(const string& inimigoFile) : textureLoaded(false), velocidade(50.0f), posicao(Vector2f(400, 300)), dps(seconds(1.0f)), intervaloDisparo(seconds(2)) { 
         if (!background_inimigo.loadFromFile(inimigoFile)) {
             cerr << "Erro ao carregar a imagem do inimigo" << endl;
@@ -25,7 +24,6 @@ Inimigo::Inimigo(const string& inimigoFile) : textureLoaded(false), velocidade(5
    
 }
 
-//Move o inimigo
 void Inimigo::mover() {
     Vector2f posicaoAtual = backgroundSprite_inimigo.getPosition();
     Vector2f direcao = posicao - posicaoAtual;
@@ -36,8 +34,6 @@ void Inimigo::mover() {
         backgroundSprite_inimigo.move(direcao * velocidade * 0.01f);
     }
 }
-
-
 
 void Inimigo::atirarCOOP(const Vector2f& direcaoHeroi, const Vector2f& direcaoTank, const float distanciaHeroi, const float distanciaTank) {
     if(relogio.getElapsedTime() > intervaloDisparo) {
@@ -64,7 +60,6 @@ void Inimigo::atirarCOOP(const Vector2f& direcaoHeroi, const Vector2f& direcaoTa
         }
     }
 }
-
 
 void Inimigo::atirar(const Vector2f& direcao) {
     if(relogio.getElapsedTime() > intervaloDisparo) {
@@ -93,7 +88,6 @@ void Inimigo::atualizarProjeteis(float deltaTime, RenderWindow& window) {
     }
 }
 
-//Verifica colisão com um sprite
 bool Inimigo::verificarColisao(const Sprite& sprite) {
     if(backgroundSprite_inimigo.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
         return true;
@@ -101,41 +95,33 @@ bool Inimigo::verificarColisao(const Sprite& sprite) {
     return false;
 }
 
-//Define a posição do inimigo
 void Inimigo::setPosicao(const Vector2f& posicao) {
-        backgroundSprite_inimigo.setPosition(posicao);
-    }
+    backgroundSprite_inimigo.setPosition(posicao);
+}
 
-//Retorna a posição do inimigo
 Vector2f Inimigo::getPosicao() const {
-        return backgroundSprite_inimigo.getPosition();
-    }
+    return backgroundSprite_inimigo.getPosition();
+}
 
-//Retorna o sprite do inimigo
 Sprite Inimigo::getSprite() const {
     return backgroundSprite_inimigo;
 }
 
-//Retorna os projéteis do inimigo
 vector<Projetil>& Inimigo::getProjeteis() {
     return projeteis;
 }
 
-//Renderiza o inimigo
 void Inimigo::renderizar(RenderWindow& window) {
-        if(textureLoaded){
-            window.draw(backgroundSprite_inimigo);
-            for(auto& projetil : projeteis){
-                projetil.renderizar(window);
-            }
-        } else {
-            cerr << "Erro ao renderizar inimigo" << endl;
+    if(textureLoaded){
+        window.draw(backgroundSprite_inimigo);
+        for(auto& projetil : projeteis){
+            projetil.renderizar(window);
         }
-            
+    } else {
+        cerr << "Erro ao renderizar inimigo" << endl;
     }
+}
 
-//Retorna se a textura foi carregada
 bool Inimigo::isTextureLoaded() const {
         return textureLoaded;
-    }
-    
+}

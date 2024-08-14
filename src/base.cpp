@@ -84,6 +84,6 @@ bool Base::verificarColisao(const Sprite& sprite) {
 void Base::renderizar(RenderWindow& window) {
     window.draw(backgroundSprite_base);
     FloatRect textRect = textoVidaBase.getLocalBounds();
-    textoVidaBase.setPosition(window.getSize().x - textRect.width - 10, 40);
+    textoVidaBase.setPosition(window.getSize().x - textRect.width - 10, 70);
     window.draw(textoVidaBase);
 }

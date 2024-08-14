@@ -7,6 +7,8 @@
 #include "../include/base.hpp"
 #include "../include/inimigo.hpp"
 #include "../include/tank.hpp"
+#include "../include/inimigoTank.hpp"
+#include "../include/runner.hpp"
 #include <vector>
 
 using namespace sf;
@@ -30,7 +32,7 @@ class gerenciamentoTela {
         void atualizarDrop(RenderWindow& window);  
         
         int getRandomChanceDrop();
-        int getRandomTipoDrop();
+        int getRandomInimigo();
 
         void setFimDeJogo();
         void setKills();
@@ -38,7 +40,6 @@ class gerenciamentoTela {
         void waveInimigos();
         
     private:
-        RectangleShape shape;
         Texture background;
         Texture background_menu;
         Texture texturaProjetil;
@@ -49,13 +50,16 @@ class gerenciamentoTela {
         Heroi *heroi;
         Base *base;
         Tank *tank;
+        Inimigo *inimigo;
+        Inimigo *runner;
+        InimigoTank *inimigoTank;
         vector<Inimigo *> inimigos;
+        vector<Runner *> runners;
+        vector<InimigoTank *> tanks;
+        int inimigoTankVida = 2;
         vector<Projetil *> projeteis;
-          
         vector<sf::Text> botoesMenu;  
-        
         vector<sf::Text> botoesDificuldade;  
-
         vector<Projetil> projeteisInimigos;
 
         
@@ -63,6 +67,9 @@ class gerenciamentoTela {
         Clock spawRelogio;
         Time spawnInimigo;
         Time waveInimigo;
+        const Time SPAWN_FACIL = seconds(3);  
+        const Time SPAWN_NORMAL = seconds(2); 
+        const Time SPAWN_DIFICIL = seconds(1);  
         Clock waveRelogio;
         Clock relogio;
         enum class Estado {MENU, DIFICULDADE, JOGO, COOP, GAMEOVER, PAUSE};
@@ -79,6 +86,7 @@ class gerenciamentoTela {
         Sprite spriteDrop1;
         Sprite spriteDrop2;
         vector<Drop> drops; 
+        Clock dropRelogio;
 
         int Kills=0;
         Text textoKills;

@@ -7,17 +7,18 @@ using namespace std;
 using namespace sf; 
 
 //Construtor
-Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(300.0f), quantidadeProjetil(10) ,vida(vida), dps(seconds(0.5f)) {
+Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(300.0f), quantidadeProjetil(1000) ,vida(vida), dps(seconds(0.5f)) {
     if(!background_heroi.loadFromFile(heroiFile)) {
         cout << "Erro ao carregar imagem do herói" << endl;
     }
     backgroundSprite_heroi.setTexture(background_heroi);
+    backgroundSprite_heroi.setPosition(450, 300);
     posicao = backgroundSprite_heroi.getPosition();
 
     textoVida.setFont(font);
     textoVida.setCharacterSize(20);
     textoVida.setFillColor(Color::White);
-    textoVida.setString("Heroi: " + to_string(vida));
+    textoVida.setString("Heroi");
 
     textoMunicao.setFont(font);
     textoMunicao.setCharacterSize(20);
@@ -29,12 +30,17 @@ Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(3
         cout << "Erro ao carregar textura do projetil" << endl;
     }
     
-    bulletSongFile = "assets/music/bulletsong.ogg";
+    
     if(!bufferBulletSong.loadFromFile(bulletSongFile)) {
         cout << "Erro ao carregar música do projetil" << endl;
     }else {
         bulletSong.setBuffer(bufferBulletSong);
     }
+    if(!barraVida.loadFromFile("assets/images/background/rad-rainbow-lifebar.png")) {
+        cout << "Erro ao carregar barra de vida" << endl;
+    }
+    barraSprite.setTexture(barraVida);
+    barraSprite.setTextureRect(barra1);
 
 
     backgroundSprite_projetil.setTexture(texturaProjetil);
@@ -113,7 +119,9 @@ void Heroi::RecuperarVida() {
     if(vida > 100){
         vida = 100;
     }
-    textoVida.setString("Heroi: " + to_string(vida));
+    int totalBarras = barrasVida.size();
+    barraIndex = ((100 - vida) * (totalBarras - 1)) / 100;
+    barraSprite.setTextureRect(barrasVida[barraIndex]);
 }
 
 int Heroi::getRandomQuantidadeProjetil() {
@@ -130,16 +138,16 @@ void Heroi::RecuperarMunicao() {
 //Verifica colisão com um sprite
 bool Heroi::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
-            vida -= 10;
-           
-            if(vida < 0 ){
-                vida = 0;
-                
-            }
-            textoVida.setString("Heroi: " + to_string(vida));
-            relogio.restart(); 
-            return true;  
+        vida -= 10;
         
+        if(vida < 0 ){
+            vida = 0;
+            
+        }
+        int totalBarras = barrasVida.size();
+        barraIndex = ((100 - vida) * (totalBarras - 1)) / 100;
+        barraSprite.setTextureRect(barrasVida[barraIndex]);
+        return true;      
     }
     return false;
 }
@@ -147,26 +155,16 @@ bool Heroi::verificarColisao(const Sprite& sprite) {
 
 bool Heroi::verificarColisaoDrop(const Sprite& sprite) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
-            textoVida.setString("Heroi: " + to_string(vida));
-            relogio.restart(); 
-            return true;  
-        
+        int totalBarras = barrasVida.size();
+        barraIndex = ((100 - vida) * (totalBarras - 1)) / 100;
+        barraSprite.setTextureRect(barrasVida[barraIndex]); 
+        relogio.restart(); 
+        return true;  
     }
     return false;
 }
 
-//Verifica colisão com um retângulo de testes
 
-void Heroi::verificarColisao(const RectangleShape& shape) {
-    if (backgroundSprite_heroi.getGlobalBounds().intersects(shape.getGlobalBounds())) {
-         if(relogio.getElapsedTime() > dps) {
-            vida = vida - 10;
-           
-        textoVida.setString("Heroi: " + to_string(vida));   
-        relogio.restart();
-        }
-    }
-}
 
 vector<Projetil>& Heroi::getProjeteis() {
     return projeteis;
@@ -179,13 +177,15 @@ void Heroi::renderizar(RenderWindow& window) {
         projetil.renderizar(window);
     }
 
-    FloatRect textRect = textoVida.getLocalBounds();
-    textoVida.setPosition(window.getSize().x - textRect.width - 10, 10);
-    FloatRect textRectMunicao = textoMunicao.getLocalBounds();
-    textoMunicao.setPosition(window.getSize().x - textRect.width - 20, 70);
+    textoVida.setPosition(20, 20);
+    barraSprite.setPosition(20, 50);
     window.draw(textoVida);
+    window.draw(barraSprite);
+    
+    
+    textoMunicao.setPosition(20, 70);
     window.draw(textoMunicao);
-
+ 
     
 }
 

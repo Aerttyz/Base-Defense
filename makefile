@@ -2,7 +2,7 @@
 TARGET = base-defense
 
 # Arquivos fonte
-SRCS = src/main.cpp src/Gerenciamento_Tela.cpp src/heroi.cpp src/base.cpp src/inimigo.cpp src/projeteis.cpp src/drops.cpp src/tank.cpp
+SRCS = src/main.cpp src/Gerenciamento_Tela.cpp src/heroi.cpp src/base.cpp src/inimigo.cpp src/projeteis.cpp src/drops.cpp src/tank.cpp src/runner.cpp src/inimigoTank.cpp
 
 # Compilador
 CXX = g++
@@ -21,7 +21,7 @@ all: $(TARGET)
 
 # Regra para criar o executável
 $(TARGET): $(SRCS)
-	$(CXX) -o $(TARGET) $(SRCS) $(CXXFLAGS) $(LDFLAGS) $(LIBS)
+	$(CXX) -o $(TARGET) $(SRCS) $(CXXFLAGS) $(LDFLAGS) $(LIBS) 
 
 
 
