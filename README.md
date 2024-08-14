@@ -12,18 +12,23 @@ O jogo consiste em um soldado que tem a missão de defender sua base em um mapa 
 
 ## Funcionalidades
 
-- Modo COOP
-- Upgrades para base
-- Drops inimigos
+- Modos de jogo Single e COOP
+- Tank com recuperação de vida para Base (COOP)
 - Diferentes Niveis de Dificuldade
 - Dificuldade escalável
+- Diferentes tipos de Inimigos
+- Drops inimigos
+- Upgrades para base
 
+## Documentação
+
+[Documentação Base-Defense](https://aerttyz.github.io/Base-Defense/pages.html)
 
 ## Stack utilizada
 
 **Game Developer:** C++/ SFML
 
-**Designe:** ----
+**Designe:** [Pixelart](https://Pixelart.com) e Photoshop
 
 
 ## Instalação
