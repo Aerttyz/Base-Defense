@@ -30,6 +30,7 @@ class gerenciamentoTela {
         void renderizarProjeteisInimigos(RenderWindow& window);
 
         void atualizarDrop(RenderWindow& window);  
+        bool atualizarDrops(RenderWindow& window);
         
         int getRandomChanceDrop();
         int getRandomInimigo();
@@ -86,7 +87,6 @@ class gerenciamentoTela {
         Sprite spriteDrop1;
         Sprite spriteDrop2;
         vector<Drop> drops; 
-        Clock dropRelogio;
 
         int Kills=0;
         Text textoKills;

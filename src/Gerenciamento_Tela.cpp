@@ -345,6 +345,22 @@ float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
 
 
 /**
+ * @brief Atualiza os drops e remove os que já passaram do tempo de desaparecer
+ * 
+ * @param drops vetor de drops
+ */
+bool gerenciamentoTela::atualizarDrops(RenderWindow& window){
+    for (auto it = drops.begin(); it != drops.end();) {
+        if (it->verificarTempoDeDesaparecer()) {
+            return true;
+        } else {
+            ++it;
+        }
+    }
+    return false;
+}
+
+/**
  * @brief Atualiza o estado do jogo e os objetos presentes na tela.
  * 
  * Esta função é responsável por atualizar a posição dos personagens e inimigos, verificar colisões, 
@@ -450,7 +466,10 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
 
         for(auto dropIt = drops.begin(); dropIt != drops.end();) {
             bool dropRemovido = false;
-
+            if(atualizarDrops(window)){
+                dropIt = drops.erase(dropIt);
+                dropRemovido = true;
+            }
             if (!dropRemovido && heroi->verificarColisaoDrop(dropIt->getSprite())) {
                 if (dropIt->getTipo() == 1) {
                     heroi->RecuperarMunicao();
@@ -584,13 +603,11 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         if(getRandomChanceDrop() == 1){
                             Drop drop(spriteDrop, (*inimigoIt)->getPosicao(), heroi, 1);
                             drop.setPosicao((*inimigoIt)->getPosicao());
-
-                            drops.push_back(drop);
-
+                            drops.push_back(drop);                          
                         }else if(getRandomChanceDrop() == 0){
                             Drop drop(spriteDrop1, (*inimigoIt)->getPosicao(), heroi, 0);
                             drop.setPosicao((*inimigoIt)->getPosicao());
-                            drops.push_back(drop);
+                            drops.push_back(drop);                          
                         }else if(getRandomChanceDrop() == 2){
                             if(upLimite < 2){
                                 Drop drop(spriteDrop2, (*inimigoIt)->getPosicao(), heroi, 2);
@@ -676,7 +693,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         }
                     }
                 }        
-                if(getRandomInimigo() == 1){
+                if(getRandomInimigo() == 10){
                     Runner* runner = new Runner("assets/images/characters/alien_1.png");
                     if(runner->isTextureLoaded()){
                         runner->setPosicao(posicao);
@@ -686,7 +703,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         delete runner;
                     }
                     spawRelogio.restart();
-                }else if(getRandomInimigo() == 0){
+                }else if(0 == 0){
                     Inimigo* inimigo = new Inimigo("assets/images/characters/enemy.png");
                     if (inimigo->isTextureLoaded()) {
                         inimigo->setPosicao(posicao);
@@ -697,7 +714,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         delete inimigo;
                     }
                     spawRelogio.restart();
-                }else if(getRandomInimigo() == 2){
+                }else if(getRandomInimigo() == 20){
                     InimigoTank* inimigoTank = new InimigoTank("assets/images/characters/pixel-tank.png");
                     if (inimigoTank->isTextureLoaded()) {
                         inimigoTank->setPosicao(posicao);

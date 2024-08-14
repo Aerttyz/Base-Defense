@@ -16,15 +16,18 @@ class Drop{
         void setPosicao(const Vector2f& posicao);
         Vector2f getPosicao() const;
         Sprite getSprite() const;
-
         bool verificarColisao(const Sprite& sprite);
+        bool verificarTempoDeDesaparecer();
         int getTipo() const;
     private:
         Vector2f posicao;
         bool textureLoaded;
         Sprite backgroundSprite_drop;
         Heroi *heroi;
-        int tipoDrop;
+        int tipoDrop;    
+
+        Time tempoDeCriacao;    
+        Clock clockDrop; 
 };
 
 
