@@ -24,6 +24,7 @@ Drop::Drop(const Sprite& dropSprite, const Vector2f& posicao, Heroi *heroi, int 
     backgroundSprite_drop.setPosition(posicao);
     textureLoaded = backgroundSprite_drop.getTexture() != nullptr;
     tipoDrop = tipo;
+    tempoDeCriacao = clockDrop.getElapsedTime();
 }
 
 /**
@@ -48,6 +49,17 @@ bool Drop::verificarColisao(const Sprite& sprite) {
         return true;
     }
     return false;
+}
+
+/**
+ * @brief Verifica se o drop já passou do tempo de desaparecer
+ * 
+ * @return true se já passou do tempo de desaparecer
+ * @return false se ainda não passou do tempo de desaparecer
+ */
+bool Drop::verificarTempoDeDesaparecer() {
+    Time tempoDecorrido = clockDrop.getElapsedTime() - tempoDeCriacao;
+    return tempoDecorrido >= seconds(5);
 }
 
 /**
