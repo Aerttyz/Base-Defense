@@ -6,7 +6,16 @@
 using namespace std;
 using namespace sf; 
 
-//Construtor
+/**
+ * @brief Construtor da classe Heroi
+ * 
+ * Este construtor inicializa o herói com uma certa quantidade de vida, uma imagem, e uma fonte para o texto.
+ * 
+ * @param vida Vida do herói
+ * @param heroiFile Arquivo de imagem do herói
+ * @param font Fonte do texto
+ * 
+ */
 Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(300.0f), quantidadeProjetil(1000) ,vida(vida), dps(seconds(0.5f)) {
     if(!background_heroi.loadFromFile(heroiFile)) {
         cout << "Erro ao carregar imagem do herói" << endl;
@@ -47,22 +56,42 @@ Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(3
     backgroundSprite_projetil.setPosition(posicao);
 }
 
-//Retorna o sprite do herói
+/**
+ * @brief Retorna o sprite do herói
+ * 
+ * @return Sprite do herói 
+ */
 Sprite Heroi::getSprite() const {
     return backgroundSprite_heroi;
 }
 
-//Retorna a posição do herói
+/**
+ * @brief retorna a posição do herói
+ * 
+ * @return  Vector2f: Posição do herói
+ */
 Vector2f Heroi::getPosicao() {
     return backgroundSprite_heroi.getPosition();
 }
 
-//Define a posição do herói
+/**
+ * @brief Define a posição do herói
+ * 
+ * Define a posição do herói para a nova posição passada como parâmetro.
+ * 
+ * @param novaPosicao 
+ * 
+ */
 void Heroi::definirPosicao(const Vector2f& novaPosicao) {
     posicao = novaPosicao;
 }
 
-//Move o herói
+/**
+ * @brief Move o herói
+ * 
+ * Move o herói para a posição definida se a distância entre a posição atual e a nova posição for maior que 1.0f.
+ * 
+ */
 void Heroi::mover() {
     Vector2f posicaoAtual = backgroundSprite_heroi.getPosition();
     Vector2f direcao = posicao - posicaoAtual;
@@ -74,6 +103,16 @@ void Heroi::mover() {
     }
 }
 
+/**
+ * @brief Atira um projetil na direção passada como parâmetro
+ * 
+ * Este método verifica se a quantidade de projeteis é maior que 0. 
+ * Se for, decrementa a quantidade de projeteis e cria um novo projetil na direção passada como parâmetro.
+ * 
+ * 
+ * 
+ * @param direcao Direção do projetil de acordo com a posição do mouse
+ */
 void Heroi::atirar(const Vector2f& direcao) {
         if(quantidadeProjetil>0){
             Vector2f direcaoNormalizada = direcao / sqrt(direcao.x * direcao.x + direcao.y * direcao.y);
@@ -87,6 +126,13 @@ void Heroi::atirar(const Vector2f& direcao) {
         }
 }
 
+/**
+ * @brief Atualiza a posição dos projeteis
+ * 
+ * Este método atualiza a posição de todos os projeteis do vetor de projeteis.
+ * 
+ * @param deltaTime 
+ */
 void Heroi::atualizarProjeteis(float deltaTime) {
     for (auto& projetil : projeteis) {
         projetil.mover(deltaTime);
@@ -96,24 +142,38 @@ void Heroi::atualizarProjeteis(float deltaTime) {
     }), projeteis.end());
 }
 
-void Heroi::setVida(int novaVida) {
-    vida = novaVida;
-    textoVida.setString("Heroi: " + to_string(vida));
-}
-
+/**
+ * @brief Retorna a vida do herói
+ * 
+ * @return int Vida do herói
+ */
 int Heroi::getVida() {
     return vida;
 }
+
 
 void Heroi::TomarDano() {
    //TODO
 }
 
+/**
+ * @brief Diminui a quantidade de projeteis
+ * 
+ * Diminui a quantidade de projeteis em 5.
+ * 
+ */
 void Heroi::darMunicao() {
     quantidadeProjetil -= 5;
     textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
 }
 
+/**
+ * @brief Recupera a vida do herói
+ * 
+ * Recupera 10 de vida do herói.
+ * Atualiza a barra de vida de acordo com a vida atual.
+ * 
+ */
 void Heroi::RecuperarVida() {
     vida += 10;
     if(vida > 100){
@@ -124,18 +184,40 @@ void Heroi::RecuperarVida() {
     barraSprite.setTextureRect(barrasVida[barraIndex]);
 }
 
+/**
+ * @brief Retorna um número aleatório de projeteis 
+ * 
+ * @return int Número aleatório de projeteis entre 0 e 10
+ */
 int Heroi::getRandomQuantidadeProjetil() {
     int quantidade = rand() % 10;
     return quantidade;
 }
 
+/**
+ * @brief Recupera a quantidade de projeteis
+ * 
+ * Recupera uma quantidade aleatória de projeteis com base no método getRandomQuantidadeProjetil().
+ * Atualiza a quantidade de projeteis no texto.
+ * 
+ */
 void Heroi::RecuperarMunicao() {
     quantidadeProjetil += getRandomQuantidadeProjetil();
     textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
 }
 
 
-//Verifica colisão com um sprite
+/**
+ * @brief Verifica colisão com um sprite
+ * 
+ * Verifica se houve colisão com um sprite passado como parâmetro.
+ * Se houver colisão, decrementa a vida do herói em 10.
+ * Atualiza a barra de vida de acordo com a vida atual.
+ * 
+ * @param sprite Sprite a ser verificado a colisão
+ * @return true Se houve colisão
+ * @return false Se não houve colisão
+ */
 bool Heroi::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
         vida -= 10;
@@ -152,25 +234,41 @@ bool Heroi::verificarColisao(const Sprite& sprite) {
     return false;
 }
 
-
+/**
+ * @brief Verifica colisão com um drop
+ * 
+ * Verifica se houve colisão com um drop passado como parâmetro.
+ * 
+ * @param sprite Sprite a ser verificado a colisão
+ * @return true Se houve colisão
+ * @return false Se não houve colisão
+ */
 bool Heroi::verificarColisaoDrop(const Sprite& sprite) {
-    if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
-        int totalBarras = barrasVida.size();
-        barraIndex = ((100 - vida) * (totalBarras - 1)) / 100;
-        barraSprite.setTextureRect(barrasVida[barraIndex]); 
-        relogio.restart(); 
+    if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {    
         return true;  
     }
     return false;
 }
 
 
-
+/**
+ * @brief Retorna o vetor de projeteis
+ * 
+ * @return vector<Projetil>& Vetor de projeteis
+ */
 vector<Projetil>& Heroi::getProjeteis() {
     return projeteis;
 }
 
-//Renderiza o herói
+/**
+ * @brief Renderiza o herói
+ * 
+ * Renderiza o herói na janela passada como parâmetro.
+ * Renderiza os projeteis na janela.
+ * Renderiza o texto de vida e a barra de vida.
+ * 
+ * @param window Janela onde o herói será renderizado
+ */
 void Heroi::renderizar(RenderWindow& window) {
     window.draw(backgroundSprite_heroi);
     for (auto& projetil : projeteis) {
