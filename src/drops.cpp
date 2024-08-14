@@ -7,7 +7,17 @@ using namespace std;
 using namespace sf;
 
 
-//Construtor
+/**
+ * @brief Construtor da classe Drop
+ * 
+ * Este construtor inicializa o drop com uma certa posição, um sprite e um tipo.
+ * Inicializa também a textura do sprite e verifica se a textura foi carregada.
+ * 
+ * @param dropSprite sprite do drop
+ * @param posicao posição do drop
+ * @param heroi herói do jogo
+ * @param tipo tipo do drop
+ */
 Drop::Drop(const Sprite& dropSprite, const Vector2f& posicao, Heroi *heroi, int tipo) : textureLoaded(false), posicao(posicao) {
     
     backgroundSprite_drop = dropSprite;
@@ -16,13 +26,22 @@ Drop::Drop(const Sprite& dropSprite, const Vector2f& posicao, Heroi *heroi, int 
     tipoDrop = tipo;
 }
 
-int Drop::getRandomTipoDrop(){
-    return rand() % 2;
-}
-
+/**
+ * @brief Retorna o tipo do drop
+ * 
+ * @return int 
+ */
 int Drop::getTipo() const {
     return tipoDrop;
 }
+
+/**
+ * @brief Verifica se houve colisão com o drop
+ * 
+ * @param sprite sprite a ser verificado a colisão
+ * @return true se houve colisão
+ * @return false se não houve colisão
+ */
 bool Drop::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_drop.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
        
@@ -31,20 +50,38 @@ bool Drop::verificarColisao(const Sprite& sprite) {
     return false;
 }
 
-
+/**
+ * @brief Retorna a posição do drop
+ * 
+ * @return Vector2f: posição do drop
+ */
 Vector2f Drop::getPosicao() const {
     return backgroundSprite_drop.getPosition();
 }
 
+/**
+ * @brief Retorna o sprite do drop
+ * 
+ * @return Sprite: sprite do drop
+ */
 Sprite Drop::getSprite() const {
     return backgroundSprite_drop;
 }
 
+/**
+ * @brief Define a posição do drop
+ * 
+ * @param posicao posição do drop
+ */
 void Drop::setPosicao(const Vector2f& posicao) {
     backgroundSprite_drop.setPosition(posicao);
 }
 
-
+/**
+ * @brief Renderiza o drop
+ * 
+ * @param window janela onde o drop será renderizado
+ */
 void Drop::renderizar(RenderWindow& window) {
     window.draw(backgroundSprite_drop);
 }

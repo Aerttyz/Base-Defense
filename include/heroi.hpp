@@ -17,8 +17,8 @@ class Heroi {
         virtual void mover();
         void atirar(const Vector2f& direcao);
         void atualizarProjeteis(float deltaTime);
-        void setVida(int novaVida);
         int getVida();
+        void setVida(int novaVida);
         virtual void RecuperarVida();
         void RecuperarMunicao();
         void TomarDano();

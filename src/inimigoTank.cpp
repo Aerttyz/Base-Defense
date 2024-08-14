@@ -6,6 +6,15 @@
 using namespace std;
 using namespace sf;
 
+/**
+ * @brief Construtor da classe InimigoTank que herda de Inimigo
+ * 
+ *  
+ * Este construtor herda de Inimigo e inicializa o tanque inimigo com uma certa quantidade de vida, uma imagem.
+ * 
+ * @param inimigoTankFile Arquivo de imagem do inimigoTank
+ * 
+ */
 InimigoTank::InimigoTank(const string& inimigoTankFile) : Inimigo(inimigoTankFile) {
     this->velocidade = 20.0f;
 
@@ -16,10 +25,19 @@ InimigoTank::InimigoTank(const string& inimigoTankFile) : Inimigo(inimigoTankFil
     }
 }
 
+/**
+ * @brief Retorna a vida do tank inimigo
+ * 
+ * @return int 
+ */
 int InimigoTank::getVidaInimigo(){
     return vidaInimigo;
 }
 
+/**
+ * @brief Diminui a vida do tank inimigo
+ * 
+ */
 void InimigoTank::tomarDano(){
     vidaInimigo--;
 }

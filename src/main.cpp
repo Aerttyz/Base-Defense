@@ -8,8 +8,9 @@ using namespace sf;
 using namespace std;
 
 int main() {
-    //Cria janela de 800x600 pixels e limita o fps em 60
+    
     RenderWindow window(VideoMode(800, 600), "Base-Defense");
+    //Ajusta a taxa de atualização da janela
     window.setFramerateLimit(60);
     
 
