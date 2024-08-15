@@ -22,12 +22,12 @@ using namespace std;
  * 
  * @param backgroundFile O caminho para o arquivo de imagem do fundo da tela.
  * @param backgroundMenuFile O caminho para o arquivo de imagem do fundo do menu.
- * @param musicFile O caminho para o arquivo de música de fundo.
+ * @param musicaTemaFile O caminho para o arquivo de música de fundo.
  * @param heroi Ponteiro para o objeto do tipo Heroi, representando o herói no jogo.
  * @param base Ponteiro para o objeto do tipo Base, representando a base no jogo.
  * @param windowSize Tamanho da janela do jogo (largura e altura).
  */
-gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
+gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicaTemaFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
 : heroi(heroi), base(base), estado(Estado::MENU), spawnInimigo(seconds(0.2f)), intervaloDisparo(seconds(1)), waveInimigo(seconds(5)) {
 
     if(!background.loadFromFile(backgroundFile)) {
@@ -51,12 +51,16 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     if(!texturaDrop2.loadFromFile("assets/images/background/flare_1.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
-    if(!music.openFromFile(musicFile)) {
+    if(!musicaTema.openFromFile(musicaTemaFile)) {
         cout << "Erro ao carregar música" << endl;
     }else {
-        music.setLoop(true);
-        music.play();
+        musicaTema.setLoop(true);
+        musicaTema.play();
     }
+    if(!musicaGameOver.openFromFile("assets/music/game_over.ogg")) {
+        cout << "Erro ao carregar música de game over" << endl;
+    }
+
     
     spriteDrop.setTexture(texturaDrop);
     spriteDrop1.setTexture(texturaDrop1);
@@ -148,7 +152,7 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
     Event event;
     while (window.pollEvent(event)) {
         if (event.type == Event::Closed) {
-            music.stop();
+            musicaTema.stop();
             window.close();
         }
         if (estado == Estado::MENU) {
@@ -219,6 +223,24 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
                     botoesDificuldade[i].setFillColor(Color::White);
                 }
             }
+        }else if(estado == Estado::GAMEOVER){
+            if(event.type == Event::KeyPressed && event.key.code == Keyboard::Enter) {
+                estado = Estado::MENU;
+                heroi->setVida(100);
+                inimigos.clear();
+                runners.clear();
+                tanks.clear();
+                projeteisInimigos.clear();
+                drops.clear();
+                projeteis.clear();
+                regenerarVidaBase = false;
+                upLimite = 0;
+                base->setVidaBase(100);
+                Kills = 0;
+                setKills();
+                musicaGameOver.stop();
+                musicaTema.play();
+            }
         }
     }
 }
@@ -242,7 +264,20 @@ void gerenciamentoTela::setKills(){
  */
 void gerenciamentoTela::setFimDeJogo(){
     if((heroi->getVida() <= 0) || (base->getVidaBase() <= 0 || spawRelogio.getElapsedTime() > seconds(60))){
+        if(estado == Estado::COOP){
+            if(tank){
+                tank->setVida(300);
+            }
+        }
         estado = Estado::GAMEOVER;
+        
+        if (musicaTema.getStatus() == Music::Playing) {
+                musicaTema.stop();
+            }
+
+        if (musicaGameOver.getStatus() != Music::Playing) {
+            musicaGameOver.play();
+        }
     }
 }
 
@@ -389,8 +424,8 @@ bool gerenciamentoTela::atualizarDrops(RenderWindow& window){
  * - Os inimigos são spawnados de forma aleatória com base em uma chance definida e em um tempo específico.
  */
 void gerenciamentoTela::atualizar(RenderWindow& window) {
-      /* setFimDeJogo();  
-     */
+    setFimDeJogo();  
+    
 
     if (estado == Estado::JOGO || estado == Estado::COOP) {
         float deltaTime = relogio.restart().asSeconds();
@@ -743,8 +778,8 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
  */
 void gerenciamentoTela::waveInimigos(){
     waveInimigo -= seconds(0.2);
-    if(waveInimigo <= seconds(1)){
-        waveInimigo = seconds(1);
+    if(waveInimigo <= seconds(0.5)){
+        waveInimigo = seconds(0.5);
     }
 }
 
@@ -877,12 +912,12 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         renderizarProjeteisInimigos(window);
         atualizarDrop(window);
     }else if(estado == Estado::GAMEOVER) {
-        CircleShape shape(100);
-        shape.setFillColor(Color::Red);
-        shape.setOrigin(shape.getRadius(), shape.getRadius());
-        shape.setPosition(window.getSize().x / 2.0f, window.getSize().y / 2.0f);
-        window.draw(shape);
         window.draw(backgroundSprite_menu);
+        Text textoGameOver("GAME OVER", font, 50);
+        textoGameOver.setFillColor(Color::Red);
+        textoGameOver.setOrigin(textoGameOver.getLocalBounds().width / 2, textoGameOver.getLocalBounds().height / 2);
+        textoGameOver.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+        window.draw(textoGameOver);
     }else if(estado == Estado::COOP){
         tank->renderizar(window);
     }

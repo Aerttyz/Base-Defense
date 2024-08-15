@@ -18,7 +18,7 @@ using namespace std;
 
 class gerenciamentoTela {
     public:
-        gerenciamentoTela(const string& backgroundFile,const string& backgroundMenuFile, const string& musicFile, Heroi *heroi, Base *base, const Vector2f& windowSize);  
+        gerenciamentoTela(const string& backgroundFile,const string& backgroundMenuFile, const string& musicaTemaFile, Heroi *heroi, Base *base, const Vector2f& windowSize);  
         void eventos(RenderWindow& window);
         void renderizar(RenderWindow& window);
         void atualizar(RenderWindow& window);
@@ -39,7 +39,7 @@ class gerenciamentoTela {
         void setKills();
 
         void waveInimigos();
-        
+
     private:
         Texture background;
         Texture background_menu;
@@ -47,7 +47,8 @@ class gerenciamentoTela {
         Sprite backgroundSprite;
         Sprite backgroundSprite_menu;
         Text textoMenu;
-        Music music;
+        Music musicaTema;
+        Music musicaGameOver;
         Heroi *heroi;
         Base *base;
         Tank *tank;
@@ -70,7 +71,7 @@ class gerenciamentoTela {
         Time waveInimigo;
         const Time SPAWN_FACIL = seconds(3);  
         const Time SPAWN_NORMAL = seconds(2); 
-        const Time SPAWN_DIFICIL = seconds(1);  
+        const Time SPAWN_DIFICIL = seconds(0.5);  
         Clock waveRelogio;
         Clock relogio;
         enum class Estado {MENU, DIFICULDADE, JOGO, COOP, GAMEOVER, PAUSE};
