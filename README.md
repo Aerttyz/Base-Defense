@@ -1,4 +1,4 @@
-# Base-Defense
+# Base-Defense :space_invader: :space_invader:
 
 ## Projeto de um jogo desenvolvido em C++/SFML da disciplina de Linguagem de Programação
 O jogo consiste em um soldado que tem a missão de defender sua base em um mapa 2D. Inimigos surgem de forma aleatória e avançam em direção a base, disparando projéteis enquanto tentam dominar o campo de batalha.
@@ -12,8 +12,8 @@ O jogo consiste em um soldado que tem a missão de defender sua base em um mapa 
 
 ## Funcionalidades
 
-- Modos de jogo Single e COOP
-- Tank com recuperação de vida para Base (COOP)
+- Modos de jogo Single Player e COOP
+- Tank com habilidade de recuperação de vida para Base (COOP)
 - Diferentes Niveis de Dificuldade
 - Dificuldade escalável
 - Diferentes tipos de Inimigos
@@ -30,6 +30,9 @@ O jogo consiste em um soldado que tem a missão de defender sua base em um mapa 
 
 **Designe:** [Pixelart](https://Pixelart.com) e Photoshop
 
+## Gameplay de exibição:
+
+[**Base-Defense Preview**](/)
 
 ## Instalação
 
@@ -48,4 +51,17 @@ Em seguida, instale o pacote `build-essential` que inclui o compilador `g++` e o
 Por fim, instale a biblioteca SFML (Simple and Fast Multimedia Library) para execução do jogo:
 ```bash
   sudo apt-get install libsfml-dev
+```
+
+**Compilação e execução do Jogo:**
+
+O projeto é compilado com ajuda de um ```makefile``` então para compilar apenas:
+
+```bash 
+make
+```
+
+Para execução siga o comando e divirta-se:
+```bash
+./base-defense
 ```
