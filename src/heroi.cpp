@@ -16,7 +16,7 @@ using namespace sf;
  * @param font Fonte do texto
  * 
  */
-Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(300.0f), quantidadeProjetil(1000) ,vida(vida), dps(seconds(0.5f)) {
+Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : vida(vida) {
     if(!background_heroi.loadFromFile(heroiFile)) {
         cout << "Erro ao carregar imagem do herói" << endl;
     }
@@ -45,7 +45,7 @@ Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : velocidade(3
     }else {
         bulletSong.setBuffer(bufferBulletSong);
     }
-    if(!barraVida.loadFromFile("assets/images/background/rad-rainbow-lifebar.png")) {
+    if(!barraVida.loadFromFile("assets/images/background/lifebar.png")) {
         cout << "Erro ao carregar barra de vida" << endl;
     }
     barraSprite.setTexture(barraVida);
@@ -160,7 +160,8 @@ int Heroi::getVida() {
  */
 void Heroi::setVida(int novaVida) {
     vida = novaVida;
-    textoVida.setString("Heroi: " + to_string(vida));
+    barraSprite.setTextureRect(barrasVida[1]);
+    
 }
 
 
@@ -191,9 +192,10 @@ void Heroi::RecuperarVida() {
     if(vida > 100){
         vida = 100;
     }
-    int totalBarras = barrasVida.size();
-    barraIndex = ((100 - vida) * (totalBarras - 1)) / 100;
-    barraSprite.setTextureRect(barrasVida[barraIndex]);
+    int index = (100 - vida) / 10;
+    if (index > 0 && index < 10) {
+        barraSprite.setTextureRect(barrasVida[index]);
+    }
 }
 
 /**
@@ -218,6 +220,10 @@ void Heroi::RecuperarMunicao() {
     textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
 }
 
+void Heroi::setMunicao() {
+    quantidadeProjetil = 100;
+    textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
+}
 
 /**
  * @brief Verifica colisão com um sprite
@@ -233,14 +239,42 @@ void Heroi::RecuperarMunicao() {
 bool Heroi::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_heroi.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
         vida -= 10;
-        
         if(vida < 0 ){
             vida = 0;
             
         }
-        int totalBarras = barrasVida.size();
-        barraIndex = ((100 - vida) * (totalBarras - 1)) / 100;
-        barraSprite.setTextureRect(barrasVida[barraIndex]);
+        switch (vida)
+        {
+            case 90:
+                barraSprite.setTextureRect(barrasVida[1]);
+                break;
+            case 80:
+                barraSprite.setTextureRect(barrasVida[2]);
+                break;
+            case 70:
+                barraSprite.setTextureRect(barrasVida[3]);
+                break;
+            case 60:
+                barraSprite.setTextureRect(barrasVida[4]);
+                break;
+            case 50:
+                barraSprite.setTextureRect(barrasVida[5]);
+                break;
+            case 40:
+                barraSprite.setTextureRect(barrasVida[6]);
+                break;
+            case 30:
+                barraSprite.setTextureRect(barrasVida[7]);
+                break;
+            case 20:
+                barraSprite.setTextureRect(barrasVida[8]);
+                break;
+            case 10:
+                barraSprite.setTextureRect(barrasVida[9]);
+                break;
+            default:
+                break;
+        }
         return true;      
     }
     return false;

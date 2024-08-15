@@ -28,7 +28,7 @@ using namespace std;
  * @param windowSize Tamanho da janela do jogo (largura e altura).
  */
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicaTemaFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
-: heroi(heroi), base(base), estado(Estado::MENU), spawnInimigo(seconds(0.2f)), intervaloDisparo(seconds(1)), waveInimigo(seconds(5)) {
+: heroi(heroi), base(base), estado(Estado::MENU), spawnInimigo(seconds(0.2f)), intervaloDisparo(seconds(1)), waveInimigo(seconds(3)) {
 
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
@@ -106,8 +106,6 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
         botao.setPosition(windowSize.x / 1.3f, (windowSize.y / 8.0f) + i * 50);
         botoesMenu.push_back(botao);
     }
-
-   
     vector<string> opcoesDificuldade = {"Facil", "Normal", "Dificil"};
     for (size_t i = 0; i < opcoesDificuldade.size(); ++i) {
         Text botaoDificuldade;
@@ -165,7 +163,7 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
                             estado = Estado::JOGO;  
                         } else if (i == 1) {
                             estado = Estado::COOP;  
-                            tank = new Tank(300, "assets/images/characters/TankSup.png", font, heroi, base);
+                            tank = new Tank(100, "assets/images/characters/TankSup.png", font, heroi, base);
                         } else if (i == 2) {
                             estado = Estado::DIFICULDADE;
                         }
@@ -226,23 +224,29 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
         }else if(estado == Estado::GAMEOVER){
             if(event.type == Event::KeyPressed && event.key.code == Keyboard::Enter) {
                 estado = Estado::MENU;
-                heroi->setVida(100);
-                inimigos.clear();
-                runners.clear();
-                tanks.clear();
-                projeteisInimigos.clear();
-                drops.clear();
-                projeteis.clear();
-                regenerarVidaBase = false;
-                upLimite = 0;
-                base->setVidaBase(100);
-                Kills = 0;
-                setKills();
+                resetarJogo();
                 musicaGameOver.stop();
                 musicaTema.play();
             }
         }
     }
+}
+
+void gerenciamentoTela::resetarJogo(){
+    heroi->setVida(100);
+    heroi->setMunicao();
+    heroi->getSprite().setPosition(400, 300);
+    inimigos.clear();
+    runners.clear();
+    tanks.clear();
+    projeteisInimigos.clear();
+    drops.clear();
+    projeteis.clear();
+    regenerarVidaBase = false;
+    upLimite = 0;
+    base->setVidaBase(100);
+    Kills = 0;
+    setKills();
 }
 
 /**
@@ -266,7 +270,8 @@ void gerenciamentoTela::setFimDeJogo(){
     if((heroi->getVida() <= 0) || (base->getVidaBase() <= 0 || spawRelogio.getElapsedTime() > seconds(60))){
         if(estado == Estado::COOP){
             if(tank){
-                tank->setVida(300);
+                tank->setVida(100);
+                tank->getSprite().setPosition(350, 300);
             }
         }
         estado = Estado::GAMEOVER;
@@ -279,6 +284,20 @@ void gerenciamentoTela::setFimDeJogo(){
             musicaGameOver.play();
         }
     }
+    if(estado == Estado::COOP && tank && tank->getVida() <= 0){
+        estado = Estado::GAMEOVER;
+        tank->setVida(100);
+        tank->getSprite().setPosition(350, 300);
+        if (musicaTema.getStatus() == Music::Playing) {
+                musicaTema.stop();
+            }
+
+        if (musicaGameOver.getStatus() != Music::Playing) {
+            musicaGameOver.play();
+        }
+    }
+
+    
 }
 
 /**
@@ -728,7 +747,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         }
                     }
                 }        
-                if(getRandomInimigo() == 10){
+                if(getRandomInimigo() == 1){
                     Runner* runner = new Runner("assets/images/characters/alien_1.png");
                     if(runner->isTextureLoaded()){
                         runner->setPosicao(posicao);
@@ -738,7 +757,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         delete runner;
                     }
                     spawRelogio.restart();
-                }else if(0 == 0){
+                }else if(getRandomInimigo() == 0){
                     Inimigo* inimigo = new Inimigo("assets/images/characters/enemy.png");
                     if (inimigo->isTextureLoaded()) {
                         inimigo->setPosicao(posicao);
@@ -749,7 +768,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                         delete inimigo;
                     }
                     spawRelogio.restart();
-                }else if(getRandomInimigo() == 20){
+                }else if(getRandomInimigo() == 2){
                     InimigoTank* inimigoTank = new InimigoTank("assets/images/characters/pixel-tank.png");
                     if (inimigoTank->isTextureLoaded()) {
                         inimigoTank->setPosicao(posicao);
@@ -778,8 +797,8 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
  */
 void gerenciamentoTela::waveInimigos(){
     waveInimigo -= seconds(0.2);
-    if(waveInimigo <= seconds(0.5)){
-        waveInimigo = seconds(0.5);
+    if(waveInimigo <= seconds(1)){
+        waveInimigo = seconds(1);
     }
 }
 

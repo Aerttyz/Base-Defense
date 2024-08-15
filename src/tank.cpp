@@ -32,6 +32,9 @@ Tank::Tank(int vida, const string& tankFile, const Font& font, Heroi *heroi, Bas
     textoVidaTank.setFillColor(Color::White);
     textoVidaTank.setString("Tank");
 
+    barraSprite.setTexture(barraVida);
+    barraSprite.setTextureRect(barra1);
+
 }
 
 /**
@@ -53,11 +56,14 @@ Sprite Tank::getSprite() const {
  * 
  */
 void Tank::RecuperarVida() {
-    vida += 30;  
-    if (vida > 300) {  
-        vida = 300;
+    vida += 20;  
+    if (vida > 100) {  
+        vida = 100;
     }
-    textoVida.setString("Tank: ");
+    int index = (100 - vida) / 10;
+    if (index > 0 && index < 10) {
+        barraSprite.setTextureRect(barrasVida[index]);
+    }
 }
 
 /**
@@ -84,15 +90,12 @@ void Tank::trocarMunicaoPorVidaBase() {
  */
 bool Tank::verificarColisao(const Sprite& sprite) {
     if (backgroundSprite_tank.getGlobalBounds().intersects(sprite.getGlobalBounds())) {
-            vida -= 10;
+            vida -= 5;
            
-            if(vida < 0 ){
-                vida = 0;
-                
+            int index = (100 - vida) / 10;
+            if (index > 0 && index < 10) {
+                barraSprite.setTextureRect(barrasVida[index]);
             }
-            int totalBarras = barrasVida.size();
-            barraIndex = ((300 - vida) * (totalBarras - 1)) / 300;
-            barraSprite.setTextureRect(barrasVida[barraIndex]);
             return true;  
         
     }
@@ -151,6 +154,6 @@ void Tank::renderizar(RenderWindow& window) {
     FloatRect textRect = textoVidaTank.getLocalBounds();
     textoVidaTank.setPosition(window.getSize().x - textRect.width - 20, 20);
     window.draw(textoVidaTank);
-    barraSprite.setPosition(window.getSize().x - textRect.width - 20, 50);
+    barraSprite.setPosition(window.getSize().x - textRect.width - 236, 50);
     window.draw(barraSprite);
 }

@@ -40,6 +40,8 @@ class gerenciamentoTela {
 
         void waveInimigos();
 
+        void resetarJogo();
+
     private:
         Texture background;
         Texture background_menu;
@@ -71,7 +73,7 @@ class gerenciamentoTela {
         Time waveInimigo;
         const Time SPAWN_FACIL = seconds(3);  
         const Time SPAWN_NORMAL = seconds(2); 
-        const Time SPAWN_DIFICIL = seconds(0.5);  
+        const Time SPAWN_DIFICIL = seconds(1.5);  
         Clock waveRelogio;
         Clock relogio;
         enum class Estado {MENU, DIFICULDADE, JOGO, COOP, GAMEOVER, PAUSE};
