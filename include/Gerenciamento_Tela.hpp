@@ -21,7 +21,7 @@ class gerenciamentoTela {
         gerenciamentoTela(const string& backgroundFile,const string& backgroundMenuFile, const string& musicaTemaFile, Heroi *heroi, Base *base, const Vector2f& windowSize);  
         void iniciarArquivos(const string& backgroundFile, const string& backgroundMenuFile,const string& musicaTemaFile);
         void setaArquivos(const Vector2f& windowSize);
-        void eventos(RenderWindow& window);
+        void eventos(RenderWindow& window, const Vector2f& windowSize);
         void renderizar(RenderWindow& window);
         void atualizar(RenderWindow& window);
         void setBackgroundScale(RenderWindow& window, Sprite& sprite);
@@ -42,7 +42,7 @@ class gerenciamentoTela {
 
         void waveInimigos();
 
-        void resetarJogo();
+        void resetarJogo(const Vector2f& windowSize);
 
     private:
         Texture background;
@@ -72,6 +72,7 @@ class gerenciamentoTela {
 
         
         Font font;
+        Font fontGame;
         Clock spawRelogio;
         const Time SPAWN_FACIL = seconds(3);  
         const Time SPAWN_NORMAL = seconds(2); 

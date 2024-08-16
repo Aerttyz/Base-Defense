@@ -35,7 +35,7 @@ int main() {
     //Loop principal
     while (window.isOpen()) {
             
-            gerenciamentoTela.eventos(window);
+            gerenciamentoTela.eventos(window, Vector2f(window.getSize()));
             
             gerenciamentoTela.atualizar(window);
             

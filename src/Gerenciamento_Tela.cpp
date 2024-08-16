@@ -52,6 +52,9 @@ void gerenciamentoTela::iniciarArquivos(const string& backgroundFile, const stri
     if(!font.loadFromFile("assets/fonts/DotGothic16-Regular.ttf")) {
         cout << "Erro ao carregar fonte" << endl;
     }
+    if(!fontGame.loadFromFile("assets/fonts/LilitaOne-Regular.ttf")) {
+        cout << "Erro ao carregar fonte" << endl;
+    }
     if(!background_menu.loadFromFile(backgroundMenuFile)) {
         cout << "Erro ao carregar imagem de fundo do menu" << endl;
     }
@@ -104,13 +107,13 @@ void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
     spawRelogio.restart();
 
     
-    textoKills.setFont(font);
+    textoKills.setFont(fontGame);
     textoKills.setCharacterSize(20);
     textoKills.setFillColor(Color::White);
-    textoKills.setString("kills:" + to_string(Kills));
+    textoKills.setString("ABATES:" + to_string(Kills));
     FloatRect textRectKill = textoKills.getLocalBounds();
     textoKills.setOrigin(textRectKill.left + textRectKill.width/2.0f, textRectKill.top  + textRectKill.height/2.0f);
-    textoKills.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
+    textoKills.setPosition(windowSize.x / 2.0f, 20);
 
     vector<string> opcoes = {"Solo", "Dupla", "Dificuldade"};
     for (size_t i = 0; i < opcoes.size(); ++i) {
@@ -164,7 +167,7 @@ void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
  * - No estado `DIFICULDADE`, a função verifica a posição do mouse sobre os botões de dificuldade e altera
  *   a dificuldade do jogo com base no botão clicado. Após selecionar a dificuldade, retorna ao estado `MENU`.
  */
-void gerenciamentoTela::eventos(RenderWindow& window) {
+void gerenciamentoTela::eventos(RenderWindow& window, const Vector2f& windowSize) {
     Event event;
     while (window.pollEvent(event)) {
         if (event.type == Event::Closed) {
@@ -183,7 +186,7 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
                         } else if (i == 1) {
                             escolhaMenu.play();
                             estado = Estado::COOP;  
-                            tank = new Tank(100, "assets/images/characters/TankSup.png", font, heroi, base);
+                            tank = new Tank(100, "assets/images/characters/TankSup.png", fontGame, heroi, base);
                         } else if (i == 2) {
                             escolhaMenu.play();
                             estado = Estado::DIFICULDADE;
@@ -248,7 +251,7 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
         }else if(estado == Estado::GAMEOVER){
             if(event.type == Event::KeyPressed && event.key.code == Keyboard::Enter) {
                 estado = Estado::MENU;
-                resetarJogo();
+                resetarJogo(windowSize);
                 musicaGameOver.stop();
                 musicaTema.play();
             }
@@ -262,7 +265,7 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
  * Esta função reseta os valores do jogo para o estado inicial, zerando a vida do herói, a vida da base, a quantidade de inimigos
  * 
  */
-void gerenciamentoTela::resetarJogo(){
+void gerenciamentoTela::resetarJogo(const Vector2f& windowSize){
     heroi->setVida(100);
     heroi->setMunicao();
     heroi->getSprite().setPosition(400, 300);
@@ -277,6 +280,10 @@ void gerenciamentoTela::resetarJogo(){
     base->setVidaBase(100);
     Kills = 0;
     setKills();
+    textoKills.setPosition(windowSize.x / 2.0f, 20);
+    textoKills.setFillColor(Color::White);
+    textoKills.setCharacterSize(20);
+    
 }
 
 /**
