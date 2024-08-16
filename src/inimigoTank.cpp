@@ -17,7 +17,7 @@ using namespace sf;
  */
 InimigoTank::InimigoTank(const string& inimigoTankFile) : Inimigo(inimigoTankFile) {
     this->velocidade = 20.0f;
-    this->intervaloDisparo = seconds(3);
+    this->intervaloDisparo = seconds(5);
     if(!background_inimigoTank.loadFromFile(inimigoTankFile)){
         cout << "Erro ao carregar a textura do Runner" << endl;
     }else{

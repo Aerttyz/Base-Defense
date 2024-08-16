@@ -679,6 +679,11 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                 for (auto runnerIt = runners.begin(); runnerIt != runners.end();) {
                     if ((*runnerIt)->verificarColisao((it)->getSprite())) {
                         cout << "Runner atingido" << endl;                       
+                        if(getRandomChanceDrop() == 1){
+                            Drop drop(spriteDrop, (*runnerIt)->getPosicao(), heroi, 1);
+                            drop.setPosicao((*runnerIt)->getPosicao());
+                            drops.push_back(drop);                          
+                        }
                         runnerIt = runners.erase(runnerIt);                       
                         it = projeteis.erase(it);
                         Kills++;
@@ -699,12 +704,6 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                             Drop drop(spriteDrop1, (*inimigoIt)->getPosicao(), heroi, 0);
                             drop.setPosicao((*inimigoIt)->getPosicao());
                             drops.push_back(drop);                          
-                        }else if(getRandomChanceDrop() == 2){
-                            if(upLimite < 2){
-                                Drop drop(spriteDrop2, (*inimigoIt)->getPosicao(), heroi, 2);
-                                drop.setPosicao((*inimigoIt)->getPosicao());
-                                drops.push_back(drop);
-                            }
                         }
                         inimigoIt = inimigos.erase(inimigoIt);
                         it = projeteis.erase(it);

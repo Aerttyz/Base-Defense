@@ -48,7 +48,7 @@ class Inimigo{
         Sprite backgroundSprite_projetil;
     protected:
         float velocidade;   
-        Time intervaloDisparo = seconds(1); 
+        Time intervaloDisparo = seconds(3); 
         
 
 };

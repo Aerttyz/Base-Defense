@@ -52,7 +52,7 @@ class Heroi {
         Sprite backgroundSprite_projetil;
         Texture background_projetil;
 
-        int quantidadeProjetil = 100;
+        int quantidadeProjetil = 30;
         Text textoMunicao;
     protected:
         int vida;
