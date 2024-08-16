@@ -19,6 +19,8 @@ using namespace std;
 class gerenciamentoTela {
     public:
         gerenciamentoTela(const string& backgroundFile,const string& backgroundMenuFile, const string& musicaTemaFile, Heroi *heroi, Base *base, const Vector2f& windowSize);  
+        void iniciarArquivos(const string& backgroundFile, const string& backgroundMenuFile,const string& musicaTemaFile);
+        void setaArquivos(const Vector2f& windowSize);
         void eventos(RenderWindow& window);
         void renderizar(RenderWindow& window);
         void atualizar(RenderWindow& window);
@@ -69,15 +71,15 @@ class gerenciamentoTela {
         
         Font font;
         Clock spawRelogio;
-        Time spawnInimigo;
-        Time waveInimigo;
         const Time SPAWN_FACIL = seconds(3);  
         const Time SPAWN_NORMAL = seconds(2); 
         const Time SPAWN_DIFICIL = seconds(1);  
+        Time spawnInimigo = seconds(0.2f);
+        Time waveInimigo = SPAWN_FACIL;
         Clock waveRelogio;
         Clock relogio;
         enum class Estado {MENU, DIFICULDADE, JOGO, COOP, GAMEOVER, PAUSE};
-        Estado estado;
+        Estado estado = Estado::MENU;
 
         Time intervaloDisparo;
         string projetilFile;

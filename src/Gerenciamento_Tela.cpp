@@ -28,8 +28,24 @@ using namespace std;
  * @param windowSize Tamanho da janela do jogo (largura e altura).
  */
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicaTemaFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
-: heroi(heroi), base(base), estado(Estado::MENU), spawnInimigo(seconds(0.2f)), intervaloDisparo(seconds(1)), waveInimigo(seconds(3)) {
+: heroi(heroi), base(base){
 
+    iniciarArquivos(backgroundFile, backgroundMenuFile, musicaTemaFile);
+    setaArquivos(windowSize);
+    
+}
+
+/**
+ * @brief Inicializa os arquivos de imagem, fonte e música do jogo.
+ * 
+ * Esta função carrega os arquivos de imagem, fonte e música do jogo, exibindo mensagens de erro caso ocorra algum problema
+ * durante o carregamento dos arquivos.
+ * 
+ * @param backgroundFile O caminho para o arquivo de imagem do fundo da tela.
+ * @param backgroundMenuFile O caminho para o arquivo de imagem do fundo do menu.
+ * @param musicaTemaFile O caminho para o arquivo de música de fundo.
+ */
+void gerenciamentoTela::iniciarArquivos(const string& backgroundFile, const string& backgroundMenuFile,const string& musicaTemaFile){
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
     }
@@ -53,15 +69,24 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     }
     if(!musicaTema.openFromFile(musicaTemaFile)) {
         cout << "Erro ao carregar música" << endl;
-    }else {
-        musicaTema.setLoop(true);
-        musicaTema.play();
     }
     if(!musicaGameOver.openFromFile("assets/music/game_over.ogg")) {
         cout << "Erro ao carregar música de game over" << endl;
     }
+}
 
-    
+/**
+ * @brief Configura os arquivos de imagem, fonte e música do jogo.
+ * 
+ * Esta função configura os arquivos de imagem, fonte e música do jogo, definindo texturas e sprites para o fundo da tela,
+ * o fundo do menu, os botões do menu, a música de fundo e o texto do menu.
+ * 
+ * @param windowSize O tamanho da janela do jogo (largura e altura).
+ */
+void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
+    musicaTema.setLoop(true);
+    musicaTema.play();
+
     spriteDrop.setTexture(texturaDrop);
     spriteDrop1.setTexture(texturaDrop1);
     spriteDrop2.setTexture(texturaDrop2);
@@ -93,7 +118,6 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     textoKills.setOrigin(textRectKill.left + textRectKill.width/2.0f, textRectKill.top  + textRectKill.height/2.0f);
     textoKills.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
 
-    
     vector<string> opcoes = {"Solo", "Dupla", "Dificuldade"};
     for (size_t i = 0; i < opcoes.size(); ++i) {
         Text botao;
