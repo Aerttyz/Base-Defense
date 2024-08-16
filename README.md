@@ -22,7 +22,7 @@ O jogo consiste em um soldado que tem a missão de defender sua base em um mapa 
 
 ## Documentação
 
-[Documentação Base-Defense](https://aerttyz.github.io/Base-Defense/pages.html)
+[Documentação Base-Defense](https://aerttyz.github.io/Base-Defense/annotated.html)
 
 ## Stack utilizada
 
