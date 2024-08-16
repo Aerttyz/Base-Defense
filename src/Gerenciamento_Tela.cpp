@@ -49,7 +49,7 @@ void gerenciamentoTela::iniciarArquivos(const string& backgroundFile, const stri
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
     }
-    if(!font.loadFromFile("assets/fonts/LilitaOne-Regular.ttf")) {
+    if(!font.loadFromFile("assets/fonts/DotGothic16-Regular.ttf")) {
         cout << "Erro ao carregar fonte" << endl;
     }
     if(!background_menu.loadFromFile(backgroundMenuFile)) {
@@ -73,6 +73,9 @@ void gerenciamentoTela::iniciarArquivos(const string& backgroundFile, const stri
     if(!musicaGameOver.openFromFile("assets/music/game_over.ogg")) {
         cout << "Erro ao carregar música de game over" << endl;
     }
+    if(!bufferEscolhaMenu.loadFromFile("assets/music/Menu-Choice.ogg")) {
+        cout << "Erro ao carregar música de escolha do menu" << endl;
+    }
 }
 
 /**
@@ -86,6 +89,7 @@ void gerenciamentoTela::iniciarArquivos(const string& backgroundFile, const stri
 void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
     musicaTema.setLoop(true);
     musicaTema.play();
+    escolhaMenu.setBuffer(bufferEscolhaMenu);
 
     spriteDrop.setTexture(texturaDrop);
     spriteDrop1.setTexture(texturaDrop1);
@@ -97,16 +101,6 @@ void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
     backgroundSprite.setTexture(background);
     backgroundSprite_menu.setTexture(background_menu);
 
-    
-    textoMenu.setFont(font);
-    textoMenu.setCharacterSize(30);
-    textoMenu.setFillColor(Color::White);
-    textoMenu.setString("Pressione Enter para iniciar o jogo");
-    FloatRect textRect = textoMenu.getLocalBounds();
-    textoMenu.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
-    textoMenu.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
-
-    
     spawRelogio.restart();
 
     
@@ -123,11 +117,11 @@ void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
         Text botao;
         botao.setFont(font);
         botao.setString(opcoes[i]);
-        botao.setCharacterSize(30);
+        botao.setCharacterSize(50);
         botao.setFillColor(Color::White); 
         botao.setOrigin(botao.getLocalBounds().width / 2, botao.getLocalBounds().height / 2);
-        
-        botao.setPosition(windowSize.x / 1.3f, (windowSize.y / 8.0f) + i * 50);
+        //setPosition para o meio da tela
+        botao.setPosition((windowSize.x / 2.0f), (windowSize.y / 2.0f) - 100 + i * 100);
         botoesMenu.push_back(botao);
     }
     vector<string> opcoesDificuldade = {"Facil", "Normal", "Dificil"};
@@ -135,10 +129,10 @@ void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
         Text botaoDificuldade;
         botaoDificuldade.setFont(font);
         botaoDificuldade.setString(opcoesDificuldade[i]);
-        botaoDificuldade.setCharacterSize(30);
+        botaoDificuldade.setCharacterSize(50);
         botaoDificuldade.setFillColor(Color::White);
         botaoDificuldade.setOrigin(botaoDificuldade.getLocalBounds().width / 2, botaoDificuldade.getLocalBounds().height / 2);
-        botaoDificuldade.setPosition(windowSize.x / 1.3f, (windowSize.y / 8.0f) + i * 50);
+        botaoDificuldade.setPosition(windowSize.x / 2.0f, (windowSize.y / 2.0f) - 100 + i * 100);
         botoesDificuldade.push_back(botaoDificuldade);
     }
 }
@@ -185,10 +179,13 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
                     if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                         if (i == 0) {
                             estado = Estado::JOGO;  
+                            escolhaMenu.play();
                         } else if (i == 1) {
+                            escolhaMenu.play();
                             estado = Estado::COOP;  
                             tank = new Tank(100, "assets/images/characters/TankSup.png", font, heroi, base);
                         } else if (i == 2) {
+                            escolhaMenu.play();
                             estado = Estado::DIFICULDADE;
                         }
                     }
@@ -232,10 +229,13 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
                     botoesDificuldade[i].setFillColor(Color::Yellow);
                     if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                         if (i == 0) {
+                            escolhaMenu.play();
                             waveInimigo = SPAWN_FACIL;
                         } else if (i == 1) {
+                            escolhaMenu.play();
                             waveInimigo = SPAWN_NORMAL;
                         } else if (i == 2) {
+                            escolhaMenu.play();
                             waveInimigo = SPAWN_DIFICIL;
                         }
                         
@@ -472,10 +472,11 @@ bool gerenciamentoTela::atualizarDrops(RenderWindow& window){
  * - Os inimigos são spawnados de forma aleatória com base em uma chance definida e em um tempo específico.
  */
 void gerenciamentoTela::atualizar(RenderWindow& window) {
-    setFimDeJogo();  
+      
     
 
     if (estado == Estado::JOGO || estado == Estado::COOP) {
+        setFimDeJogo();
         float deltaTime = relogio.restart().asSeconds();
         Time tempoDecorrido = spawRelogio.getElapsedTime();
         if(regenerarVidaBase){

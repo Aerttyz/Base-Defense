@@ -53,6 +53,8 @@ class gerenciamentoTela {
         Text textoMenu;
         Music musicaTema;
         Music musicaGameOver;
+        Sound escolhaMenu;
+        SoundBuffer bufferEscolhaMenu;
         Heroi *heroi;
         Base *base;
         Tank *tank;
@@ -75,7 +77,7 @@ class gerenciamentoTela {
         const Time SPAWN_NORMAL = seconds(2); 
         const Time SPAWN_DIFICIL = seconds(1);  
         Time spawnInimigo = seconds(0.2f);
-        Time waveInimigo = SPAWN_FACIL;
+        Time waveInimigo = SPAWN_NORMAL;
         Clock waveRelogio;
         Clock relogio;
         enum class Estado {MENU, DIFICULDADE, JOGO, COOP, GAMEOVER, PAUSE};
