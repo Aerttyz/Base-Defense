@@ -16,7 +16,7 @@ using namespace sf;
  * @param inimigoFile Arquivo de imagem do inimigo
  * 
  */
-Inimigo::Inimigo(const string& inimigoFile) : textureLoaded(false), velocidade(50.0f), posicao(Vector2f(400, 300)), dps(seconds(1.0f)), intervaloDisparo(seconds(2)) { 
+Inimigo::Inimigo(const string& inimigoFile) : textureLoaded(false), velocidade(50.0f), posicao(Vector2f(400, 300)), dps(seconds(1.0f)) { 
         if (!background_inimigo.loadFromFile(inimigoFile)) {
             cerr << "Erro ao carregar a imagem do inimigo" << endl;
             exit(1);

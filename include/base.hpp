@@ -12,6 +12,7 @@ class Base{
         bool verificarColisao(const Sprite& sprite);
         Sprite getSprite() const;
         void setVidaBase(int novaVidaBase);
+        void tomarDanoTank();
         int getVidaBase();
         void recuperarVida();
         void baseUpRegenerarVida();

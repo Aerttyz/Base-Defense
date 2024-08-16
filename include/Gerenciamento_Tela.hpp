@@ -73,7 +73,7 @@ class gerenciamentoTela {
         Time waveInimigo;
         const Time SPAWN_FACIL = seconds(3);  
         const Time SPAWN_NORMAL = seconds(2); 
-        const Time SPAWN_DIFICIL = seconds(1.5);  
+        const Time SPAWN_DIFICIL = seconds(1);  
         Clock waveRelogio;
         Clock relogio;
         enum class Estado {MENU, DIFICULDADE, JOGO, COOP, GAMEOVER, PAUSE};

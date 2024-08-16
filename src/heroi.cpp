@@ -34,7 +34,7 @@ Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : vida(vida) {
     textoMunicao.setFillColor(Color::White);
     textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
 
-    projetilFile = "assets/images/background/bullet1.png";   
+    projetilFile = "assets/images/background/hero_bullet.png";   
     if(!texturaProjetil.loadFromFile(projetilFile)) {
         cout << "Erro ao carregar textura do projetil" << endl;
     }

@@ -50,6 +50,17 @@ void Base::setVidaBase(int novaVidaBase) {
 }
 
 /**
+ * @brief Diminui a vida da base
+ * 
+ * Diminui a vida da base em 100
+ * 
+ */
+void Base::tomarDanoTank() {
+    vida -= 100;
+    
+}
+
+/**
  * @brief Retorna a vida da base
  * 
  * @return int 

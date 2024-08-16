@@ -17,7 +17,7 @@ using namespace sf;
  * 
  */
 Runner::Runner(const string& runnerFile) : Inimigo(runnerFile) {
-    this->velocidade = 200.0f;
+    this->velocidade = 150.0f;
 
     if(!background_runner.loadFromFile(runnerFile)){
         cout << "Erro ao carregar a textura do Runner" << endl;

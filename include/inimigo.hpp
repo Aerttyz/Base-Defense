@@ -43,11 +43,12 @@ class Inimigo{
         string projetilFile = "assets/images/background/bullet2.png";
 
         vector<Projetil> projeteis; 
-        Time intervaloDisparo;
+        
         Texture texturaProjetil;
         Sprite backgroundSprite_projetil;
     protected:
         float velocidade;   
+        Time intervaloDisparo = seconds(1); 
         
 
 };

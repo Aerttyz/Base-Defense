@@ -42,13 +42,13 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
     if(!texturaProjetil.loadFromFile("assets/images/background/bullet1.png")) {
         cout << "Erro ao carregar textura do projetil" << endl;
     }
-    if(!texturaDrop.loadFromFile("assets/images/background/drop.png")) {
+    if(!texturaDrop.loadFromFile("assets/images/background/energy_bullet.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
-    if(!texturaDrop1.loadFromFile("assets/images/background/Heart.png")) {
+    if(!texturaDrop1.loadFromFile("assets/images/background/drop_life.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
-    if(!texturaDrop2.loadFromFile("assets/images/background/flare_1.png")) {
+    if(!texturaDrop2.loadFromFile("assets/images/background/upgrade.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
     if(!musicaTema.openFromFile(musicaTemaFile)) {
@@ -232,6 +232,12 @@ void gerenciamentoTela::eventos(RenderWindow& window) {
     }
 }
 
+/**
+ * @brief Reseta os valores do jogo para o estado inicial.
+ * 
+ * Esta função reseta os valores do jogo para o estado inicial, zerando a vida do herói, a vida da base, a quantidade de inimigos
+ * 
+ */
 void gerenciamentoTela::resetarJogo(){
     heroi->setVida(100);
     heroi->setMunicao();
@@ -396,7 +402,6 @@ int gerenciamentoTela::getRandomInimigo(){
 float calcularDistancia(const Vector2f& posicao1, const Vector2f& posicao2) {
     return sqrt(pow(posicao1.x - posicao2.x, 2) + pow(posicao1.y - posicao2.y, 2));
 }
-
 
 /**
  * @brief Atualiza os drops e remove os que já passaram do tempo de desaparecer
@@ -720,7 +725,10 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
 
         for (auto it = tanks.begin(); it != tanks.end();) {
             (*it)->mover();
-            base->verificarColisao((*it)->getSprite());
+            if(base->verificarColisao((*it)->getSprite())){
+                base->tomarDanoTank();
+            }
+            
             if (base && (*it)->verificarColisao(base->getSprite())) {
                 it = tanks.erase(it);
             } else {
@@ -748,7 +756,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                     }
                 }        
                 if(getRandomInimigo() == 1){
-                    Runner* runner = new Runner("assets/images/characters/alien_1.png");
+                    Runner* runner = new Runner("assets/images/characters/runner.png");
                     if(runner->isTextureLoaded()){
                         runner->setPosicao(posicao);
                         runners.push_back(runner);
@@ -769,7 +777,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                     }
                     spawRelogio.restart();
                 }else if(getRandomInimigo() == 2){
-                    InimigoTank* inimigoTank = new InimigoTank("assets/images/characters/pixel-tank.png");
+                    InimigoTank* inimigoTank = new InimigoTank("assets/images/characters/enemy_tank.png");
                     if (inimigoTank->isTextureLoaded()) {
                         inimigoTank->setPosicao(posicao);
                         tanks.push_back(inimigoTank);
@@ -796,7 +804,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
  * 
  */
 void gerenciamentoTela::waveInimigos(){
-    waveInimigo -= seconds(0.2);
+    waveInimigo -= seconds(0.1);
     if(waveInimigo <= seconds(1)){
         waveInimigo = seconds(1);
     }
@@ -894,7 +902,7 @@ void gerenciamentoTela::atualizarDrop(RenderWindow& window) {
 void gerenciamentoTela::renderizar(RenderWindow& window) {
     window.clear();
 
-    if(estado == Estado::MENU) { //Botoes menu renderizados
+    if(estado == Estado::MENU) { 
         setBackgroundScale(window, backgroundSprite_menu);
         window.draw(backgroundSprite_menu);
         for (const auto& botao : botoesMenu) {
@@ -937,6 +945,10 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         textoGameOver.setOrigin(textoGameOver.getLocalBounds().width / 2, textoGameOver.getLocalBounds().height / 2);
         textoGameOver.setPosition(window.getSize().x / 2, window.getSize().y / 2);
         window.draw(textoGameOver);
+        textoKills.setPosition(window.getSize().x / 2, window.getSize().y / 2 + 50);
+        textoKills.setFillColor(Color::Red);
+        textoKills.setCharacterSize(30);
+        window.draw(textoKills);
     }else if(estado == Estado::COOP){
         tank->renderizar(window);
     }
