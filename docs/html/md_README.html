@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Base-Defense: Base-Defense :space_invader: :space_invader:</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Base-Defense
+   </div>
+   <div id="projectbrief">Projeto de um jogo desenvolvido em C++/SFML da disciplina de Linguagem de Programação</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Gerado por Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Localizar','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Localizar');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">Base-Defense :space_invader: :space_invader: </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><h1><a class="anchor" id="autotoc_md1"></a>
+Projeto de um jogo desenvolvido em C++/SFML da disciplina de Linguagem de Programação</h1>
+<p>O jogo consiste em um soldado que tem a missão de defender sua base em um mapa 2D. Inimigos surgem de forma aleatória e avançam em direção a base, disparando projéteis enquanto tentam dominar o campo de batalha.</p>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Referência</h1>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=5NH7W2XgdwE">Base Defense - Allegro 5 C++ test game</a></li>
+</ul>
+<h1><a class="anchor" id="autotoc_md3"></a>
+Funcionalidades</h1>
+<ul>
+<li>Modos de jogo Single Player e COOP</li>
+<li><a class="el" href="classTank.html">Tank</a> com habilidade de recuperação de vida para <a class="el" href="classBase.html">Base</a> (COOP)</li>
+<li>Diferentes Niveis de Dificuldade</li>
+<li>Dificuldade escalável</li>
+<li>Diferentes tipos de Inimigos</li>
+<li>Drops inimigos</li>
+<li>Upgrades para base</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md4"></a>
+Documentação</h1>
+<p><a href="https://aerttyz.github.io/Base-Defense/pages.html">Documentação Base-Defense</a></p>
+<h1><a class="anchor" id="autotoc_md5"></a>
+Stack utilizada</h1>
+<p><b>Game Developer:</b> C++/ SFML</p>
+<p><b>Designe:</b> <a href="https://Pixelart.com">Pixelart</a> e Photoshop</p>
+<h1><a class="anchor" id="autotoc_md6"></a>
+Gameplay de exibição:</h1>
+<p><a href="/"><b>Base-Defense Preview</b></a></p>
+<h1><a class="anchor" id="autotoc_md7"></a>
+Instalação</h1>
+<p>Configuração e execução no Linux</p>
+<p><b>Instale as ferramentas essenciais para C++:</b></p>
+<p>Primeiramente, atualize os repositórios de pacotes: </p><div class="fragment"><div class="line">sudo apt update</div>
+</div><!-- fragment --><p> Em seguida, instale o pacote <code>build-essential</code> que inclui o compilador <code>g++</code> e outras ferramentas: </p><div class="fragment"><div class="line">sudo apt install build-essential</div>
+</div><!-- fragment --><p> Por fim, instale a biblioteca SFML (Simple and Fast Multimedia Library) para execução do jogo: </p><div class="fragment"><div class="line">sudo apt-get install libsfml-dev</div>
+</div><!-- fragment --><p><b>Compilação e execução do Jogo:</b></p>
+<p>O projeto é compilado com ajuda de um <code>makefile</code> então para compilar apenas:</p>
+<div class="fragment"><div class="line">make</div>
+</div><!-- fragment --><p>Para execução siga o comando e divirta-se: </p><div class="fragment"><div class="line">./base-defense</div>
+</div><!-- fragment --> </div></div><!-- contents -->
+</div><!-- PageDoc -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Gerado por&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+</small></address>
+</body>
+</html>
