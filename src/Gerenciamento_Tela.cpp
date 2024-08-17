@@ -1,6 +1,7 @@
 #include "../include/Gerenciamento_Tela.hpp"
 #include <iostream>
 #include <cmath>
+#include <fstream>
 #include "../include/heroi.hpp"
 #include "../include/base.hpp"
 #include "../include/projeteis.hpp"
@@ -32,6 +33,7 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
 
     iniciarArquivos(backgroundFile, backgroundMenuFile, musicaTemaFile);
     setaArquivos(windowSize);
+    setarRecordes();
     
 }
 
@@ -79,6 +81,7 @@ void gerenciamentoTela::iniciarArquivos(const string& backgroundFile, const stri
     if(!bufferEscolhaMenu.loadFromFile("assets/music/Menu-Choice.ogg")) {
         cout << "Erro ao carregar música de escolha do menu" << endl;
     }
+    
 }
 
 /**
@@ -90,6 +93,13 @@ void gerenciamentoTela::iniciarArquivos(const string& backgroundFile, const stri
  * @param windowSize O tamanho da janela do jogo (largura e altura).
  */
 void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
+    ifstream arquivo("record.txt");
+    if (!arquivo.is_open()) {
+        cout << "Erro ao abrir o arquivo." << endl;
+    }
+    arquivo >> top1 >> top2 >> top3;
+    arquivo.close();
+    getRecordes();
     musicaTema.setLoop(true);
     musicaTema.play();
     escolhaMenu.setBuffer(bufferEscolhaMenu);
@@ -115,7 +125,7 @@ void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
     textoKills.setOrigin(textRectKill.left + textRectKill.width/2.0f, textRectKill.top  + textRectKill.height/2.0f);
     textoKills.setPosition(windowSize.x / 2.0f, 20);
 
-    vector<string> opcoes = {"Solo", "Dupla", "Dificuldade"};
+    vector<string> opcoes = {"Solo", "Dupla", "Dificuldade", "Recordes"};
     for (size_t i = 0; i < opcoes.size(); ++i) {
         Text botao;
         botao.setFont(font);
@@ -124,7 +134,7 @@ void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
         botao.setFillColor(Color::White); 
         botao.setOrigin(botao.getLocalBounds().width / 2, botao.getLocalBounds().height / 2);
         //setPosition para o meio da tela
-        botao.setPosition((windowSize.x / 2.0f), (windowSize.y / 2.0f) - 100 + i * 100);
+        botao.setPosition((windowSize.x / 2.0f), (windowSize.y / 2.0f) - 150 + i * 100);
         botoesMenu.push_back(botao);
     }
     vector<string> opcoesDificuldade = {"Facil", "Normal", "Dificil"};
@@ -140,6 +150,14 @@ void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
     }
 }
 
+/**
+ * @brief Inicia o texto de game over na tela.
+ * 
+ * Esta função inicia o texto de game over na tela, definindo a fonte, o tamanho, a cor e a posição do texto.
+ * 
+ * @param window 
+ * @param font 
+ */
 void gerenciamentoTela::setarTextoGameOver(RenderWindow& window, const Font& font){
     textoGameOver.setFont(font);
     textoGameOver.setCharacterSize(50);
@@ -202,6 +220,8 @@ void gerenciamentoTela::eventos(RenderWindow& window, const Vector2f& windowSize
                         } else if (i == 2) {
                             escolhaMenu.play();
                             estado = Estado::DIFICULDADE;
+                        }else if(i == 3){
+                            estado = Estado::SCORE;
                         }
                     }
                 } else {
@@ -308,6 +328,49 @@ void gerenciamentoTela::setKills(){
     textoKills.setString("kills:" + to_string(Kills));
 }
 
+void gerenciamentoTela::getRecordes(){
+    ifstream arquivo("record.txt");
+    if (!arquivo.is_open()) {
+        cout << "Erro ao abrir o arquivo." << endl;
+    }
+    arquivo >> top1 >> top2 >> top3;
+    arquivo.close();
+}
+
+void gerenciamentoTela::setarRecordes(){
+    ofstream arquivo("record.txt");
+    if (!arquivo.is_open()) {
+        cout << "Erro ao abrir o arquivo." << endl;
+    }
+    cout << "chegou aqui" << endl;
+    string aux;
+    aux = top1;
+    
+    if(stoi(aux) < Kills){
+        top1 = to_string(Kills);
+    }
+   
+    
+    arquivo << top1 << endl << top2 << endl << top3;
+    arquivo.close();
+    
+    top1Text.setFont(fontGame);
+    top1Text.setCharacterSize(20);
+    top1Text.setFillColor(Color::White);
+    top1Text.setString("1: " + top1);
+    top1Text.setPosition(100, 100);
+    top2Text.setFont(fontGame);
+    top2Text.setCharacterSize(20);
+    top2Text.setFillColor(Color::White);    
+    top2Text.setString("2: " + top2);
+    top2Text.setPosition(100, 150);
+    top3Text.setFont(fontGame);
+    top3Text.setCharacterSize(20);
+    top3Text.setFillColor(Color::White);
+    top3Text.setString("3: " + top3);
+    top3Text.setPosition(100, 200);
+}
+
 /**
  * @brief Gerencia o fim do jogo.
  * 
@@ -317,6 +380,7 @@ void gerenciamentoTela::setKills(){
  */
 void gerenciamentoTela::setFimDeJogo(){
     if((heroi->getVida() <= 0) || (base->getVidaBase() <= 0 || spawRelogio.getElapsedTime() > seconds(60))){
+        setarRecordes();
         if(estado == Estado::COOP){
             if(tank){
                 tank->setVida(100);
@@ -334,6 +398,7 @@ void gerenciamentoTela::setFimDeJogo(){
         }
     }
     if(estado == Estado::COOP && tank && tank->getVida() <= 0){
+        setarRecordes();
         estado = Estado::GAMEOVER;
         tank->setVida(100);
         tank->getSprite().setPosition(350, 300);
@@ -985,12 +1050,26 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         renderizarProjeteisInimigos(window);
         atualizarDrop(window);
     }else if(estado == Estado::GAMEOVER) {
+        setarRecordes();
         setarTextoGameOver(window, font);
         window.draw(backgroundSprite_menu);
         window.draw(textoGameOver);     
         window.draw(textoKills);
     }else if(estado == Estado::COOP){
         tank->renderizar(window);
+    }else if(estado == Estado::SCORE){
+        window.draw(backgroundSprite_menu);
+        window.draw(textoKills);
+        /* Text textoScore;
+        textoScore.setFont(font);
+        textoScore.setString("Score: " + top1);
+        textoScore.setPosition(400, 300);
+        textoScore.setFillColor(Color::White);
+        textoScore.setCharacterSize(50); */
+        
+        window.draw(top1Text);
+        window.draw(top2Text);
+        window.draw(top3Text);
     }
     window.display();
 }

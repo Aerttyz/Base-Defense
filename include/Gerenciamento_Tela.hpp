@@ -9,6 +9,7 @@
 #include "../include/tank.hpp"
 #include "../include/inimigoTank.hpp"
 #include "../include/runner.hpp"
+#include <fstream>
 #include <vector>
 
 using namespace sf;
@@ -44,6 +45,9 @@ class gerenciamentoTela {
 
         void resetarJogo(const Vector2f& windowSize);
         void setarTextoGameOver(RenderWindow& window, const Font& font);
+
+        void setarRecordes();
+        void getRecordes();
 
     private:
         Texture background;
@@ -82,7 +86,7 @@ class gerenciamentoTela {
         Time waveInimigo = SPAWN_NORMAL;
         Clock waveRelogio;
         Clock relogio;
-        enum class Estado {MENU, DIFICULDADE, JOGO, COOP, GAMEOVER, VITORIA};
+        enum class Estado {MENU, DIFICULDADE, JOGO, COOP, GAMEOVER, VITORIA, SCORE};
         Estado estado = Estado::MENU;
 
         Time intervaloDisparo;
@@ -104,7 +108,9 @@ class gerenciamentoTela {
         bool regenerarVidaBase = false;
         bool aumentarVidaBase = false;
         int upLimite = 0;
-              
+
+        string top1, top2, top3;
+        Text top1Text, top2Text, top3Text;
 
 };
 #endif // GERENCIAMENTO_TELA_HPP
