@@ -99,7 +99,6 @@ void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
     }
     arquivo >> top1 >> top2 >> top3;
     arquivo.close();
-    getRecordes();
     musicaTema.setLoop(true);
     musicaTema.play();
     escolhaMenu.setBuffer(bufferEscolhaMenu);
@@ -328,26 +327,36 @@ void gerenciamentoTela::setKills(){
     textoKills.setString("kills:" + to_string(Kills));
 }
 
-void gerenciamentoTela::getRecordes(){
-    ifstream arquivo("record.txt");
-    if (!arquivo.is_open()) {
-        cout << "Erro ao abrir o arquivo." << endl;
-    }
-    arquivo >> top1 >> top2 >> top3;
-    arquivo.close();
-}
-
+/**
+ * @brief Renderiza o texto de recordes na tela.
+ * 
+ * Esta função abre o arquivo de recordes e lê os recordes salvos, exibindo-os na tela assim como também 
+ * atualiza os recordes conforme o progresso do jogador.
+ * 
+ * @param window A janela do jogo onde o texto é renderizado.
+ */
 void gerenciamentoTela::setarRecordes(){
     ofstream arquivo("record.txt");
     if (!arquivo.is_open()) {
         cout << "Erro ao abrir o arquivo." << endl;
     }
-    cout << "chegou aqui" << endl;
-    string aux;
-    aux = top1;
     
-    if(stoi(aux) < Kills){
+    string aux1;
+    aux1 = top1;
+    string aux2;
+    aux2 = top2;
+    string aux3;
+    aux3 = top2;
+    
+    if(stoi(aux1) < Kills){
         top1 = to_string(Kills);
+        top2 = aux1;
+        top3 = aux2;
+    }else if(stoi(aux2 ) < Kills){
+        top2 = to_string(Kills);
+        top3 = aux2;
+    }else if(stoi(aux3) < Kills){
+        top3 = to_string(Kills);
     }
    
     
@@ -738,7 +747,6 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                             tankIt = tanks.erase(tankIt);
                             Kills++;
                             setKills();
-                            if(int chance = rand() % 3 == 0){
                                 if(getRandomChanceDrop() == 2){
                                     if(upLimite < 2){
                                         Drop drop(spriteDrop2, (*tankIt)->getPosicao(), heroi, 2);
@@ -746,7 +754,6 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                                         drops.push_back(drop);
                                     }
                                 }    
-                            }
                         }
                         it = projeteis.erase(it);
                         projetilRemovido = true;
