@@ -13,7 +13,7 @@ class InimigoTank : public Inimigo {
     private:
         Sprite backgroundSprite_inimigoTank;
         Texture background_inimigoTank;
-        int vidaInimigo = 5;
+        int vidaInimigo = 3;
 
 };   
 

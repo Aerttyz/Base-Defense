@@ -166,7 +166,12 @@ void Heroi::setVida(int novaVida) {
 
 
 void Heroi::TomarDano() {
-   //TODO
+   vida -= 100;
+   int index = (100 - vida) / 10;
+    if (index > 0 && index < 10) {
+        barraSprite.setTextureRect(barrasVida[index]);
+    }
+    
 }
 
 /**

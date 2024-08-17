@@ -621,9 +621,11 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
 
         for(auto tankIt = tanks.begin(); tankIt != tanks.end();) {
             if(heroi->verificarColisao((*tankIt)->getSprite())) {
+                heroi->TomarDano();
                 tankIt = tanks.erase(tankIt);
             }else if(estado == Estado::COOP && tank && tank->verificarColisao((*tankIt)->getSprite())){
                 tankIt = tanks.erase(tankIt);
+                tank->TomarDano();
             }else {
                 ++tankIt;
             }
@@ -808,20 +810,21 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                     }
                     spawRelogio.restart();
                 }else if(getRandomInimigo() == 2){
-                    InimigoTank* inimigoTank = new InimigoTank("assets/images/characters/enemy_tank.png");
-                    if (inimigoTank->isTextureLoaded()) {
-                        inimigoTank->setPosicao(posicao);
-                        tanks.push_back(inimigoTank);
-                        cout << tanks.size() << endl;
-                        cout  << "Inimigo Tank spawnado" << endl;
+                    if(rand() % 2 == 0){
+                        InimigoTank* inimigoTank = new InimigoTank("assets/images/characters/enemy_tank.png");
+                        if (inimigoTank->isTextureLoaded()) {
+                            inimigoTank->setPosicao(posicao);
+                            tanks.push_back(inimigoTank);
+                            cout << tanks.size() << endl;
+                            cout  << "Inimigo Tank spawnado" << endl;
 
-                    } else {
-                        delete inimigoTank;
+                        } else {
+                            delete inimigoTank;
+                        }
+                        spawRelogio.restart();
                     }
-                    spawRelogio.restart();
                 }
             }
-            
             waveInimigos();
             waveRelogio.restart();
         }
