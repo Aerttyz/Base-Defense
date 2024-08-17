@@ -78,9 +78,12 @@ void Tank::RecuperarVida() {
  * 
  */
 void Tank::trocarMunicaoPorVidaBase() {
-    
-    heroi->darMunicao();
-    base->recuperarVida();
+    if(heroi->getMunicao() >= 5) {
+        heroi->darMunicao();
+        base->recuperarVida();
+    }else {
+        cout << "Sem munição suficiente" << endl;
+    }
 }
 
 /**

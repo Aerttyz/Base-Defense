@@ -164,6 +164,14 @@ void Heroi::setVida(int novaVida) {
     
 }
 
+/**
+ * @brief Retorna a quantidade de projeteis
+ * 
+ * @return  int Quantidade de projeteis
+ */
+int Heroi::getMunicao() {
+    return quantidadeProjetil;
+}
 
 void Heroi::TomarDano() {
    vida -= 100;
@@ -182,6 +190,9 @@ void Heroi::TomarDano() {
  */
 void Heroi::darMunicao() {
     quantidadeProjetil -= 5;
+    if(quantidadeProjetil < 0){
+        quantidadeProjetil = 0;
+    }
     textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
 }
 

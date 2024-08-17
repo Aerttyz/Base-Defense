@@ -140,6 +140,18 @@ void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
     }
 }
 
+void gerenciamentoTela::setarTextoGameOver(RenderWindow& window, const Font& font){
+    textoGameOver.setFont(font);
+    textoGameOver.setCharacterSize(50);
+    textoGameOver.setString("GAME OVER");
+    textoGameOver.setFillColor(Color::Red);
+    textoGameOver.setOrigin(textoGameOver.getLocalBounds().width / 2, textoGameOver.getLocalBounds().height / 2);
+    textoGameOver.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+    textoKills.setPosition(window.getSize().x / 2, window.getSize().y / 2 + 50);
+    textoKills.setFillColor(Color::Red);
+    textoKills.setCharacterSize(30);
+}
+
 /**
  * @brief Gerencia os eventos de entrada do usuário para a tela atual do jogo.
  * 
@@ -248,7 +260,7 @@ void gerenciamentoTela::eventos(RenderWindow& window, const Vector2f& windowSize
                     botoesDificuldade[i].setFillColor(Color::White);
                 }
             }
-        }else if(estado == Estado::GAMEOVER){
+        }else if(estado == Estado::GAMEOVER || estado == Estado::VITORIA){
             if(event.type == Event::KeyPressed && event.key.code == Keyboard::Enter) {
                 estado = Estado::MENU;
                 resetarJogo(windowSize);
@@ -838,7 +850,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
  * 
  */
 void gerenciamentoTela::waveInimigos(){
-    waveInimigo -= seconds(0.1);
+    waveInimigo -= seconds(0.5);
     if(waveInimigo <= seconds(1)){
         waveInimigo = seconds(1);
     }
@@ -973,15 +985,9 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         renderizarProjeteisInimigos(window);
         atualizarDrop(window);
     }else if(estado == Estado::GAMEOVER) {
+        setarTextoGameOver(window, font);
         window.draw(backgroundSprite_menu);
-        Text textoGameOver("GAME OVER", font, 50);
-        textoGameOver.setFillColor(Color::Red);
-        textoGameOver.setOrigin(textoGameOver.getLocalBounds().width / 2, textoGameOver.getLocalBounds().height / 2);
-        textoGameOver.setPosition(window.getSize().x / 2, window.getSize().y / 2);
-        window.draw(textoGameOver);
-        textoKills.setPosition(window.getSize().x / 2, window.getSize().y / 2 + 50);
-        textoKills.setFillColor(Color::Red);
-        textoKills.setCharacterSize(30);
+        window.draw(textoGameOver);     
         window.draw(textoKills);
     }else if(estado == Estado::COOP){
         tank->renderizar(window);

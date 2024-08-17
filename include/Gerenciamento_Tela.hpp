@@ -43,6 +43,7 @@ class gerenciamentoTela {
         void waveInimigos();
 
         void resetarJogo(const Vector2f& windowSize);
+        void setarTextoGameOver(RenderWindow& window, const Font& font);
 
     private:
         Texture background;
@@ -78,10 +79,10 @@ class gerenciamentoTela {
         const Time SPAWN_NORMAL = seconds(2); 
         const Time SPAWN_DIFICIL = seconds(1);  
         Time spawnInimigo = seconds(0.2f);
-        Time waveInimigo = seconds(2);
+        Time waveInimigo = SPAWN_NORMAL;
         Clock waveRelogio;
         Clock relogio;
-        enum class Estado {MENU, DIFICULDADE, JOGO, COOP, GAMEOVER, PAUSE};
+        enum class Estado {MENU, DIFICULDADE, JOGO, COOP, GAMEOVER, VITORIA};
         Estado estado = Estado::MENU;
 
         Time intervaloDisparo;
@@ -98,6 +99,7 @@ class gerenciamentoTela {
 
         int Kills=0;
         Text textoKills;
+        Text textoGameOver;
 
         bool regenerarVidaBase = false;
         bool aumentarVidaBase = false;

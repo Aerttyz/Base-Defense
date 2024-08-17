@@ -22,6 +22,7 @@ class Heroi {
         void setMunicao();  
         virtual void RecuperarVida();
         void RecuperarMunicao();
+        int getMunicao();
         void TomarDano();
         void darMunicao();
         Vector2f getPosicao();
