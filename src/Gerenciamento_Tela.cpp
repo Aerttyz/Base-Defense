@@ -2,6 +2,9 @@
 #include <iostream>
 #include <cmath>
 #include <fstream>
+#include <ctime>
+#include <sstream>
+#include <iomanip>
 #include "../include/heroi.hpp"
 #include "../include/base.hpp"
 #include "../include/projeteis.hpp"
@@ -49,6 +52,9 @@ gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string&
  */
 void gerenciamentoTela::iniciarArquivos(const string& backgroundFile, const string& backgroundMenuFile,const string& musicaTemaFile){
     if(!background.loadFromFile(backgroundFile)) {
+        cout << "Erro ao carregar imagem de fundo" << endl;
+    }
+    if(!backgroundScore.loadFromFile("assets/images/background/score1.jpg")) {
         cout << "Erro ao carregar imagem de fundo" << endl;
     }
     if(!font.loadFromFile("assets/fonts/DotGothic16-Regular.ttf")) {
@@ -112,6 +118,7 @@ void gerenciamentoTela::setaArquivos(const Vector2f& windowSize){
    
     backgroundSprite.setTexture(background);
     backgroundSprite_menu.setTexture(background_menu);
+    backgroundSpriteScore.setTexture(backgroundScore);
 
     spawRelogio.restart();
 
@@ -167,6 +174,30 @@ void gerenciamentoTela::setarTextoGameOver(RenderWindow& window, const Font& fon
     textoKills.setPosition(window.getSize().x / 2, window.getSize().y / 2 + 50);
     textoKills.setFillColor(Color::Red);
     textoKills.setCharacterSize(30);
+}
+
+string getCurrentDateTime() {
+    time_t now = time(nullptr);
+    tm* localTime = localtime(&now);
+    ostringstream oss;
+    oss << put_time(localTime, "%Y-%m-%d %H:%M:%S");
+    return oss.str();
+}
+
+/**
+ * @brief Inicia o texto de recordes na tela.
+ * 
+ * Esta função inicia o texto de recordes na tela, definindo a fonte, o tamanho, a cor e a posição do texto.
+ * 
+ * @param window 
+ */
+void gerenciamentoTela::setarTextoRecordes(RenderWindow& window){
+    textoScore.setFont(fontGame);
+    textoScore.setCharacterSize(50);
+    textoScore.setFillColor(Color::White);
+    textoScore.setString("RECORDES");
+    textoScore.setOrigin(textoScore.getLocalBounds().width / 2, textoScore.getLocalBounds().height / 2);
+    textoScore.setPosition(window.getSize().x / 2.0f, 20);
 }
 
 /**
@@ -346,7 +377,7 @@ void gerenciamentoTela::setarRecordes(){
     string aux2;
     aux2 = top2;
     string aux3;
-    aux3 = top2;
+    aux3 = top3;
     
     if(stoi(aux1) < Kills){
         top1 = to_string(Kills);
@@ -359,25 +390,27 @@ void gerenciamentoTela::setarRecordes(){
         top3 = to_string(Kills);
     }
    
+    top1Text.setFont(fontGame);
+    top1Text.setCharacterSize(30);
+    top1Text.setFillColor(Color::White);
+    top1Text.setString("1: " + top1 + " Abates");
+    top1Text.setPosition(350, 100);
+    top2Text.setFont(fontGame);
+    top2Text.setCharacterSize(30);
+    top2Text.setFillColor(Color::White);    
+    top2Text.setString("2: " + top2 + " Abates");
+    top2Text.setPosition(350, 150);
+    top3Text.setFont(fontGame);
+    top3Text.setCharacterSize(30);
+    top3Text.setFillColor(Color::White);
+    top3Text.setString("3: " + top3 + " Abates");
+    top3Text.setPosition(350, 200);
     
+
     arquivo << top1 << endl << top2 << endl << top3;
     arquivo.close();
     
-    top1Text.setFont(fontGame);
-    top1Text.setCharacterSize(20);
-    top1Text.setFillColor(Color::White);
-    top1Text.setString("1: " + top1);
-    top1Text.setPosition(100, 100);
-    top2Text.setFont(fontGame);
-    top2Text.setCharacterSize(20);
-    top2Text.setFillColor(Color::White);    
-    top2Text.setString("2: " + top2);
-    top2Text.setPosition(100, 150);
-    top3Text.setFont(fontGame);
-    top3Text.setCharacterSize(20);
-    top3Text.setFillColor(Color::White);
-    top3Text.setString("3: " + top3);
-    top3Text.setPosition(100, 200);
+    
 }
 
 /**
@@ -1065,15 +1098,9 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
     }else if(estado == Estado::COOP){
         tank->renderizar(window);
     }else if(estado == Estado::SCORE){
-        window.draw(backgroundSprite_menu);
-        window.draw(textoKills);
-        /* Text textoScore;
-        textoScore.setFont(font);
-        textoScore.setString("Score: " + top1);
-        textoScore.setPosition(400, 300);
-        textoScore.setFillColor(Color::White);
-        textoScore.setCharacterSize(50); */
-        
+        setarTextoRecordes(window);
+        window.draw(backgroundSpriteScore);
+        window.draw(textoScore);
         window.draw(top1Text);
         window.draw(top2Text);
         window.draw(top3Text);

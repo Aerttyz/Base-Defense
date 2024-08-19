@@ -47,7 +47,7 @@ class gerenciamentoTela {
         void setarTextoGameOver(RenderWindow& window, const Font& font);
 
         void setarRecordes();
-        void getRecordes();
+        void setarTextoRecordes(RenderWindow& window);
 
     private:
         Texture background;
@@ -111,6 +111,9 @@ class gerenciamentoTela {
 
         string top1, top2, top3;
         Text top1Text, top2Text, top3Text;
+        Texture backgroundScore;
+        Sprite backgroundSpriteScore;
+        Text textoScore;
 
 };
 #endif // GERENCIAMENTO_TELA_HPP
