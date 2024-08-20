@@ -34,7 +34,7 @@ Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : vida(vida) {
     textoMunicao.setFillColor(Color::White);
     textoMunicao.setString("Municao: " + to_string(quantidadeProjetil));
 
-    projetilFile = "assets/images/background/hero_bullet.png";   
+    projetilFile = "../assets/images/background/hero_bullet.png";   
     if(!texturaProjetil.loadFromFile(projetilFile)) {
         cout << "Erro ao carregar textura do projetil" << endl;
     }
@@ -45,7 +45,7 @@ Heroi::Heroi(int vida, const string& heroiFile, const Font& font) : vida(vida) {
     }else {
         bulletSong.setBuffer(bufferBulletSong);
     }
-    if(!barraVida.loadFromFile("assets/images/background/lifebar.png")) {
+    if(!barraVida.loadFromFile("../assets/images/background/lifebar.png")) {
         cout << "Erro ao carregar barra de vida" << endl;
     }
     barraSprite.setTexture(barraVida);

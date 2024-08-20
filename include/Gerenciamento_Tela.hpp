@@ -105,6 +105,10 @@ class gerenciamentoTela {
         Text textoKills;
         Text textoGameOver;
 
+        //botao voltar 
+        Text textoVoltar;
+        
+
         bool regenerarVidaBase = false;
         bool aumentarVidaBase = false;
         int upLimite = 0;

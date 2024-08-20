@@ -36,7 +36,7 @@ class Heroi {
     private:
         
         
-        string bulletSongFile = "assets/music/bulletsong.ogg";
+        string bulletSongFile = "../assets/music/bulletsong.ogg";
         Sound bulletSong;
         SoundBuffer bufferBulletSong;
         Texture texturaProjetil;
