@@ -112,8 +112,9 @@ class gerenciamentoTela {
         bool regenerarVidaBase = false;
         bool aumentarVidaBase = false;
         int upLimite = 0;
-
         string top1, top2, top3;
+        
+
         Text top1Text, top2Text, top3Text;
         Texture backgroundScore;
         Sprite backgroundSpriteScore;

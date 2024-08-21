@@ -33,7 +33,6 @@ using namespace std;
  */
 gerenciamentoTela::gerenciamentoTela(const string& backgroundFile, const string& backgroundMenuFile,const string& musicaTemaFile, Heroi *heroi, Base *base, const Vector2f& windowSize) 
 : heroi(heroi), base(base){
-
     iniciarArquivos(backgroundFile, backgroundMenuFile, musicaTemaFile);
     setaArquivos(windowSize);
     setarRecordes();
@@ -54,37 +53,37 @@ void gerenciamentoTela::iniciarArquivos(const string& backgroundFile, const stri
     if(!background.loadFromFile(backgroundFile)) {
         cout << "Erro ao carregar imagem de fundo" << endl;
     }
-    if(!backgroundScore.loadFromFile("../assets/images/background/score1.jpg")) {
+    if(!backgroundScore.loadFromFile("assets/images/background/score1.jpg")) {
         cout << "Erro ao carregar imagem de fundo" << endl;
     }
-    if(!font.loadFromFile("../assets/fonts/DotGothic16-Regular.ttf")) {
+    if(!font.loadFromFile("assets/fonts/DotGothic16-Regular.ttf")) {
         cout << "Erro ao carregar fonte" << endl;
     }
-    if(!fontGame.loadFromFile("../assets/fonts/LilitaOne-Regular.ttf")) {
+    if(!fontGame.loadFromFile("assets/fonts/LilitaOne-Regular.ttf")) {
         cout << "Erro ao carregar fonte" << endl;
     }
     if(!background_menu.loadFromFile(backgroundMenuFile)) {
         cout << "Erro ao carregar imagem de fundo do menu" << endl;
     }
-    if(!texturaProjetil.loadFromFile("../assets/images/background/bullet1.png")) {
+    if(!texturaProjetil.loadFromFile("assets/images/background/bullet1.png")) {
         cout << "Erro ao carregar textura do projetil" << endl;
     }
-    if(!texturaDrop.loadFromFile("../assets/images/background/energy_bullet.png")) {
+    if(!texturaDrop.loadFromFile("assets/images/background/energy_bullet.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
-    if(!texturaDrop1.loadFromFile("../assets/images/background/drop_life.png")) {
+    if(!texturaDrop1.loadFromFile("assets/images/background/drop_life.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
-    if(!texturaDrop2.loadFromFile("../assets/images/background/upgrade.png")) {
+    if(!texturaDrop2.loadFromFile("assets/images/background/upgrade.png")) {
         cout << "Erro ao carregar textura do drop" << endl;
     }
     if(!musicaTema.openFromFile(musicaTemaFile)) {
         cout << "Erro ao carregar música" << endl;
     }
-    if(!musicaGameOver.openFromFile("../assets/music/game_over.ogg")) {
+    if(!musicaGameOver.openFromFile("assets/music/game_over.ogg")) {
         cout << "Erro ao carregar música de game over" << endl;
     }
-    if(!bufferEscolhaMenu.loadFromFile("../assets/music/Menu-Choice.ogg")) {
+    if(!bufferEscolhaMenu.loadFromFile("assets/music/Menu-Choice.ogg")) {
         cout << "Erro ao carregar música de escolha do menu" << endl;
     }
     
@@ -178,14 +177,6 @@ void gerenciamentoTela::setarTextoGameOver(RenderWindow& window, const Font& fon
     textoKills.setCharacterSize(30);
 }
 
-string getCurrentDateTime() {
-    time_t now = time(nullptr);
-    tm* localTime = localtime(&now);
-    ostringstream oss;
-    oss << put_time(localTime, "%Y-%m-%d %H:%M:%S");
-    return oss.str();
-}
-
 /**
  * @brief Inicia o texto de recordes na tela.
  * 
@@ -202,12 +193,11 @@ void gerenciamentoTela::setarTextoRecordes(RenderWindow& window){
     textoScore.setPosition(window.getSize().x / 2.0f, 20);
     
 
-    //botao voltar
     textoVoltar.setFont(fontGame);
     textoVoltar.setString("Voltar");
     textoVoltar.setCharacterSize(30);
-    textoVoltar.setFillColor(sf::Color::White); // Cor
-    textoVoltar.setPosition(50, 50); // Posicao texto 
+    textoVoltar.setFillColor(sf::Color::White); 
+    textoVoltar.setPosition(50, 50); 
     
 }
 
@@ -257,7 +247,7 @@ void gerenciamentoTela::eventos(RenderWindow& window, const Vector2f& windowSize
                         } else if (i == 1) {
                             escolhaMenu.play();
                             estado = Estado::COOP;  
-                            tank = new Tank(100, "../assets/images/characters/TankSup.png", fontGame, heroi, base);
+                            tank = new Tank(100, "assets/images/characters/TankSup.png", fontGame, heroi, base);
                         } else if (i == 2) {
                             escolhaMenu.play();
                             estado = Estado::DIFICULDADE;
@@ -389,10 +379,6 @@ void gerenciamentoTela::setKills(){
  * @param window A janela do jogo onde o texto é renderizado.
  */
 void gerenciamentoTela::setarRecordes(){
-    ofstream arquivo("record.txt");
-    if (!arquivo.is_open()) {
-        cout << "Erro ao abrir o arquivo." << endl;
-    }
     
     string aux1;
     aux1 = top1;
@@ -411,7 +397,7 @@ void gerenciamentoTela::setarRecordes(){
     }else if(stoi(aux3) < Kills){
         top3 = to_string(Kills);
     }
-   
+
     top1Text.setFont(fontGame);
     top1Text.setCharacterSize(30);
     top1Text.setFillColor(Color::White);
@@ -427,6 +413,10 @@ void gerenciamentoTela::setarRecordes(){
     top3Text.setFillColor(Color::White);
     top3Text.setString("3: " + top3 + " Abates");
     top3Text.setPosition(350, 200);
+    ofstream arquivo("record.txt");
+    if (!arquivo.is_open()) {
+        cout << "Erro ao abrir o arquivo." << endl;
+    }
     
 
     arquivo << top1 << endl << top2 << endl << top3;
@@ -928,7 +918,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                     }
                 }        
                 if(getRandomInimigo() == 1){
-                    Runner* runner = new Runner("../assets/images/characters/runner.png");
+                    Runner* runner = new Runner("assets/images/characters/runner.png");
                     if(runner->isTextureLoaded()){
                         runner->setPosicao(posicao);
                         runners.push_back(runner);
@@ -938,7 +928,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                     }
                     spawRelogio.restart();
                 }else if(getRandomInimigo() == 0){
-                    Inimigo* inimigo = new Inimigo("../assets/images/characters/enemy.png");
+                    Inimigo* inimigo = new Inimigo("assets/images/characters/enemy.png");
                     if (inimigo->isTextureLoaded()) {
                         inimigo->setPosicao(posicao);
                         inimigos.push_back(inimigo);
@@ -950,7 +940,7 @@ void gerenciamentoTela::atualizar(RenderWindow& window) {
                     spawRelogio.restart();
                 }else if(getRandomInimigo() == 2){
                     if(rand() % 2 == 0){
-                        InimigoTank* inimigoTank = new InimigoTank("../assets/images/characters/enemy_tank.png");
+                        InimigoTank* inimigoTank = new InimigoTank("assets/images/characters/enemy_tank.png");
                         if (inimigoTank->isTextureLoaded()) {
                             inimigoTank->setPosicao(posicao);
                             tanks.push_back(inimigoTank);
@@ -1112,7 +1102,6 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         renderizarProjeteisInimigos(window);
         atualizarDrop(window);
     }else if(estado == Estado::GAMEOVER) {
-        setarRecordes();
         setarTextoGameOver(window, font);
         window.draw(backgroundSprite_menu);
         window.draw(textoGameOver);     
@@ -1126,9 +1115,7 @@ void gerenciamentoTela::renderizar(RenderWindow& window) {
         window.draw(top1Text);
         window.draw(top2Text);
         window.draw(top3Text);
-        //botao de voltar
         Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
-        //IF pra verificar quando está com o mouse sobre o texto e mudar a cor
         if (textoVoltar.getGlobalBounds().contains(mousePos)) { 
             textoVoltar.setFillColor(sf::Color::Yellow); 
         } else {

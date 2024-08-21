@@ -23,7 +23,7 @@ Tank::Tank(int vida, const string& tankFile, const Font& font, Heroi *heroi, Bas
     if (!background_tank.loadFromFile(tankFile)) {
         cout << "Erro ao carregar imagem do tanque" << endl;
     }
-    if(!barraVida.loadFromFile("../assets/images/background/shieldbar.png")) {
+    if(!barraVida.loadFromFile("assets/images/background/shieldbar.png")) {
         cout << "Erro ao carregar barra de vida" << endl;
     }
 
