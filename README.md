@@ -31,9 +31,8 @@ O jogo consiste em um soldado que tem a missão de defender sua base em um mapa 
 **Designe:** [Pixelart](https://Pixelart.com) e Photoshop
 
 ## Gameplay de exibição:
-https://www.youtube.com/watch?v=_91ANe7mYfc
 
-[**Base-Defense Preview**](/)
+[**Base-Defense Preview**](https://www.youtube.com/watch?v=_91ANe7mYfc)
 
 ## Instalação
 
